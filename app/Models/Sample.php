@@ -72,12 +72,11 @@ class Sample extends Model {
 		}
 		$res=$level=='batches'?$res->groupby('batch_id'):$res;
 		return $res->get()->count();
-	}	
+	}
 
+		
 	public static function countPositives($year=""){
 		if(empty($year)) $year=date("Y");
-		/*$res=\DB::select("SELECT count(s.id) AS number_positive FROM dbs_samples AS s 
-					   WHERE year(date_results_entered)=$year AND accepted_result='POSITIVE'");*/
 		$res=Sample::select(\DB::raw(" count(s.id) AS number_positive"))
 				->from("dbs_samples AS s")
 				->whereYear('s.date_results_entered','=',$year)
@@ -90,8 +89,6 @@ class Sample extends Model {
 
 	public static function countPositives2($year=""){
 		if(empty($year)) $year=date("Y");
-		/*$res=\DB::select("SELECT count(s.id) AS number_positive FROM dbs_samples AS s 
-					   WHERE year(date_results_entered)=$year AND accepted_result='POSITIVE'");*/
 		$res=Sample::select(\DB::raw("month(date_results_entered) AS mth, count(s.id) AS number_positive"))
 				->from("dbs_samples AS s")
 				->whereYear('s.date_results_entered','=',$year)
@@ -105,6 +102,36 @@ class Sample extends Model {
 
 		//echo json_encode($res);
 		return $months;
+	}
+		/*SELECT region,MONTH(`date_results_entered`) AS m,count(s.id) AS counts
+FROM `dbs_samples` AS s
+LEFT JOIN batches AS b ON s.`batch_id`=b.id
+LEFT JOIN facilities AS f ON b.facility_id=f.id
+LEFT JOIN districts AS d ON f.districtID=d.id
+RIGHT JOIN regions AS r ON d.regionID=r.id
+WHERE accepted_result='POSITIVE'
+GROUP BY region,m
+ORDER BY count(f.id)*/  
+
+	public static function countPositivesByRegions($year=""){
+		if(empty($year)) $year=date("Y");
+		$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
+				->leftjoin("facilities AS f","f.id","=","b.facility_id")
+				->leftjoin("districts AS d","d.id","=","f.districtID")
+				->select(\DB::raw("d.regionID,month(date_results_entered) AS mth, count(s.id) AS number_positive"))
+				->from("dbs_samples AS s")
+				->whereYear('s.date_results_entered','=',$year)
+				->where('s.accepted_result','=','POSITIVE')
+				->groupby('regionID','mth')
+				->get();
+		$regions=Location\Region::regionsArr();
+		$months=\MyHTML::initMonths();
+		$regs=[];
+		foreach ($regions as $regID => $reg)  $regs[$regID]=$months;
+		foreach ($res as $k) {
+			$regs[$k->regionID][$k->mth]=$k->number_positive;
+		}
+		return $regs;
 	}
 
 	public static function avPositivity($year=""){
@@ -136,4 +163,38 @@ class Sample extends Model {
 		}
 		return $months;
 	}
+
+	public static function sampleNumbersByRegions($year=""){
+		if(empty($year)) $year=date("Y");
+		$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
+				->leftjoin("facilities AS f","f.id","=","b.facility_id")
+				->leftjoin("districts AS d","d.id","=","f.districtID")
+				->select(\DB::raw("d.regionID,month(date_results_entered) AS mth, count(s.id) AS num"))
+				->from("dbs_samples AS s")
+				->whereYear('s.date_results_entered','=',$year)
+				->groupby('regionID','mth')
+				->get();
+		$regions=Location\Region::regionsArr();
+		$months=\MyHTML::initMonths();
+		$regs=[];
+		foreach ($regions as $regID => $reg)  $regs[$regID]=$months;
+		foreach ($res as $k) {
+			$regs[$k->regionID][$k->mth]=$k->num;
+		}
+		return $regs;
+	}
+
 }
+
+
+/*Array ( 
+	[Central 1] => Array ( [9] => 7 [10] => 10 ) 
+	[Central 2] => Array ( [9] => 3 [10] => 3 ) 
+	[East Central] => Array ( [9] => 1 [10] => 4 ) 
+	[Kampala] => Array ( [9] => 8 [10] => 9 ) 
+	[Mid Eastern] => Array ( [9] => 1 [10] => 4 ) 
+	[Mid Northern] => Array ( [9] => 4 [10] => 9 ) 
+	[Mid Western] => Array ( [9] => 5 [10] => 5 ) 
+	[North East] => Array ( [9] => 1 [10] => 1 ) 
+	[South Western] => Array ( [9] => 5 [10] => 9 ) 
+	[West Nile] => Array ( [9] => 1 ) )*/

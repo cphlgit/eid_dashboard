@@ -43,13 +43,13 @@
 <div class='container'>
     <br>
     <?php if(!isset($filter_val)) $filter_val="National Metrics, ".date('Y')." thus far" ?>
-     <p><label class='hdr hdr-grey'> FILTERS:</label> <label class='hdr val-grey'>{!! $filter_val !!}</label> </p>
+     <!-- <p><label class='hdr hdr-grey'> FILTERS:</label> <label class='hdr val-grey'>{!! $filter_val !!}</label> </p> -->
     
      <table border='1' cellpadding='0' cellspacing='0' class='filter-tb'>
         <tr>
             <td width='25%'>{!! Form::select('time',[''=>'YEAR']+MyHTML::years(2010),$time,["id"=>"time_fltr"]) !!}</td>
             <td width='25%'>{!! Form::select('region',$regions,"all",['ng-init'=>"region='all'","ng-model"=>"region",'ng-change'=>"regionFilter()"]) !!}</td>
-            <td width='25%'>{!! Form::select('district',[''=>'DISTRICT']+$districts) !!}</td>
+            <td width='25%'>{!! Form::select('district',[''=>'DISTRICT']+$districts,"",["ng-model"=>"district",'ng-change'=>"districtFilter()"]) !!}</td>
             <td width='25%'>{!! Form::select('care_level',[''=>'CARE LEVEL']+$facility_levels) !!}</td>
         </tr>
      </table>
@@ -95,11 +95,18 @@
             </li>
         </ul>
 
+        <?php 
+
+        $key_nat="<label class='sm_box national'>&nbsp;</label>&nbsp;National";
+        $key_slctn="<label class='sm_box selection'>&nbsp;</label>&nbsp;Selection";
+        $key_lb="$key_nat &nbsp;&nbsp;&nbsp; $key_slctn <br>";
+
+        ?>
+
         <div>
             <div id="tab1" class="tabContent">
-                <label class="sm_box national">&nbsp;</label>&nbsp;National 
-                &nbsp;&nbsp;&nbsp;
-                <label class="sm_box selection">&nbsp;</label>&nbsp;Selection<br>
+                 
+                {!!$key_lb !!}
                 <canvas id="hiv_postive_infants" class='db-charts'></canvas>              
             </div>
 
@@ -113,6 +120,7 @@
             </div>
  
             <div id="tab4" class="tabContent hide">
+                {!!$key_lb !!}
                 <canvas id="av_positivity" class='db-charts'></canvas>               
             </div>
         </div>
@@ -184,16 +192,30 @@ var app=angular.module('dashboard', [], function($interpolateProvider) {
 var ctrllers={};
 
 ctrllers.DashController=function($scope,$timeout){
-    //var cp_sum=<?php echo $count_positives ?>;
+    //for filtering by region
     $scope.positives_by_region=<?php echo json_encode($positives_by_region) ?>;   
     $scope.pos_by_reg_sums=<?php echo json_encode($pos_by_reg_sums) ?>;
 
     $scope.av_by_region=<?php echo json_encode($av_by_region) ?>;
     $scope.av_by_reg_mth=<?php echo json_encode($av_by_reg_mth) ?>;
 
+    //for filtering by district
+    $scope.positives_by_dist=<?php echo json_encode($positives_by_dist) ?>;   
+    $scope.pos_by_dist_sums=<?php echo json_encode($pos_by_dist_sums) ?>;
+
+    $scope.av_by_dist=<?php echo json_encode($av_by_dist) ?>;
+    $scope.av_by_dist_mth=<?php echo json_encode($av_by_dist_mth) ?>;
+
+
+
     $scope.regionFilter=function(){
         $scope.setCountPos();
         $scope.avPositivity();
+    };
+
+    $scope.districtFilter=function(){
+        $scope.setCountPosDist();
+        $scope.avPositivityDist();
     };
 
     $scope.setCountPos=function(){
@@ -236,6 +258,53 @@ ctrllers.DashController=function($scope,$timeout){
                         "pointHighlightFill":"#fff",
                         "pointHighlightStroke":"#FFCC99",
                         "data":$scope.av_by_reg_mth[$scope.region]
+                    }] 
+                };
+                var myLineChart = new Chart(ctx).Line(data);
+            };
+        },1);
+    }
+
+     $scope.setCountPosDist=function(){
+        $scope.count_positives=$scope.pos_by_dist_sums[$scope.district];
+        $timeout(function(){
+            if($("#tb_hd1").hasClass('selected')){
+                var ctx = $("#hiv_postive_infants").get(0).getContext("2d");
+                var data = {
+                    labels: months,datasets: [
+                    count_positives_json,
+                    {
+                        "fillColor":"#FFFFCC",
+                        "strokeColor":"#FFCC99",
+                        "pointColor":"#FFCC99",
+                        "pointStrokeColor":"#fff",
+                        "pointHighlightFill":"#fff",
+                        "pointHighlightStroke":"#FFCC99",
+                        "data":$scope.positives_by_dist[$scope.district]
+                    }] 
+                };
+                var myLineChart = new Chart(ctx).Line(data);
+            }
+
+        },1);
+    };
+
+
+    $scope.avPositivity=function (){
+        $scope.av_positivity=$scope.av_by_dist[$scope.district];
+        $timeout(function(){
+            if($("#tb_hd4").hasClass('selected')){
+                var ctx = $("#av_positivity").get(0).getContext("2d");
+                var data = {
+                    labels: months,datasets: [
+                    av_positivity_json,{
+                        "fillColor":"#FFFFCC",
+                        "strokeColor":"#FFCC99",
+                        "pointColor":"#FFCC99",
+                        "pointStrokeColor":"#fff",
+                        "pointHighlightFill":"#fff",
+                        "pointHighlightStroke":"#FFCC99",
+                        "data":$scope.av_by_dist_mth[$scope.district]
                     }] 
                 };
                 var myLineChart = new Chart(ctx).Line(data);

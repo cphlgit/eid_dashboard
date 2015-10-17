@@ -134,6 +134,26 @@ ORDER BY count(f.id)*/
 		return $regs;
 	}
 
+	public static function countPositivesByDistricts($year=""){
+		if(empty($year)) $year=date("Y");
+		$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
+				->leftjoin("facilities AS f","f.id","=","b.facility_id")
+				->select(\DB::raw("f.districtID,month(date_results_entered) AS mth, count(s.id) AS number_positive"))
+				->from("dbs_samples AS s")
+				->whereYear('s.date_results_entered','=',$year)
+				->where('s.accepted_result','=','POSITIVE')
+				->groupby('districtID','mth')
+				->get();
+		$districts=Location\District::districtsArr();
+		$months=\MyHTML::initMonths();
+		$ret=[];
+		foreach ($districts as $dID => $d)  $ret[$dID]=$months;
+		foreach ($res as $k) {
+			$ret[$k->districtID][$k->mth]=$k->number_positive;
+		}
+		return $ret;
+	}
+
 	public static function avPositivity($year=""){
 		if(empty($year)) $year=date("Y");
 		$res_all=Sample::select(\DB::raw("count(s.id) AS num"))
@@ -182,6 +202,25 @@ ORDER BY count(f.id)*/
 			$regs[$k->regionID][$k->mth]=$k->num;
 		}
 		return $regs;
+	}
+
+	public static function sampleNumbersByDistricts($year=""){
+		if(empty($year)) $year=date("Y");
+		$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
+				->leftjoin("facilities AS f","f.id","=","b.facility_id")
+				->select(\DB::raw("f.districtID,month(date_results_entered) AS mth, count(s.id) AS num"))
+				->from("dbs_samples AS s")
+				->whereYear('s.date_results_entered','=',$year)
+				->groupby('districtID','mth')
+				->get();
+		$districts=Location\District::districtsArr();
+		$months=\MyHTML::initMonths();
+		$ret=[];
+		foreach ($districts as $dID => $d)  $ret[$dID]=$months;
+		foreach ($res as $k) {
+			$ret[$k->districtID][$k->mth]=$k->num;
+		}
+		return $ret;
 	}
 
 }

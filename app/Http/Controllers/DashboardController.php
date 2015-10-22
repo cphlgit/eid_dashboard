@@ -57,6 +57,30 @@ class DashboardController extends Controller {
 		$av_by_dist=$this->arrAvs($nums_by_dist,$positives_by_dist);
 		$av_by_dist_mth=$this->arrMonthAvs($nums_by_dist,$positives_by_dist);
 
+		//other metrics
+		$first_pcr_total=Sample::NumberTotals($time,'FIRST');
+		$sec_pcr_total=Sample::NumberTotals($time,'SECOND');
+
+		$total_initiated=Sample::NumberTotals($time,"",1);
+		$total_samples=Sample::NumberTotals($time);
+
+		$first_pcr_ages=Sample::PCRAges($time,"FIRST");
+		$first_pcr_median_age=$this->median($first_pcr_ages);
+		$sec_pcr_ages=Sample::PCRAges($time,"SECOND");
+		$sec_pcr_median_age=$this->median($sec_pcr_ages);
+
+		//other metrics by region
+		$first_pcr_total_reg=Sample::NumberTotalsGroupBy($time,"FIRST","","regionID");
+		$sec_pcr_total_reg=Sample::NumberTotalsGroupBy($time,"SECOND","","regionID");
+		$total_samples_reg=Sample::NumberTotalsGroupBy($time,"","","regionID");
+		$total_initiated_reg=Sample::NumberTotalsGroupBy($time,"",1,"regionID");
+
+		//other metrics by district
+		$first_pcr_total_dist=Sample::NumberTotalsGroupBy($time,"FIRST","","districtID");
+		$sec_pcr_total_dist=Sample::NumberTotalsGroupBy($time,"SECOND","","districtID");
+		$total_samples_dist=Sample::NumberTotalsGroupBy($time,"","","districtID");
+		$total_initiated_dist=Sample::NumberTotalsGroupBy($time,"",1,"districtID");
+
 
 		return view('db/show',compact(
 			"time",
@@ -74,7 +98,25 @@ class DashboardController extends Controller {
 			"positives_by_dist",
 			"pos_by_dist_sums",
 			"av_by_dist",
-			"av_by_dist_mth"
+			"av_by_dist_mth",
+			"first_pcr_total",
+			"sec_pcr_total",
+			"first_pcr_median_age",
+			"sec_pcr_median_age",
+			"total_initiated",
+			"total_samples",
+
+			"first_pcr_total_reg",
+			"sec_pcr_total_reg",
+			"total_samples_reg",
+			"total_initiated_reg",
+
+			"first_pcr_total_dist",
+			"sec_pcr_total_dist",
+			"total_samples_dist",			
+			"total_initiated_dist"
+
+			
 			));
 	}
 
@@ -106,6 +148,20 @@ class DashboardController extends Controller {
 			}
 		}
 		return $ret;		
+	}
+
+
+	private function median($arr){
+		sort($arr);
+		$quantity=count($arr);
+		$half_quantity=(int)($quantity/2);
+		$ret=0;
+		if($quantity%2==0){
+			 $ret=($arr[($half_quantity-1)]+$arr[$half_quantity])/2;
+		}else{
+			$ret=$arr[$half_quantity];
+		}
+		return $ret;
 	}
 
 	/*

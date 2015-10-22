@@ -260,7 +260,7 @@ dsktp img{
 
 .filter-tb{
 	border:1px solid #C0C0C0;
-	color: #C0C0C0;
+	color: #C0C0EE;
 	text-align: center;
 	width: 100%;
 }
@@ -285,7 +285,12 @@ dsktp img{
 	background-color:rgba(151,187,205,0.2);
 }
 
-.selection{
+.hiv-positive-numbers{
 	border:2px solid #FFCC99;
 	background-color:#FFFFCC;
+}
+
+.hiv-positive-average{
+	border:2px solid #BF00FF;
+	background-color:#F6CEEC;
 }

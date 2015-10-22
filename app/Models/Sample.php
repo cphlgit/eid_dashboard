@@ -223,6 +223,83 @@ ORDER BY count(f.id)*/
 		return $ret;
 	}
 
+	public static function NumberTotals($year,$pcr="",$ttl_inited=""){
+		if(empty($year)) $year=date("Y");
+		$res=Sample::select(\DB::raw("count(s.id) AS num"))
+			 ->from("dbs_samples AS s")
+			 ->whereYear('s.date_results_entered','=',$year);
+		$res=!empty($pcr)?$res->where('s.pcr','=',$pcr):$res;
+		$res=$ttl_inited==1?$res->where("f_ART_initiated",'=','YES'):$res;
+		$ret=0;
+		$ret=$res->get()->first()->num;
+		return $ret;
+	}
+
+	public static function NumberTotalsGroupBy($year,$pcr="",$ttl_inited="",$groupby=""){
+		if(empty($year)) $year=date("Y");
+		$res=$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
+				  ->leftjoin("facilities AS f","f.id","=","b.facility_id")
+				  ->leftjoin("districts AS d","d.id","=","f.districtID")
+				  ->select(\DB::raw("regionID,districtID,count(s.id) AS num"))
+			 	  ->from("dbs_samples AS s")
+			 	  ->whereYear('s.date_results_entered','=',$year);
+		$res=!empty($pcr)?$res->where('s.pcr','=',$pcr):$res;
+		$res=$ttl_inited==1?$res->where("f_ART_initiated",'=','YES'):$res;
+		$res=$res->groupby($groupby)->get();
+
+		$ret=[];
+
+		if($groupby=='regionID'){
+			$ret=Location\Region::regionsInit();
+			foreach ($res as $rw) {
+				$ret[$rw->regionID]=$rw->num;
+			}
+		}elseif($groupby=='districtID'){
+			$ret=Location\District::districtsInit();
+			foreach ($res as $rw) {
+				$ret[$rw->districtID]=$rw->num;
+			}
+		}
+		return $ret;
+	}
+
+	public static function PCRAges($year,$pcr=""){
+		$res=Sample::select("s.infant_age")
+			 ->from("dbs_samples AS s")
+			 ->whereYear('s.date_results_entered','=',$year);
+		$res=!empty($pcr)?$res->where('s.pcr','=',$pcr):$res;
+		$res=$res->get();
+		$ret=[];
+		foreach ($res as $rw) {
+			$ret[]=Sample::cleanAge($rw->infant_age);	
+		}
+		//if($pcr=="SECOND") print_r($ret);
+		return $ret;
+	}
+
+	private static function cleanAge($age=0){
+		$ret=0;
+		$age_arr=explode(" ", $age);
+		//return round($age_arr[0],2);
+		$age_param=$age_arr[1];
+		//$age_figure=str_replace(" ", "", ($age_arr[0]));
+		$years=0;$months=0;$weeks=0;$days=0;
+
+		foreach ($age_arr as $k => $val) {
+			if($val=='year'||$val=='years'){
+				$years=str_replace(" ", "",$age_arr[($k-1)]);
+			}elseif($val=='months'||$val=='month'){
+				$months=str_replace(" ", "",$age_arr[($k-1)]);
+			}elseif($val=='weeks'||$val=='week'){
+				$weeks=str_replace(" ", "",$age_arr[($k-1)]);
+			}elseif($val=='days'||$val=='day'){
+				$days=str_replace(" ", "",$age_arr[($k-1)]);
+			}
+		}
+		$ret= ($years*12)+$months+($weeks/4)+($days/30);
+		return round($ret,2);
+	}
+
 }
 
 
@@ -237,3 +314,8 @@ ORDER BY count(f.id)*/
 	[North East] => Array ( [9] => 1 [10] => 1 ) 
 	[South Western] => Array ( [9] => 5 [10] => 9 ) 
 	[West Nile] => Array ( [9] => 1 ) )*/
+
+
+/*
+Your lim
+*/

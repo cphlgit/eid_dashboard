@@ -44,4 +44,12 @@ class District extends Model {
 		return $arr;
 	}
 
+	public static function districtsInit(){
+		$arr=array();
+		foreach(District::all() AS $d){
+			$arr[$d->id]=0;
+		}
+		return $arr;
+	}
+
 }

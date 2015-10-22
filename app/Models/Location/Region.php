@@ -28,6 +28,14 @@ class Region extends Model {
 		return $arr;
 	}
 
+	public static function regionsInit(){
+		$arr=array();
+		foreach(Region::all() AS $region){
+			$arr[$region->id]=0;
+		}
+		return $arr;
+	}
+
 
 
 }

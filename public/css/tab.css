@@ -55,3 +55,22 @@ div.tabContent.hide { display: none; }
     width: 600px;
     height: 300px;
 }
+
+div.addition-metrics{ 
+    padding: 10px; 
+    min-height: 80px;
+    border:1px solid #C0C0C0;
+    text-align: center;
+}
+
+.addition-metrics.figure{
+    font-weight: bolder;
+    font-size: 25px;
+    color: #C0C0EE;
+}
+
+.addition-metrics.desc{
+    color: #C0C0EE;
+    font-weight: bolder;
+    font-size: 13px;
+}

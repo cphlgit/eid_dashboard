@@ -36,6 +36,19 @@ class Region extends Model {
 		return $arr;
 	}
 
+	public static function regionsFacilitiesInit(){
+		$arr=array();
+		$res=Region::rightjoin('districts AS d','d.id','=','f.districtID')
+			 ->rightjoin('regions AS r','r.id','=','d.regionID')
+			 ->select('regionID','region','f.id AS facility_id')
+			 ->from('facilities AS f')
+			 ->get();
+		foreach($res AS $row){
+			$arr[$row->regionID][$row->facility_id]=0;
+		}
+		return $arr;
+	}
+
 
 
 }

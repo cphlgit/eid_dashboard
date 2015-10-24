@@ -48,8 +48,8 @@
      <table border='1' cellpadding='0' cellspacing='0' class='filter-tb'>
         <tr>
             <td width='25%'>{!! Form::select('time',[''=>'YEAR']+MyHTML::years(2010),$time,["id"=>"time_fltr"]) !!}</td>
-            <td width='25%'>{!! Form::select('region',$regions,"all",['ng-init'=>"region='all'","ng-model"=>"region",'ng-change'=>"filter('region')"]) !!}</td>
-            <td width='25%'>{!! Form::select('district',[''=>'DISTRICT']+$districts,"",["ng-model"=>"district",'ng-change'=>"filter('district')"]) !!}</td>
+            <td width='25%'>{!! Form::select('region',$regions,"all",['ng-init'=>"region='all'","ng-model"=>"region",'ng-change'=>"filter('region')","id"=>"region_slct"]) !!}</td>
+            <td width='25%' id='dist_elmt'>{!! Form::select('district',[''=>'DISTRICT']+$districts,"",["ng-model"=>"district",'ng-change'=>"filter('district')"]) !!}</td>
             <!-- <td width='25%'>{!! Form::select('care_level',[''=>'CARE LEVEL']+$facility_levels) !!}</td> -->
         </tr>
      </table>
@@ -75,10 +75,13 @@
                     </label>
                 </a>
             </li>
+            
             <li>
                 <a href="#tab3" id='tb_hd3'>
                     <label class='tab-labels'>
-                        00.0%
+                        <span ng-model="av_initiation_rate" ng-init="av_initiation_rate={!! $av_initiation_rate !!}">
+                            <% av_initiation_rate %>%
+                        </span> 
                         <font class='tab-sm-ttl'>AVERAGE ART INITIATION RATE</font>
                     </label>
                 </a>
@@ -87,7 +90,7 @@
                 <a href="#tab4" id='tb_hd4' ng-click="avPositivity()">
                     <label class='tab-labels'>
                         <span ng-model="av_positivity" ng-init="av_positivity={!! $av_positivity !!}">
-                            <% av_positivity %>
+                            <% av_positivity %>%
                         </span>  
                         <font class='tab-sm-ttl'>AVERAGE POSITIVITY RATE</font>
                     </label>
@@ -98,19 +101,45 @@
         <?php $key_nat="<label class='sm_box national'>&nbsp;</label>&nbsp;National"   ?>
 
         <div>
-            <div id="tab1" class="tabContent">                 
-                {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
-                <label class='sm_box hiv-positive-numbers'>&nbsp;</label>&nbsp;Selection
-                <br>
-                <canvas id="hiv_postive_infants" class='db-charts'></canvas>              
+            <div id="tab1" class="tabContent">   
+                <div class="row">
+                    <div class="col-lg-6">
+                        {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
+                        <label class='sm_box hiv-positive-numbers'>&nbsp;</label>&nbsp;Selection
+                        <br>
+                        <br>
+                        <br>
+                        <canvas id="hiv_postive_infants" class='db-charts'></canvas> 
+                    </div>
+                    <!-- <div class="col-lg-6" ng-init='facility_pos_counts=1'>
+                        <table class='table table-bordered table-striped table table-condensed facilities' id='tab_id'>
+                            <thead>
+                                <tr height="10">
+                                    <th>Facility</th>
+                                    <th>Absolute Positives</th>
+                                </tr>
+                            </thead>
+                            <tbody  ng-model='facility_pos_counts' ng-repeat="fpc in facility_pos_counts">
+                                <tr><td><% fpc.facility %></td><td><% fpc.pos_count %></td></tr>
+                            </tbody>
+                        </table>
+
+                    </div> -->
+                </div>                             
             </div>
 
             <div id="tab2" class="tabContent hide">
-                00.0%
+               {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
+                <label class='sm_box uptake'>&nbsp;</label>&nbsp;Selection
+                <br>
+                <canvas id="average_uptake_rate" class='db-charts'></canvas> 
             </div>
  
             <div id="tab3" class="tabContent hide">
-                00.0%    
+               {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
+                <label class='sm_box init-rate'>&nbsp;</label>&nbsp;Selection
+                <br>
+                <canvas id="average_uptake_rate" class='db-charts'></canvas> 
             </div>
  
             <div id="tab4" class="tabContent hide">
@@ -164,13 +193,20 @@
 
 </body>
 <?php
+/*
+national -- #6D6D6D
+blue -- #357BB8
+green-- #5EA361
+purple -- #9F82D1
+yellow -- #F5A623
+*/
 $chart_stuff=[
-    "fillColor"=>"rgba(151,187,205,0.2)",
-    "strokeColor"=>"rgba(151,187,205,1)",
-    "pointColor"=>"rgba(151,187,205,1)",
+    "fillColor"=>"rgba(0,0,0, 0)",
+    "strokeColor"=>"#6D6D6D",
+    "pointColor"=>"#6D6D6D",
     "pointStrokeColor"=>"#fff",
     "pointHighlightFill"=>"#fff",
-    "pointHighlightStroke"=> "rgba(151,187,205,1)"
+    "pointHighlightStroke"=> "#6D6D6D"
     ];
 
 $chart_stuff2=[
@@ -189,6 +225,7 @@ $st2= ["Jan"=>2, "Feb"=>2, "Mar"=>3, "Apr"=>6, "May"=>3, "Jun"=>6, "Jul"=>6,"Aug
 
 <script type="text/javascript">
 var months=["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug","Sept","Oct","Nov","Dec"];
+var reg_districts=<?php echo json_encode($reg_districts) ?>;
 var count_positives_json=<?php echo json_encode($chart_stuff + ["data"=>$count_positives_arr]) ?>;
 var count_positives_json2=<?php echo json_encode($chart_stuff2 + ["data"=>$st2]) ?>;
 var av_positivity_json=<?php echo json_encode($chart_stuff + ["data"=>$av_positivity_arr]) ?>;
@@ -206,6 +243,7 @@ var total_samples_dist=<?php echo json_encode($total_samples_dist) ?>;
 var total_initiated_dist=<?php echo json_encode($total_initiated_dist) ?>;
 
 
+
 $(document).ready( function(){
     var ctx = $("#hiv_postive_infants").get(0).getContext("2d");
    // This will get the first returned node in the jQuery collection. 
@@ -216,9 +254,21 @@ $(document).ready( function(){
     var myLineChart = new Chart(ctx).Line(data);
 });
 
+/*$(document).ready(function() {
+    setTimeout($('#tab_id').DataTable(),3000);
+    
+  });*/
+
 $("#time_fltr").change(function(){
     return window.location.assign("/"+this.value);
 });
+
+$("#region_slct").change(function(){
+    var items=reg_districts[this.value];
+    var options=" ng-model='district' ng-change=\"filter('district')\" ";
+    $("#dist_elmt").html(dropDown("district",items,options)) ;
+});
+
 
 
 //angular stuff
@@ -267,11 +317,23 @@ ctrllers.DashController=function($scope,$timeout){
         if(filterer=='region'){
             $scope.count_positives=$scope.pos_by_reg_sums[$scope.region];
             filtered_data=$scope.positives_by_region[$scope.region];
+            //$scope.facility_pos_counts=facility_pos_counts_regs[$scope.region];
+            //$('#tab_id').DataTable();
         }else if(filterer=='district'){
             $scope.count_positives=$scope.pos_by_dist_sums[$scope.district];
             filtered_data=$scope.positives_by_dist[$scope.district];
+            //$scope.facility_pos_counts=facility_pos_counts_dist[$scope.district];
         }else{
-            filtered_data=[];
+             if($scope.district!=null){
+                $scope.count_positives=$scope.pos_by_dist_sums[$scope.district];
+                filtered_data=$scope.positives_by_dist[$scope.district];
+            }else if($scope.region!="all"){
+                $scope.count_positives=$scope.pos_by_reg_sums[$scope.region];
+                filtered_data=$scope.positives_by_region[$scope.region];
+            }else{
+                $scope.count_positives=<?php echo $count_positives ?>;
+                filtered_data=[];
+            }   
         }
         
         $timeout(function(){
@@ -281,12 +343,12 @@ ctrllers.DashController=function($scope,$timeout){
                     labels: months,datasets: [
                     count_positives_json,
                     {
-                        "fillColor":"#FFFFCC",
-                        "strokeColor":"#FFCC99",
-                        "pointColor":"#FFCC99",
+                        "fillColor":"rgba(0, 0, 0, 0)",
+                        "strokeColor":"#357BB8",
+                        "pointColor":"#357BB8",
                         "pointStrokeColor":"#fff",
                         "pointHighlightFill":"#fff",
-                        "pointHighlightStroke":"#FFCC99",
+                        "pointHighlightStroke":"#357BB8",
                         "data":filtered_data
                     }] 
                 };
@@ -302,10 +364,19 @@ ctrllers.DashController=function($scope,$timeout){
             $scope.av_positivity=$scope.av_by_region[$scope.region];
             filtered_data=$scope.av_by_reg_mth[$scope.region];
         }else if(filterer=='district'){
-            $scope.count_positives=$scope.pos_by_dist_sums[$scope.district];
-            filtered_data=$scope.positives_by_dist[$scope.district];
+            $scope.av_positivity=$scope.av_by_dist[$scope.district];
+            filtered_data=$scope.av_by_dist_mth[$scope.district];
         }else{
-            filtered_data=[];
+            if($scope.district!=null){
+                $scope.av_positivity=$scope.av_by_dist[$scope.district];
+                filtered_data=$scope.av_by_dist_mth[$scope.district];
+            }else if($scope.region!="all"){
+                $scope.av_positivity=$scope.av_by_region[$scope.region];
+                filtered_data=$scope.av_by_reg_mth[$scope.region];
+            }else{
+                $scope.av_positivity=<?php echo $av_positivity ?>;
+                filtered_data=[];
+            }       
         }
         
         $timeout(function(){
@@ -314,12 +385,12 @@ ctrllers.DashController=function($scope,$timeout){
                 var data = {
                     labels: months,datasets: [
                     av_positivity_json,{
-                        "fillColor":"#F6CEEC",
-                        "strokeColor":"#BF00FF",
-                        "pointColor":"#BF00FF",
+                        "fillColor":"rgba(0, 0, 0, 0)",
+                        "strokeColor":"#9F82D1",
+                        "pointColor":"#9F82D1",
                         "pointStrokeColor":"#fff",
                         "pointHighlightFill":"#fff",
-                        "pointHighlightStroke":"#BF00FF",
+                        "pointHighlightStroke":"#9F82D1",
                         "data":filtered_data
                     }] 
                 };

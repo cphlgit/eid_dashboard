@@ -263,6 +263,34 @@ ORDER BY count(f.id)*/
 		return $ret;
 	}
 
+	public static function InitsGroupByM($year,$pcr="",$ttl_inited="",$groupby=""){
+		if(empty($year)) $year=date("Y");
+		$res=$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
+				  ->leftjoin("facilities AS f","f.id","=","b.facility_id")
+				  ->leftjoin("districts AS d","d.id","=","f.districtID")
+				  ->select(\DB::raw("regionID,districtID,month(date_results_entered) AS mth,count(s.id) AS num"))
+			 	  ->from("dbs_samples AS s")
+			 	  ->whereYear('s.date_results_entered','=',$year);
+		$res=!empty($pcr)?$res->where('s.pcr','=',$pcr):$res;
+		$res=$ttl_inited==1?$res->where("f_ART_initiated",'=','YES'):$res;
+		$res=$res->groupby($groupby,"mth")->get();
+
+		$ret=[];
+
+		if($groupby=='regionID'){
+			$ret=Sample::regionMonthsInit();
+			foreach ($res as $rw) {
+				$ret[$rw->regionID][$rw->mth]=$rw->num;
+			}
+		}elseif($groupby=='districtID'){
+			$ret=Sample::districtMonthsInit();
+			foreach ($res as $rw) {
+				$ret[$rw->districtID][$rw->mth]=$rw->num;
+			}
+		}
+		return $ret;
+	}
+
 	public static function PCRAges($year,$pcr=""){
 		$res=Sample::select("s.infant_age")
 			 ->from("dbs_samples AS s")
@@ -274,6 +302,41 @@ ORDER BY count(f.id)*/
 			$ret[]=Sample::cleanAge($rw->infant_age);	
 		}
 		//if($pcr=="SECOND") print_r($ret);
+		return $ret;
+	}
+
+	public static function countPositivesByFacilities($year="",$groupby=""){
+		if(empty($year)) $year=date("Y");
+		$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
+				->leftjoin("facilities AS f","f.id","=","b.facility_id")
+				->leftjoin("districts AS d","d.id","=","f.districtID")
+				->select(\DB::raw("f.facility,d.regionID, f.districtID,b.facility_id, count(s.id) AS number_positive"))
+				->from("dbs_samples AS s")
+				->whereYear('s.date_results_entered','=',$year)
+				->where('s.accepted_result','=','POSITIVE');
+
+		$res=!empty($groupby)?$res->groupby($groupby,'facility_id')->get():$res->groupby('facility_id')->get();
+				
+		$ret=[];
+		if($groupby=='regionID'){
+			$regs=Location\Region::regionsFacilitiesInit();
+			foreach ($res as $rw) {
+				$regs[$rw->regionID][]=["facility"=>$rw->facility,"pos_count"=>$rw->number_positive];
+			}
+			$ret=$regs;
+		}else if($groupby=='districtID'){
+			$districts=Location\District::districtsFacilitiesInit();
+			foreach ($res as $rw) {
+				$districts[$rw->districtID][]=["facility"=>$rw->facility,"pos_count"=>$rw->number_positive];
+			}
+			$ret=$districts;
+		}else{
+			foreach ($res as $rw) {
+				$ret[]=["facility"=>$rw->facility,"pos_count"=>$rw->number_positive];
+			}
+		}
+				
+		
 		return $ret;
 	}
 
@@ -299,6 +362,24 @@ ORDER BY count(f.id)*/
 		$ret= ($years*12)+$months+($weeks/4)+($days/30);
 		return round($ret,2);
 	}
+
+	private static function regionMonthsInit(){
+		$regions=Location\Region::regionsArr();
+		$months=\MyHTML::initMonths();
+		$ret=[];
+		foreach ($regions as $regID => $reg)  $ret[$regID]=$months;
+		return $ret;
+	}
+
+	private static function districtMonthsInit(){
+		$districts=Location\District::districtsArr();
+		$months=\MyHTML::initMonths();
+		$ret=[];
+		foreach ($districts as $dID => $d)  $ret[$dID]=$months;
+		return $ret;
+	}
+
+
 
 }
 

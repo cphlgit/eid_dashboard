@@ -26,8 +26,10 @@ class DashboardController extends Controller {
 
 	public function show($time=""){
 		if(empty($time)) $time=date("Y");
+
 		$regions=['all'=>'REGION']+Region::regionsArr();
 		$districts=District::districtsArr();
+		$reg_districts=District::districtsByRegions();
 		$facility_levels=FacilityLevel::facilityLevelsArr();
 		//$count_positives=Sample::countPositives($time);
 		$av_positivity=Sample::avPositivity($time);
@@ -81,11 +83,28 @@ class DashboardController extends Controller {
 		$total_samples_dist=Sample::NumberTotalsGroupBy($time,"","","districtID");
 		$total_initiated_dist=Sample::NumberTotalsGroupBy($time,"",1,"districtID");
 
+		$inits_by_regM=Sample::InitsGroupByM($time,"",1,"regionID");
+		$inits_by_distM=Sample::InitsGroupByM($time,"",1,"districtID");
+
+		$av_initiation_rate=($total_initiated/$count_positives)*100;
+		$av_initiation_rate=round($av_initiation_rate,1);
+		$av_initiation_rate_reg=$this->arrAvs($positives_by_region,$inits_by_regM);		
+		$av_initiation_rate_dist=$this->arrAvs($positives_by_dist,$inits_by_distM);		
+		$av_initiation_rate_regM=$this->arrMonthAvs($positives_by_region,$inits_by_regM);
+		$av_initiation_rate_distM=$this->arrMonthAvs($positives_by_dist,$inits_by_distM);
+
+
+		//facility lists
+		/*$facility_pos_counts_regs=Sample::countPositivesByFacilities($time,"regionID");
+		$facility_pos_counts_dist=Sample::countPositivesByFacilities($time,"districtID");
+		$facility_pos_counts=Sample::countPositivesByFacilities($time);
+		$facility_pos_counts=json_encode($facility_pos_counts);*/
 
 		return view('db/show',compact(
 			"time",
 			"regions",
 			"districts",
+			"reg_districts",
 			"facility_levels",
 			"count_positives",
 			"av_positivity",
@@ -106,6 +125,12 @@ class DashboardController extends Controller {
 			"total_initiated",
 			"total_samples",
 
+			"av_initiation_rate",
+			"av_initiation_rate_reg",
+			"av_initiation_rate_dist",
+			"av_initiation_rate_regM",
+			"av_initiation_rate_distM",
+
 			"first_pcr_total_reg",
 			"sec_pcr_total_reg",
 			"total_samples_reg",
@@ -115,7 +140,6 @@ class DashboardController extends Controller {
 			"sec_pcr_total_dist",
 			"total_samples_dist",			
 			"total_initiated_dist"
-
 			
 			));
 	}

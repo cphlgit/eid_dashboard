@@ -142,7 +142,7 @@
                {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
                 <label class='sm_box init-rate'>&nbsp;</label>&nbsp;Selection
                 <br>
-                <canvas id="average_uptake_rate" class='db-charts'></canvas> 
+                <canvas id="average_init_rate" class='db-charts'></canvas> 
             </div>
  
             <div id="tab4" class="tabContent hide">
@@ -322,7 +322,7 @@ ctrllers.DashController=function($scope,$timeout){
     $scope.filter=function(filterer){
         $scope.setCountPos(filterer);
         $scope.avUptakeRate(filterer);
-        $scope. avInitRate(filterer);
+        $scope.avInitRate(filterer);
         $scope.avPositivity(filterer);
         $scope.setAdditionalMetrics(filterer);
     };
@@ -447,8 +447,8 @@ ctrllers.DashController=function($scope,$timeout){
         }
         
         $timeout(function(){
-            if($("#tb_hd2").hasClass('selected')){
-                var ctx = $("#average_uptake_rate").get(0).getContext("2d");
+            if($("#tb_hd3").hasClass('selected')){
+                var ctx = $("#average_init_rate").get(0).getContext("2d");
                 var data = {
                     labels: months,datasets: [
                     av_initiation_rate_months,

@@ -99,10 +99,23 @@ class Sample extends Model {
 		foreach ($res as $k) {
 			$months[$k->mth]=$k->number_positive;
 		}
-
-		//echo json_encode($res);
 		return $months;
 	}
+
+	public static function countAllByMonths($year=""){
+		if(empty($year)) $year=date("Y");
+		$res=Sample::select(\DB::raw("month(date_results_entered) AS mth, count(s.id) AS number_positive"))
+				->from("dbs_samples AS s")
+				->whereYear('s.date_results_entered','=',$year)
+				->groupby('mth')
+				->get();
+		$months=\MyHTML::initMonths();
+		foreach ($res as $k) {
+			$months[$k->mth]=$k->number_positive;
+		}
+		return $months;
+	}
+
 		/*SELECT region,MONTH(`date_results_entered`) AS m,count(s.id) AS counts
 FROM `dbs_samples` AS s
 LEFT JOIN batches AS b ON s.`batch_id`=b.id
@@ -273,7 +286,8 @@ ORDER BY count(f.id)*/
 			 	  ->whereYear('s.date_results_entered','=',$year);
 		$res=!empty($pcr)?$res->where('s.pcr','=',$pcr):$res;
 		$res=$ttl_inited==1?$res->where("f_ART_initiated",'=','YES'):$res;
-		$res=$res->groupby($groupby,"mth")->get();
+		$res=!empty($groupby)?$res->groupby($groupby,"mth"):$res->groupby("mth");
+		$res=$res->get();
 
 		$ret=[];
 
@@ -343,9 +357,6 @@ ORDER BY count(f.id)*/
 	private static function cleanAge($age=0){
 		$ret=0;
 		$age_arr=explode(" ", $age);
-		//return round($age_arr[0],2);
-		$age_param=$age_arr[1];
-		//$age_figure=str_replace(" ", "", ($age_arr[0]));
 		$years=0;$months=0;$weeks=0;$days=0;
 
 		foreach ($age_arr as $k => $val) {

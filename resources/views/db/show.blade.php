@@ -69,15 +69,18 @@
                 </a>
             </li>
             <li>
-                <a href="#tab2" id='tb_hd2'>
-                    <label class='tab-labels'>00.0%
-                        <font class='tab-sm-ttl'>AVERAGE UPTAKE RATE</font>
+                <a href="#tab2" id='tb_hd2'  ng-click="avUptakeRate()">
+                    <label class='tab-labels'>
+                        <span ng-model="total_samples" ng-init="total_samples={!! $total_samples !!}">
+                            <% total_samples %>
+                        </span>
+                        <font class='tab-sm-ttl'>TOTAL TESTS</font>
                     </label>
                 </a>
             </li>
             
             <li>
-                <a href="#tab3" id='tb_hd3'>
+                <a href="#tab3" id='tb_hd3' ng-click="avUptakeRate()">
                     <label class='tab-labels'>
                         <span ng-model="av_initiation_rate" ng-init="av_initiation_rate={!! $av_initiation_rate !!}">
                             <% av_initiation_rate %>%
@@ -226,9 +229,12 @@ $st2= ["Jan"=>2, "Feb"=>2, "Mar"=>3, "Apr"=>6, "May"=>3, "Jun"=>6, "Jul"=>6,"Aug
 <script type="text/javascript">
 var months=["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug","Sept","Oct","Nov","Dec"];
 var reg_districts=<?php echo json_encode($reg_districts) ?>;
+var districts_json=<?php echo json_encode($districts) ?>;
 var count_positives_json=<?php echo json_encode($chart_stuff + ["data"=>$count_positives_arr]) ?>;
 var count_positives_json2=<?php echo json_encode($chart_stuff2 + ["data"=>$st2]) ?>;
 var av_positivity_json=<?php echo json_encode($chart_stuff + ["data"=>$av_positivity_arr]) ?>;
+
+var nums_json=<?php echo json_encode($chart_stuff+["data"=>$nums_by_months]) ?>;
 
 
 var first_pcr_total_reg=<?php echo json_encode($first_pcr_total_reg) ?>;
@@ -242,6 +248,19 @@ var sec_pcr_total_dist=<?php echo json_encode($sec_pcr_total_dist) ?>;
 var total_samples_dist=<?php echo json_encode($total_samples_dist) ?>;
 var total_initiated_dist=<?php echo json_encode($total_initiated_dist) ?>;
 
+
+//average initiation rates
+/*var av_initiation_rate_reg=<?php echo json_encode($av_initiation_rate_reg) ?>;
+var av_initiation_rate_dist=<?php echo json_encode($av_initiation_rate_dist) ?>;
+var av_initiation_rate_regM=<?php echo json_encode($av_initiation_rate_regM) ?>;
+var av_initiation_rate_distM=<?php echo json_encode($av_initiation_rate_distM) ?>;*/
+
+var av_initiation_rate_reg=<?php echo json_encode($av_initiation_rate_reg) ?>;
+var av_initiation_rate_dist=<?php echo json_encode($av_initiation_rate_dist) ?>;
+var av_initiation_rate_regM=<?php echo json_encode($av_initiation_rate_regM) ?>;
+var av_initiation_rate_distM=<?php echo json_encode($av_initiation_rate_distM) ?>;
+
+var av_initiation_rate_months=<?php echo json_encode($av_initiation_rate_months) ?>;
 
 
 $(document).ready( function(){
@@ -264,9 +283,13 @@ $("#time_fltr").change(function(){
 });
 
 $("#region_slct").change(function(){
-    var items=reg_districts[this.value];
-    var options=" ng-model='district' ng-change=\"filter('district')\" ";
-    $("#dist_elmt").html(dropDown("district",items,options)) ;
+   var items=reg_districts[this.value];
+   var options=" ng-model='district' ng-change=\"filter('district')\" ";
+   if(this.value=='all'){
+    items=districts_json;
+   }
+   $("#dist_elmt").html(dropDown("district",items,options));
+   
 });
 
 
@@ -293,8 +316,13 @@ ctrllers.DashController=function($scope,$timeout){
     $scope.av_by_dist=<?php echo json_encode($av_by_dist) ?>;
     $scope.av_by_dist_mth=<?php echo json_encode($av_by_dist_mth) ?>;
 
+    $scope.nums_by_region=<?php echo json_encode($nums_by_region) ?>;
+    $scope.nums_by_dist=<?php echo json_encode($nums_by_dist) ?>;
+
     $scope.filter=function(filterer){
         $scope.setCountPos(filterer);
+        $scope.avUptakeRate(filterer);
+        $scope. avInitRate(filterer);
         $scope.avPositivity(filterer);
         $scope.setAdditionalMetrics(filterer);
     };
@@ -309,11 +337,12 @@ ctrllers.DashController=function($scope,$timeout){
             $scope.first_pcr_total=first_pcr_total_dist[$scope.district];
             $scope.sec_pcr_total=sec_pcr_total_dist[$scope.district];
             $scope.total_samples=total_samples_dist[$scope.district];
-             $scope.total_initiated=total_initiated_dist[$scope.district];
+            $scope.total_initiated=total_initiated_dist[$scope.district];
         }        
     }
 
     $scope.setCountPos=function(filterer){
+        var filtered_data={};
         if(filterer=='region'){
             $scope.count_positives=$scope.pos_by_reg_sums[$scope.region];
             filtered_data=$scope.positives_by_region[$scope.region];
@@ -332,7 +361,7 @@ ctrllers.DashController=function($scope,$timeout){
                 filtered_data=$scope.positives_by_region[$scope.region];
             }else{
                 $scope.count_positives=<?php echo $count_positives ?>;
-                filtered_data=[];
+                filtered_data={};
             }   
         }
         
@@ -358,8 +387,91 @@ ctrllers.DashController=function($scope,$timeout){
         },1);
     };
 
+    $scope.avUptakeRate=function(filterer){
+        var filtered_data={};
+        if(filterer=='region'){
+            filtered_data=$scope.nums_by_region[$scope.region];
+        }else if(filterer=='district'){
+            filtered_data=$scope.nums_by_dist[$scope.district];
+        }else{
+             if($scope.district!=null){
+                filtered_data=$scope.nums_by_dist[$scope.district];
+            }else if($scope.region!="all"){
+                filtered_data=$scope.nums_by_region[$scope.region];
+            }else{
+                filtered_data={};
+            }   
+        }
+        
+        $timeout(function(){
+            if($("#tb_hd2").hasClass('selected')){
+                var ctx = $("#average_uptake_rate").get(0).getContext("2d");
+                var data = {
+                    labels: months,datasets: [
+                    nums_json,
+                    {
+                        "fillColor":"rgba(0, 0, 0, 0)",
+                        "strokeColor":"#5EA361",
+                        "pointColor":"#5EA361",
+                        "pointStrokeColor":"#fff",
+                        "pointHighlightFill":"#fff",
+                        "pointHighlightStroke":"#5EA361",
+                        "data":filtered_data
+                    }] 
+                };
+                var myLineChart = new Chart(ctx).Line(data);
+            }
+
+        },1);
+
+    };
+
+    $scope.avInitRate=function(filterer){
+        var filtered_data={};
+        if(filterer=='region'){
+            $scope.av_initiation_rate=av_initiation_rate_reg[$scope.region];
+            filtered_data=av_initiation_rate_regM[$scope.region];
+        }else if(filterer=='district'){
+            $scope.av_initiation_rate=av_initiation_rate_dist[$scope.district];
+            filtered_data=av_initiation_rate_distM[$scope.district];
+        }else{
+             if($scope.district!=null){
+                $scope.av_initiation_rate=av_initiation_rate_dist[$scope.district];
+                filtered_data=av_initiation_rate_distM[$scope.district];
+            }else if($scope.region!="all"){
+                $scope.av_initiation_rate=av_initiation_rate_reg[$scope.region];
+                filtered_data=av_initiation_rate_regM[$scope.region];
+            }else{
+                filtered_data={};
+            }   
+        }
+        
+        $timeout(function(){
+            if($("#tb_hd2").hasClass('selected')){
+                var ctx = $("#average_uptake_rate").get(0).getContext("2d");
+                var data = {
+                    labels: months,datasets: [
+                    av_initiation_rate_months,
+                    {
+                        "fillColor":"rgba(0, 0, 0, 0)",
+                        "strokeColor":"#5EA361",
+                        "pointColor":"#5EA361",
+                        "pointStrokeColor":"#fff",
+                        "pointHighlightFill":"#fff",
+                        "pointHighlightStroke":"#5EA361",
+                        "data":filtered_data
+                    }] 
+                };
+                var myLineChart = new Chart(ctx).Line(data);
+            }
+
+        },1);
+
+    };
+
 
     $scope.avPositivity=function (filterer){
+        var filtered_data={};
         if(filterer=='region'){
             $scope.av_positivity=$scope.av_by_region[$scope.region];
             filtered_data=$scope.av_by_reg_mth[$scope.region];
@@ -375,7 +487,7 @@ ctrllers.DashController=function($scope,$timeout){
                 filtered_data=$scope.av_by_reg_mth[$scope.region];
             }else{
                 $scope.av_positivity=<?php echo $av_positivity ?>;
-                filtered_data=[];
+                filtered_data={};
             }       
         }
         

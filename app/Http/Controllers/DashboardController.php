@@ -38,6 +38,8 @@ class DashboardController extends Controller {
 		$av_positivity_arr=Sample::avPositivity2($time);
 		//$av_positivity=array_sum($av_positivity_arr)/count($av_positivity_arr);
 
+		$nums_by_months=Sample::countAllByMonths($time);
+
 		//for regions filtering -- positive numbers
 		$positives_by_region=Sample::countPositivesByRegions($time);
 		$pos_by_reg_sums=$this->arrSums($positives_by_region);
@@ -85,6 +87,7 @@ class DashboardController extends Controller {
 
 		$inits_by_regM=Sample::InitsGroupByM($time,"",1,"regionID");
 		$inits_by_distM=Sample::InitsGroupByM($time,"",1,"districtID");
+		$inits_by_M=Sample::InitsGroupByM($time,"",1);
 
 		$av_initiation_rate=($total_initiated/$count_positives)*100;
 		$av_initiation_rate=round($av_initiation_rate,1);
@@ -92,6 +95,9 @@ class DashboardController extends Controller {
 		$av_initiation_rate_dist=$this->arrAvs($positives_by_dist,$inits_by_distM);		
 		$av_initiation_rate_regM=$this->arrMonthAvs($positives_by_region,$inits_by_regM);
 		$av_initiation_rate_distM=$this->arrMonthAvs($positives_by_dist,$inits_by_distM);
+
+		$av_initiation_rate_months=$this->avInitRateM($count_positives_arr,$inits_by_M);
+
 
 
 		//facility lists
@@ -139,9 +145,29 @@ class DashboardController extends Controller {
 			"first_pcr_total_dist",
 			"sec_pcr_total_dist",
 			"total_samples_dist",			
-			"total_initiated_dist"
+			"total_initiated_dist",
+
+			"nums_by_months",
+			"nums_by_region",
+			"nums_by_dist",
+
+			"av_initiation_rate_months"
 			
 			));
+	}
+
+	private function avInitRateM($count_positives_arr,$inits_by_M){
+		$ret=[];
+		$months=\MyHTML::initMonths();
+		foreach ($months as $m) {
+			$av=0;
+			if(array_key_exists($m, $inits_by_M) && array_key_exists($m, $count_positives_arr)){
+				$av=($inits_by_M[$m]/$count_positives_arr[$m])*100;
+			}			
+			$av=round($av,1);
+			$ret[$m]=$av;
+		}
+		return $ret;
 	}
 
 	private function arrSums($arr){
@@ -156,7 +182,11 @@ class DashboardController extends Controller {
 		$ret=[];
 		foreach ($arr_ttls as $k => $v) {
 			$ttl=array_sum($v);	
-			$val=array_sum($arr_vals[$k]);	
+			$val=0;
+			if(array_key_exists($k, $arr_vals)){
+				$val=array_sum($arr_vals[$k]);	
+			}
+			
 			$av=$ttl>0?($val/$ttl)*100:0;
 			$ret[$k]=round($av,1);	
 		}
@@ -167,7 +197,11 @@ class DashboardController extends Controller {
 		$ret=[];
 		foreach ($arr_ttls as $k => $months) {
 			foreach ($months as $mth => $mth_ttl){
-				$m_av=$mth_ttl>0?(($arr_vals[$k][$mth])/$mth_ttl)*100:0;
+				$m_av=0.0;
+				if(array_key_exists($k, $arr_vals)){
+					$m_av=$mth_ttl>0?(($arr_vals[$k][$mth])/$mth_ttl)*100:0;
+				}
+				
 				$ret[$k][$mth]=round($m_av,1);
 			}
 		}

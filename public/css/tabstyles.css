@@ -3,9 +3,15 @@
 /*****************************/
 /* Flip */
 /*****************************/
+
+@font-face {
+    font-family: OpenSans;
+    src: url('../font/fonts_open-sans/OpenSans-Regular.ttf');
+}
+
 body{
 	background-color: #fff;
-	font-family: helvetica neue regular;
+	font-family: OpenSans;
 }
 
 .tabs-style-flip  nav{
@@ -19,8 +25,8 @@ body{
 }
 
 .tabs-style-flip nav li a{
-	padding-bottom: 0.079em;
-	padding-top: 1em;
+	/*padding-bottom: 0.082em;*/
+	padding-bottom: 3.47%;
 	color: #74777b;
 }
 
@@ -63,7 +69,7 @@ body{
 
 .tabs-style-flip nav a span {
 	text-transform: uppercase;
-	line-height: 25px;
+	line-height: 16px;
 }
 
 .tabs-style-flip nav a span.num {

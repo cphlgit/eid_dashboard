@@ -368,6 +368,8 @@ ORDER BY count(f.id)*/
 				$weeks=str_replace(" ", "",$age_arr[($k-1)]);
 			}elseif($val=='days'||$val=='day'){
 				$days=str_replace(" ", "",$age_arr[($k-1)]);
+			}else{
+				$months=$val;
 			}
 		}
 		$ret= ($years*12)+$months+($weeks/4)+($days/30);

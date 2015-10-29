@@ -106,7 +106,7 @@ class DashboardController extends Controller {
 		$facility_pos_counts=Sample::countPositivesByFacilities($time);
 		$facility_pos_counts=json_encode($facility_pos_counts);*/
 
-		return view('db/show',compact(
+		return view('d',compact(
 			"time",
 			"regions",
 			"districts",
@@ -159,7 +159,7 @@ class DashboardController extends Controller {
 	private function avInitRateM($count_positives_arr,$inits_by_M){
 		$ret=[];
 		$months=\MyHTML::initMonths();
-		foreach ($months as $m) {
+		foreach ($months as $m=>$v) {
 			$av=0;
 			if(array_key_exists($m, $inits_by_M) && array_key_exists($m, $count_positives_arr)){
 				$av=($inits_by_M[$m]/$count_positives_arr[$m])*100;

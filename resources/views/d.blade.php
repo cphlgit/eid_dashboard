@@ -8,15 +8,22 @@
     <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/jquery.dataTables.css') }}" rel="stylesheet">    
     <link href="{{ asset('/css/jquery-ui.css')}}" rel="stylesheet" >
-    <link href="{{ asset('/css/eid.css') }}" rel="stylesheet">
-    <link href="{{ asset('/css/tab.css') }}" rel="stylesheet">
+
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('/css/demo.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/css/tabs.css') }} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/css/tabstyles.css') }}" />
+
+        <link href="{{ asset('/css/eid.css') }}" rel="stylesheet">
+
+    <script src="{{ asset('/js/modernizr.custom.js') }}"></script>
+
 
     <script src="{{ asset('/js/general.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/js/jquery-2.1.3.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/js/jquery-ui.js')}}" type="text/javascript"></script>
-`
-    <script src="{{ asset('/js/tab.js')}}" type="text/javascript"></script>
+
 
     <script src="{{ asset('/js/Chart.js')}}" type="text/javascript"></script>
     <script src="{{ asset('/js/angular.min.js')}}" type="text/javascript"></script>
@@ -25,7 +32,7 @@
     
 </head>
 
-<body ng-app="dashboard" ng-controller="DashController" onload="init()">
+<body ng-app="dashboard" ng-controller="DashController">
 <div class="navbar-custom navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
@@ -42,156 +49,142 @@
 
 <div class='container'>
     <br>
-    <?php if(!isset($filter_val)) $filter_val="National Metrics, ".date('Y')." thus far" ?>
-     <!-- <p><label class='hdr hdr-grey'> FILTERS:</label> <label class='hdr val-grey'>{!! $filter_val !!}</label> </p> -->
-    
+    <?php //if(!isset($filter_val)) $filter_val="National Metrics, ".$time." thus far" ?>
+     <label class='hdr hdr-grey'> FILTERS:</label> 
+     <label class='hdr val-grey'>
+        <label class='filter-val' ng-model='time' ng-init='time={!! $time !!}'>YEAR: <% time %></label> 
+        <label class='filter-val' ng-model='region_label' ng-init="region_label='~'"><% region_label %></label> 
+        <label class='filter-val' ng-model='district_label' ng-init="district_label='~'"><% district_label %></label> 
+        <label class='filter-val' ng-model='care_level_label' ng-init="care_level_label='~'"><% care_level_label %></label> 
+    </label><br>
+
      <table border='1' cellpadding='0' cellspacing='0' class='filter-tb'>
         <tr>
             <td width='25%'>{!! Form::select('time',[''=>'YEAR']+MyHTML::years(2010),$time,["id"=>"time_fltr"]) !!}</td>
             <td width='25%'>{!! Form::select('region',$regions,"all",['ng-init'=>"region='all'","ng-model"=>"region",'ng-change'=>"filter('region')","id"=>"region_slct"]) !!}</td>
             <td width='25%' id='dist_elmt'>{!! Form::select('district',[''=>'DISTRICT']+$districts,"",["ng-model"=>"district",'ng-change'=>"filter('district')"]) !!}</td>
-            <!-- <td width='25%'>{!! Form::select('care_level',[''=>'CARE LEVEL']+$facility_levels) !!}</td> -->
+            <td width='25%'>{!! Form::select('care_level',[''=>'CARE LEVEL']+$facility_levels,["ng-model"=>"care_level",'ng-change'=>"filter('care_level')"]) !!}</td>
         </tr>
      </table>
+     <br><br>
+     <label class='hdr hdr-grey'> KEY METRICS</label>
      <br>
-
-     <div class="tabs">
-        <ul id='tabs'>
-            <li class="selected">
-                <a href="#tab1" id='tb_hd1' ng-click="setCountPos()">
-                <label class='tab-labels'>
-                    <span ng-model="count_positives" ng-init="count_positives={!! $count_positives !!}">
-                        <% count_positives | number:3 %>
-                    </span>
-                                
-                    
-                </label>
-                </a>
-            </li>
-            <li>
-                <a href="#tab2" id='tb_hd2'  ng-click="avUptakeRate()">
-                    <label class='tab-labels'>
-                        <span ng-model="total_samples" ng-init="total_samples={!! $total_samples !!}">
-                            <% total_samples %>
+     <div class="tabss tabs-style-flip">
+        <nav>
+            <ul>
+                <li id='tb_hd1'>
+                    <a href="#tab1" id='tb_lnk1' ng-click="setCountPos()">
+                        <span class="num" ng-model="count_positives" ng-init="count_positives={!! $count_positives !!}" >
+                            <% count_positives|number %>
                         </span>
-                        <font class='tab-sm-ttl'>TOTAL TESTS</font>
-                    </label>
-                </a>
-            </li>
-            
-            <li>
-                <a href="#tab3" id='tb_hd3' ng-click="avInitRate()">
-                    <label class='tab-labels'>
-                        <span ng-model="av_initiation_rate" ng-init="av_initiation_rate={!! $av_initiation_rate !!}">
-                            <% av_initiation_rate %>%
-                        </span> 
-                        <font class='tab-sm-ttl'>AVERAGE ART INITIATION RATE</font>
-                    </label>
-                </a>
-            </li>
-            <li>
-                <a href="#tab4" id='tb_hd4' ng-click="avPositivity()">
-                    <label class='tab-labels'>
-                        <span ng-model="av_positivity" ng-init="av_positivity={!! $av_positivity !!}">
-                            <% av_positivity %>%
-                        </span>  
-                        <font class='tab-sm-ttl'>AVERAGE POSITIVITY RATE</font>
-                    </label>
-                </a>
-            </li>
-        </ul>
-
+                        <span class="desc">hiv positive infants</span>
+                    </a>
+                </li>
+                <li id='tb_hd2'>
+                    <a href="#tab2" id='tb_lnk2'  ng-click="avUptakeRate()">
+                        <span class="num" ng-model="total_samples" ng-init="total_samples={!! $total_samples !!}">
+                            <% total_samples|number %>
+                        </span>
+                        <span class="desc">average uptake rate</span>
+                    </a>
+                </li>
+                <li id='tb_hd3'>
+                    <a href="#tab3" id='tb_lnk3' ng-click="avInitRate()">
+                        <span class="num" ng-model="av_initiation_rate" ng-init="av_initiation_rate={!! $av_initiation_rate !!}">
+                            <% av_initiation_rate|number:1 %>%
+                        </span>
+                        <span class="desc">average initiation rate</span>
+                    </a>
+                </li>
+                <li id='tb_hd4'>
+                    <a href="#tab4" id='tb_lnk4' ng-click="avPositivity()">
+                        <span class="num" ng-model="av_positivity" ng-init="av_positivity={!! $av_positivity !!}">
+                            <% av_positivity|number:1 %>%
+                        </span>
+                        <span class="desc">average positivity rate</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
         <?php $key_nat="<label class='sm_box national'>&nbsp;</label>&nbsp;National"   ?>
 
-        <div>
-            <div id="tab1" class="tabContent">   
-                <div class="row">
-                    <div class="col-lg-6">
-                        {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
-                        <label class='sm_box hiv-positive-numbers'>&nbsp;</label>&nbsp;Selection
-                        <br>
-                        <br>
-                        <br>
-                        <canvas id="hiv_postive_infants" class='db-charts'></canvas> 
-                    </div>
-                    <!-- <div class="col-lg-6" ng-init='facility_pos_counts=1'>
-                        <table class='table table-bordered table-striped table table-condensed facilities' id='tab_id'>
-                            <thead>
-                                <tr height="10">
-                                    <th>Facility</th>
-                                    <th>Absolute Positives</th>
-                                </tr>
-                            </thead>
-                            <tbody  ng-model='facility_pos_counts' ng-repeat="fpc in facility_pos_counts">
-                                <tr><td><% fpc.facility %></td><td><% fpc.pos_count %></td></tr>
-                            </tbody>
-                        </table>
+        <div class="content-wrap">
+            <section id="tab1">
+                {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
+                <label class='sm_box hiv-positive-numbers'>&nbsp;</label>&nbsp;Selection
+                <br>
+                <canvas id="hiv_postive_infants" class='db-charts'></canvas> 
+            </section>
 
-                    </div> -->
-                </div>                             
-            </div>
-
-            <div id="tab2" class="tabContent hide">
-               {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
+            <section id="tab2">
+                {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
                 <label class='sm_box uptake'>&nbsp;</label>&nbsp;Selection
                 <br>
-                <canvas id="average_uptake_rate" class='db-charts'></canvas> 
-            </div>
- 
-            <div id="tab3" class="tabContent hide">
-               {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
+                <canvas id="average_uptake_rate" class='db-charts'></canvas>
+            </section>
+            <section id="tab3">
+                {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
                 <label class='sm_box init-rate'>&nbsp;</label>&nbsp;Selection
                 <br>
                 <canvas id="average_init_rate" class='db-charts'></canvas> 
-            </div>
- 
-            <div id="tab4" class="tabContent hide">
+            </section>
+            <section id="tab4">
                 {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
                 <label class='sm_box hiv-positive-average'>&nbsp;</label>&nbsp;Selection<br>
-                <canvas id="av_positivity" class='db-charts'></canvas>               
-            </div>
-        </div>
-    </div>
-    <br>
-    <label class='hdr hdr-grey'> ADDITIONAL METRICS:</label>
+                <canvas id="av_positivity" class='db-charts'></canvas>
+            </section>
+        </div><!-- /content -->
+    </div><!-- /tabs -->
+    
+    <br><br>
+    <label class='hdr hdr-grey'> ADDITIONAL METRICS</label>
     <div class='addition-metrics'>
        <div class='row'>
         <div class='col-sm-2'>
-            <font class='addition-metrics figure' ng-init="first_pcr_total={!! $first_pcr_total !!}" ng-model='first_pcr_total'><% first_pcr_total %></font><br>
+            <font class='addition-metrics figure' ng-init="first_pcr_total={!! $first_pcr_total !!}" ng-model='first_pcr_total'><% first_pcr_total|number %></font><br>
             <font class='addition-metrics desc'>TOTAL 1ST PCR</font>            
         </div>
         <div class='col-sm-2'>
-            <font class='addition-metrics figure' ng-init="sec_pcr_total={!! $sec_pcr_total !!}" ng-model='sec_pcr_total'><% sec_pcr_total %></font><br>
+            <font class='addition-metrics figure' ng-init="sec_pcr_total={!! $sec_pcr_total !!}" ng-model='sec_pcr_total'><% sec_pcr_total|number %></font><br>
             <font class='addition-metrics desc'>TOTAL 2ND PCR</font>            
         </div>       
         <div class='col-sm-2'>
             <font class='addition-metrics figure' ng-init="first_pcr_median_age={!! $first_pcr_median_age !!}" ng-model="first_pcr_median_age">
-                <% first_pcr_median_age %>
+                <% first_pcr_median_age|number:1 %>
             </font><br>
             <font class='addition-metrics desc'>MEDIAN MONTHS 1ST PCR</font>            
         </div>
         <div class='col-sm-2'>
             <font class='addition-metrics figure' ng-init="sec_pcr_median_age={!! $sec_pcr_median_age !!}" ng-model="sec_pcr_median_age">
-                <% sec_pcr_median_age %>
+                <% sec_pcr_median_age|number:1 %>
             </font><br>
             <font class='addition-metrics desc'>MEDIAN MONTHS 2ND PCR</font>            
         </div>
         <div class='col-sm-2'>
             <font class='addition-metrics figure' ng-init="total_initiated={!! $total_initiated !!}" ng-model="total_initiated">
-                <% total_initiated %>
+                <% total_initiated|number %>
             </font><br>
             <font class='addition-metrics desc'>TOTAL ART INITIATED CHILDREN</font>            
         </div>
         <div class='col-sm-2'>
             <font class='addition-metrics figure' ng-init="total_samples={!! $total_samples !!}" ng-model='total_samples'>
-                <% total_samples %>
+                <% total_samples|number %>
             </font><br>
             <font class='addition-metrics desc'>TOTAL TESTS</font>            
         </div>
        </div>
     </div>
 </div>
+<script src=" {{ asset('js/cbpFWTabs.js') }} "></script>
+        <script>
+            (function() {
 
+                [].slice.call( document.querySelectorAll( '.tabss' ) ).forEach( function( el ) {
+                    new CBPFWTabs( el );
+                });
+
+            })();
+        </script>
 
 
 </body>
@@ -200,8 +193,9 @@
 national -- #6D6D6D
 blue -- #357BB8
 green-- #5EA361
-purple -- #9F82D1
 yellow -- #F5A623
+purple -- #9F82D1
+
 */
 $chart_stuff=[
     "fillColor"=>"rgba(0,0,0, 0)",
@@ -230,6 +224,9 @@ $st2= ["Jan"=>2, "Feb"=>2, "Mar"=>3, "Apr"=>6, "May"=>3, "Jun"=>6, "Jul"=>6,"Aug
 var months=["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug","Sept","Oct","Nov","Dec"];
 var reg_districts=<?php echo json_encode($reg_districts) ?>;
 var districts_json=<?php echo json_encode($districts) ?>;
+var regions_json=<?php echo json_encode($regions) ?>;
+var facility_levels_json=<?php echo json_encode($facility_levels) ?>;
+
 var count_positives_json=<?php echo json_encode($chart_stuff + ["data"=>$count_positives_arr]) ?>;
 var count_positives_json2=<?php echo json_encode($chart_stuff2 + ["data"=>$st2]) ?>;
 var av_positivity_json=<?php echo json_encode($chart_stuff + ["data"=>$av_positivity_arr]) ?>;
@@ -247,6 +244,8 @@ var first_pcr_total_dist=<?php echo json_encode($first_pcr_total_dist) ?>;
 var sec_pcr_total_dist=<?php echo json_encode($sec_pcr_total_dist) ?>;
 var total_samples_dist=<?php echo json_encode($total_samples_dist) ?>;
 var total_initiated_dist=<?php echo json_encode($total_initiated_dist) ?>;
+
+
 
 
 //average initiation rates
@@ -325,6 +324,20 @@ ctrllers.DashController=function($scope,$timeout){
         $scope.avInitRate(filterer);
         $scope.avPositivity(filterer);
         $scope.setAdditionalMetrics(filterer);
+
+        if($scope.region!=null){
+            $scope.region_label=regions_json[$scope.region];
+        }
+
+        if($scope.district!=null){
+            $scope.district_label=districts_json[$scope.district];
+        }
+
+        if($scope.care_level!=null){
+            $scope.care_level_label=facility_levels_json[$scope.care_level];
+        }      
+        
+        
     };
 
     $scope.setAdditionalMetrics=function(filterer){
@@ -333,11 +346,15 @@ ctrllers.DashController=function($scope,$timeout){
             $scope.sec_pcr_total=sec_pcr_total_reg[$scope.region];
             $scope.total_samples=total_samples_reg[$scope.region];
             $scope.total_initiated=total_initiated_reg[$scope.region];
+             console.log("filtering for religions");
         }else if(filterer=='district'){
             $scope.first_pcr_total=first_pcr_total_dist[$scope.district];
             $scope.sec_pcr_total=sec_pcr_total_dist[$scope.district];
             $scope.total_samples=total_samples_dist[$scope.district];
             $scope.total_initiated=total_initiated_dist[$scope.district];
+            console.log("filtering for districts");
+        }else{
+            console.log("nara");
         }        
     }
 
@@ -366,7 +383,7 @@ ctrllers.DashController=function($scope,$timeout){
         }
         
         $timeout(function(){
-            if($("#tb_hd1").hasClass('selected')){
+            if($("#tb_hd1").hasClass('tab-current')){
                 var ctx = $("#hiv_postive_infants").get(0).getContext("2d");
                 var data = {
                     labels: months,datasets: [
@@ -404,7 +421,7 @@ ctrllers.DashController=function($scope,$timeout){
         }
         
         $timeout(function(){
-            if($("#tb_hd2").hasClass('selected')){
+            if($("#tb_hd2").hasClass('tab-current')){
                 var ctx = $("#average_uptake_rate").get(0).getContext("2d");
                 var data = {
                     labels: months,datasets: [
@@ -420,6 +437,9 @@ ctrllers.DashController=function($scope,$timeout){
                     }] 
                 };
                 var myLineChart = new Chart(ctx).Line(data);
+                console.log("inside");
+            }else{
+                console.log("outside");
             }
 
         },1);
@@ -447,7 +467,7 @@ ctrllers.DashController=function($scope,$timeout){
         }
         
         $timeout(function(){
-            if($("#tb_hd3").hasClass('selected')){
+            if($("#tb_hd3").hasClass('tab-current')){
                 var ctx = $("#average_init_rate").get(0).getContext("2d");
                 var data = {
                     labels: months,datasets: [
@@ -492,7 +512,7 @@ ctrllers.DashController=function($scope,$timeout){
         }
         
         $timeout(function(){
-            if($("#tb_hd4").hasClass('selected')){
+            if($("#tb_hd4").hasClass('tab-current')){
                 var ctx = $("#av_positivity").get(0).getContext("2d");
                 var data = {
                     labels: months,datasets: [

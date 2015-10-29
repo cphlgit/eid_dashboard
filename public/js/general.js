@@ -85,7 +85,7 @@ function formatPhoneNumber(phone){
 }
 
 function dropDown(name,items,options){
-  var ret= "<select name='"+name+" "+options+"'>";
+  var ret= "<select name='"+name+"' "+options+">";
   ret+="<option value=' '>DISTRICT</option>";
   for(var i in items){
     ret+="<option value='"+i+"'>"+items[i]+"</option>";

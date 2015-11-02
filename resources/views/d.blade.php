@@ -219,6 +219,13 @@ $chart_stuff2=[
 $st2= ["Jan"=>2, "Feb"=>2, "Mar"=>3, "Apr"=>6, "May"=>3, "Jun"=>6, "Jul"=>6,"Aug"=>6,"Sept"=>6,"Oct"=>2,"Nov"=>6,"Dec"=>2];
 ?>
 
+<?php
+$count_positives_arr=array_values($count_positives_arr);
+$av_positivity_arr=array_values($av_positivity_arr);
+$nums_by_months=array_values($nums_by_months);
+$av_initiation_rate_months=array_values($av_initiation_rate_months);
+
+?>
 
 <script type="text/javascript">
 var months=["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug","Sept","Oct","Nov","Dec"];
@@ -228,7 +235,8 @@ var regions_json=<?php echo json_encode($regions) ?>;
 var facility_levels_json=<?php echo json_encode($facility_levels) ?>;
 
 var count_positives_json=<?php echo json_encode($chart_stuff + ["data"=>$count_positives_arr]) ?>;
-var count_positives_json2=<?php echo json_encode($chart_stuff2 + ["data"=>$st2]) ?>;
+
+//var count_positives_json2=<?php echo json_encode($chart_stuff2 + ["data"=>$st2]) ?>;
 var av_positivity_json=<?php echo json_encode($chart_stuff + ["data"=>$av_positivity_arr]) ?>;
 
 var nums_json=<?php echo json_encode($chart_stuff+["data"=>$nums_by_months]) ?>;
@@ -244,8 +252,6 @@ var first_pcr_total_dist=<?php echo json_encode($first_pcr_total_dist) ?>;
 var sec_pcr_total_dist=<?php echo json_encode($sec_pcr_total_dist) ?>;
 var total_samples_dist=<?php echo json_encode($total_samples_dist) ?>;
 var total_initiated_dist=<?php echo json_encode($total_initiated_dist) ?>;
-
-
 
 
 //average initiation rates

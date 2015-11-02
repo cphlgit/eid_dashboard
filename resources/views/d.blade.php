@@ -85,7 +85,7 @@
                         <span class="num" ng-model="total_samples" ng-init="total_samples={!! $total_samples !!}">
                             <% total_samples|number %>
                         </span>
-                        <span class="desc">average uptake rate</span>
+                        <span class="desc">uptake</span>
                     </a>
                 </li>
                 <li id='tb_hd3'>
@@ -224,6 +224,8 @@ $count_positives_arr=array_values($count_positives_arr);
 $av_positivity_arr=array_values($av_positivity_arr);
 $nums_by_months=array_values($nums_by_months);
 $av_initiation_rate_months=array_values($av_initiation_rate_months);
+
+
 
 ?>
 

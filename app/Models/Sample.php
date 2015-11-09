@@ -276,6 +276,34 @@ ORDER BY count(f.id)*/
 		return $ret;
 	}
 
+	public static function niceCounts($year="",$postives=""){
+		if(empty($year)) $year=date("Y");
+		$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
+				->leftjoin("facilities AS f","f.id","=","b.facility_id")
+				->leftjoin("districts AS d","d.id","=","f.districtID")
+				->select(\DB::raw("d.regionID,f.facilityLevelID,f.districtID,month(date_results_entered) AS mth, count(s.id) AS number_positive"))
+				->from("dbs_samples AS s")
+				->whereYear('s.date_results_entered','=',$year);
+		$res=$postives==1?$res->where('s.accepted_result','=','POSITIVE'):$res;
+		$res=$res->groupby('facilityLevelID','regionID','districtID','mth')->get();
+
+		$levels=FacilityLevel::facilityLevelsArr();
+		$months=\MyHTML::initMonths();
+		$regs=Location\District::districtsByRegions();
+
+		$ret=[];
+		foreach ($levels as $lvl_id => $level) {
+			foreach ($regs as $reg_id => $dists) {
+				foreach ($dists as $dist_id => $dist) $ret[$lvl_id][$reg_id][$dist_id]=$months;
+			}			
+		}
+		
+		foreach ($res as $rw) {
+			$ret[$rw->facilityLevelID][$rw->regionID][$rw->districtID][$rw->mth]=$rw->number_positive;
+		}
+		return $ret;
+	}
+
 	public static function InitsGroupByM($year,$pcr="",$ttl_inited="",$groupby=""){
 		if(empty($year)) $year=date("Y");
 		$res=$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")

@@ -99,6 +99,10 @@ class DashboardController extends Controller {
 		$av_initiation_rate_months=$this->avInitRateM($count_positives_arr,$inits_by_M);
 
 
+		$nice_counts=Sample::niceCounts($time);
+		$nice_counts_positives=Sample::niceCounts($time,1);
+
+
 
 		//facility lists
 		/*$facility_pos_counts_regs=Sample::countPositivesByFacilities($time,"regionID");
@@ -151,7 +155,10 @@ class DashboardController extends Controller {
 			"nums_by_region",
 			"nums_by_dist",
 
-			"av_initiation_rate_months"
+			"av_initiation_rate_months",
+
+			"nice_counts",
+			"nice_counts_positives"
 			
 			));
 	}

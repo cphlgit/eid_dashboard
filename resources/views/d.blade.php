@@ -62,8 +62,19 @@
         <tr>
             <td width='25%'>{!! Form::select('time',[''=>'YEAR']+MyHTML::years(2010),$time,["id"=>"time_fltr"]) !!}</td>
             <td width='25%'>{!! Form::select('region',$regions,"all",['ng-init'=>"region='all'","ng-model"=>"region",'ng-change'=>"filter('region')","id"=>"region_slct"]) !!}</td>
-            <td width='25%' id='dist_elmt'>{!! Form::select('district',[''=>'DISTRICT']+$districts,"",["ng-model"=>"district",'ng-change'=>"filter('district')"]) !!}</td>
-            <td width='25%'>{!! Form::select('care_level',[''=>'CARE LEVEL']+$facility_levels,["ng-model"=>"care_level",'ng-change'=>"filter('care_level')"]) !!}</td>
+            <td width='25%' id='dist_elmt'>
+                <select ng-model="district" ng-change="filter('district')">
+                    <option value="">DISTRICT</option>
+                    <option ng-repeat="(dist_nr,dist_name) in districts_slct" value="<% dist_nr %>"><% dist_name %></option>
+                </select>
+            </td>
+
+             <td width='25%' id='dist_elmt'>
+                <select ng-model="care_level" ng-change="filter('level')">
+                    <option value="">CARE LEVEL</option>
+                    <option ng-repeat="(level_nr,level_name) in facility_levels_slct" value="<% level_nr %>"><% level_name %></option>
+                </select>
+            </td>
         </tr>
      </table>
      <br><br>
@@ -131,7 +142,7 @@
             <section id="tab4">
                 {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
                 <label class='sm_box hiv-positive-average'>&nbsp;</label>&nbsp;Selection<br>
-                <canvas id="av_positivity" class='db-charts'></canvas>
+                <canvas id="av_positivity_canvas" class='db-charts'></canvas>
             </section>
         </div><!-- /content -->
     </div><!-- /tabs -->
@@ -231,6 +242,11 @@ $av_initiation_rate_months=array_values($av_initiation_rate_months);
 
 <script type="text/javascript">
 var months=["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug","Sept","Oct","Nov","Dec"];
+var months_init={"1":0, "2":0, "3":0, "4":0, "5":0, "6":0, "7":0,"8":0,"9":0,"10":0,"11":0,"12":0};
+
+var nice_counts=<?php echo json_encode($nice_counts) ?>;
+var nice_counts_positives=<?php echo json_encode($nice_counts_positives) ?>;
+
 var reg_districts=<?php echo json_encode($reg_districts) ?>;
 var districts_json=<?php echo json_encode($districts) ?>;
 var regions_json=<?php echo json_encode($regions) ?>;
@@ -289,7 +305,7 @@ $("#time_fltr").change(function(){
     return window.location.assign("/"+this.value);
 });
 
-$("#region_slct").change(function(){
+/*$("#region_slct").change(function(){
    var items=reg_districts[this.value];
    var options=" ng-model='district' ng-change=\"filter('district')\" ";
    if(this.value=='all'){
@@ -297,7 +313,7 @@ $("#region_slct").change(function(){
    }
    $("#dist_elmt").html(dropDown("district",items,options));
    
-});
+});*/
 
 
 
@@ -326,12 +342,20 @@ ctrllers.DashController=function($scope,$timeout){
     $scope.nums_by_region=<?php echo json_encode($nums_by_region) ?>;
     $scope.nums_by_dist=<?php echo json_encode($nums_by_dist) ?>;
 
+    $scope.districts_slct=<?php echo json_encode($districts) ?>;
+    $scope.facility_levels_slct=<?php echo json_encode($facility_levels) ?>
+
     $scope.filter=function(filterer){
         $scope.setCountPos(filterer);
         $scope.avUptakeRate(filterer);
         $scope.avInitRate(filterer);
         $scope.avPositivity(filterer);
         $scope.setAdditionalMetrics(filterer);
+
+
+        if(filterer=='region'){
+            $scope.districts_slct=reg_districts[$scope.region];
+        }
 
         if($scope.region!=null){
             $scope.region_label=regions_json[$scope.region];
@@ -354,20 +378,20 @@ ctrllers.DashController=function($scope,$timeout){
             $scope.sec_pcr_total=sec_pcr_total_reg[$scope.region];
             $scope.total_samples=total_samples_reg[$scope.region];
             $scope.total_initiated=total_initiated_reg[$scope.region];
-             console.log("filtering for religions");
+            //console.log("filtering for religions");
         }else if(filterer=='district'){
             $scope.first_pcr_total=first_pcr_total_dist[$scope.district];
             $scope.sec_pcr_total=sec_pcr_total_dist[$scope.district];
             $scope.total_samples=total_samples_dist[$scope.district];
             $scope.total_initiated=total_initiated_dist[$scope.district];
-            console.log("filtering for districts");
+            //console.log("filtering for districts");
         }else{
             console.log("nara");
         }        
     }
 
     $scope.setCountPos=function(filterer){
-        var filtered_data={};
+        var filtered_data=months_init;
         if(filterer=='region'){
             $scope.count_positives=$scope.pos_by_reg_sums[$scope.region];
             filtered_data=$scope.positives_by_region[$scope.region];
@@ -377,6 +401,24 @@ ctrllers.DashController=function($scope,$timeout){
             $scope.count_positives=$scope.pos_by_dist_sums[$scope.district];
             filtered_data=$scope.positives_by_dist[$scope.district];
             //$scope.facility_pos_counts=facility_pos_counts_dist[$scope.district];
+        }else if(filterer=='level'){
+            var level_data=nice_counts_positives[$scope.care_level];
+            var pos_num=0;
+            var filtered_data={"1":0, "2":0, "3":0, "4":0, "5":0, "6":0, "7":0,"8":0,"9":0,"10":0,"11":0,"12":0};
+            for(var reg_id in level_data){
+                var reg_arr=level_data[reg_id];
+                for(var dist_id in reg_arr){
+                    var dist_arr=reg_arr[dist_id];
+                    for(var i in dist_arr){
+                       var val=Number(dist_arr[i]);
+                       pos_num+=val;
+                       filtered_data[i]=filtered_data[i]+val;
+                    }
+                }
+            }
+            $scope.count_positives=pos_num;
+            console.log(filtered_data);
+            
         }else{
              if($scope.district!=null){
                 $scope.count_positives=$scope.pos_by_dist_sums[$scope.district];
@@ -521,7 +563,7 @@ ctrllers.DashController=function($scope,$timeout){
         
         $timeout(function(){
             if($("#tb_hd4").hasClass('tab-current')){
-                var ctx = $("#av_positivity").get(0).getContext("2d");
+                var ctx = $("#av_positivity_canvas").get(0).getContext("2d");
                 var data = {
                     labels: months,datasets: [
                     av_positivity_json,{
@@ -537,7 +579,7 @@ ctrllers.DashController=function($scope,$timeout){
                 var myLineChart = new Chart(ctx).Line(data);
             };
         },1);
-    }
+    };
 };
 
 app.controller(ctrllers);

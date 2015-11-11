@@ -276,7 +276,38 @@ ORDER BY count(f.id)*/
 		return $ret;
 	}
 
-	public static function niceCounts($year="",$postives=""){
+	public static function getNumberTotals($year,$pcr="",$ttl_inited=""){
+		if(empty($year)) $year=date("Y");
+		$res=$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
+				  ->leftjoin("facilities AS f","f.id","=","b.facility_id")
+				  ->leftjoin("districts AS d","d.id","=","f.districtID")
+				  ->select(\DB::raw("facilityLevelID ,regionID,districtID,count(s.id) AS num"))
+			 	  ->from("dbs_samples AS s")
+			 	  ->whereYear('s.date_results_entered','=',$year);
+		$res=!empty($pcr)?$res->where('s.pcr','=',$pcr):$res;
+		$res=$ttl_inited==1?$res->where("f_ART_initiated",'=','YES'):$res;
+		$res=$res->groupby('facilityLevelID','regionID','districtID')->get();
+
+		$levels=FacilityLevel::facilityLevelsArr();
+		$regs=Location\District::districtsByRegions();
+
+		$ret=[];
+		
+		foreach ($levels as $lvl_id => $level) {
+			foreach ($regs as $reg_id => $dists) {
+				foreach ($dists as $dist_id => $dist) $ret[$lvl_id][$reg_id][$dist_id]=0;
+			}			
+		}
+		
+		foreach ($res as $rw) {
+			$ret[$rw->facilityLevelID][$rw->regionID][$rw->districtID]=$rw->num;
+		}
+		unset($ret[""]);
+		unset($ret[0]);
+		return $ret;
+	}
+
+	public static function niceCounts($year="",$postives="",$art_inits=""){
 		if(empty($year)) $year=date("Y");
 		$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
 				->leftjoin("facilities AS f","f.id","=","b.facility_id")
@@ -285,6 +316,7 @@ ORDER BY count(f.id)*/
 				->from("dbs_samples AS s")
 				->whereYear('s.date_results_entered','=',$year);
 		$res=$postives==1?$res->where('s.accepted_result','=','POSITIVE'):$res;
+		$res=$art_inits==1?$res->where('s.f_ART_initiated','=','YES'):$res;
 		$res=$res->groupby('facilityLevelID','regionID','districtID','mth')->get();
 
 		$levels=FacilityLevel::facilityLevelsArr();
@@ -292,6 +324,7 @@ ORDER BY count(f.id)*/
 		$regs=Location\District::districtsByRegions();
 
 		$ret=[];
+		
 		foreach ($levels as $lvl_id => $level) {
 			foreach ($regs as $reg_id => $dists) {
 				foreach ($dists as $dist_id => $dist) $ret[$lvl_id][$reg_id][$dist_id]=$months;
@@ -301,6 +334,8 @@ ORDER BY count(f.id)*/
 		foreach ($res as $rw) {
 			$ret[$rw->facilityLevelID][$rw->regionID][$rw->districtID][$rw->mth]=$rw->number_positive;
 		}
+		unset($ret[""]);
+		unset($ret[0]);
 		return $ret;
 	}
 

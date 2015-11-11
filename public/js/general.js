@@ -93,3 +93,12 @@ function dropDown(name,items,options){
   ret+="</select>";
   return ret;
 }
+
+function arraySum(arr){
+  var ret=0;
+  for(var i in items){
+    var val=Number(items[i]);
+    ret+=val;
+  }
+  return ret;
+}

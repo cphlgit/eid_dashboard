@@ -61,17 +61,23 @@
      <table border='1' cellpadding='0' cellspacing='0' class='filter-tb'>
         <tr>
             <td width='25%'>{!! Form::select('time',[''=>'YEAR']+MyHTML::years(2010),$time,["id"=>"time_fltr"]) !!}</td>
-            <td width='25%'>{!! Form::select('region',$regions,"all",['ng-init'=>"region='all'","ng-model"=>"region",'ng-change'=>"filter('region')","id"=>"region_slct"]) !!}</td>
+            
             <td width='25%' id='dist_elmt'>
-                <select ng-model="district" ng-change="filter('district')">
-                    <option value="">DISTRICT</option>
+                <select ng-model="region" ng-init="region='all'" ng-change="filter('region')">
+                    <option value="all">REGIONS</option>
+                    <option ng-repeat="(reg_nr,reg_name) in regions_slct" value="<% reg_nr %>"><% reg_name %></option>
+                </select>
+            </td>
+            <td width='25%' id='dist_elmt'>
+                <select ng-model="district" ng-init="district='all'" ng-change="filter('district')">
+                    <option value="all">DISTRICTS</option>
                     <option ng-repeat="(dist_nr,dist_name) in districts_slct" value="<% dist_nr %>"><% dist_name %></option>
                 </select>
             </td>
 
              <td width='25%' id='dist_elmt'>
-                <select ng-model="care_level" ng-change="filter('level')">
-                    <option value="">CARE LEVEL</option>
+                <select ng-model="care_level" ng-init="care_level='all'" ng-change="filter('level')">
+                    <option selected="selected" value="all">CARE LEVELS</option>
                     <option ng-repeat="(level_nr,level_name) in facility_levels_slct" value="<% level_nr %>"><% level_name %></option>
                 </select>
             </td>
@@ -246,8 +252,10 @@ var months_init={"1":0, "2":0, "3":0, "4":0, "5":0, "6":0, "7":0,"8":0,"9":0,"10
 
 var nice_counts=<?php echo json_encode($nice_counts) ?>;
 var nice_counts_positives=<?php echo json_encode($nice_counts_positives) ?>;
+var nice_counts_art_inits=<?php echo json_encode($nice_counts_art_inits) ?>;
 
 var reg_districts=<?php echo json_encode($reg_districts) ?>;
+var dist_n_reg_ids=<?php echo json_encode($dist_n_reg_ids) ?>;
 var districts_json=<?php echo json_encode($districts) ?>;
 var regions_json=<?php echo json_encode($regions) ?>;
 var facility_levels_json=<?php echo json_encode($facility_levels) ?>;
@@ -259,18 +267,17 @@ var av_positivity_json=<?php echo json_encode($chart_stuff + ["data"=>$av_positi
 
 var nums_json=<?php echo json_encode($chart_stuff+["data"=>$nums_by_months]) ?>;
 
+var first_pcr_ttl_grped=<?php echo json_encode($first_pcr_ttl_grped) ?>;
+var sec_pcr_ttl_grped=<?php echo json_encode($sec_pcr_ttl_grped) ?>;
+var samples_ttl_grped=<?php echo json_encode($samples_ttl_grped) ?>;
+var initiated_ttl_grped=<?php echo json_encode($initiated_ttl_grped) ?>;
 
-var first_pcr_total_reg=<?php echo json_encode($first_pcr_total_reg) ?>;
-var sec_pcr_total_reg=<?php echo json_encode($sec_pcr_total_reg) ?>;
-var total_samples_reg=<?php echo json_encode($total_samples_reg) ?>;
-var total_initiated_reg=<?php echo json_encode($total_initiated_reg) ?>;
-
-
-var first_pcr_total_dist=<?php echo json_encode($first_pcr_total_dist) ?>;
-var sec_pcr_total_dist=<?php echo json_encode($sec_pcr_total_dist) ?>;
-var total_samples_dist=<?php echo json_encode($total_samples_dist) ?>;
-var total_initiated_dist=<?php echo json_encode($total_initiated_dist) ?>;
-
+var first_pcr_total_init=<?php echo $first_pcr_total ?>;
+var sec_pcr_total_init=<?php echo $sec_pcr_total ?>;
+var first_pcr_median_age_init=<?php echo $first_pcr_median_age ?>;
+var sec_pcr_median_age_init=<?php echo $sec_pcr_median_age ?>;
+var total_initiated_init=<?php echo $total_initiated ?>;
+var total_samples_init=<?php echo $total_samples ?>;
 
 //average initiation rates
 /*var av_initiation_rate_reg=<?php echo json_encode($av_initiation_rate_reg) ?>;
@@ -305,16 +312,6 @@ $("#time_fltr").change(function(){
     return window.location.assign("/"+this.value);
 });
 
-/*$("#region_slct").change(function(){
-   var items=reg_districts[this.value];
-   var options=" ng-model='district' ng-change=\"filter('district')\" ";
-   if(this.value=='all'){
-    items=districts_json;
-   }
-   $("#dist_elmt").html(dropDown("district",items,options));
-   
-});*/
-
 
 
 //angular stuff
@@ -325,7 +322,14 @@ var app=angular.module('dashboard', [], function($interpolateProvider) {
 var ctrllers={};
 
 ctrllers.DashController=function($scope,$timeout){
+
+    $scope.count_positives_init=<?php echo $count_positives ?>;
+    $scope.total_samples_init=<?php echo $total_samples ?>;
+    $scope.av_initiation_rate_init=<?php echo $av_initiation_rate ?>;
+    $scope.av_positivity_init=<?php echo $av_positivity ?>;
+    $scope.total_initiated_init=<?php echo $total_initiated ?>
     //for filtering by region
+
     $scope.positives_by_region=<?php echo json_encode($positives_by_region) ?>;   
     $scope.pos_by_reg_sums=<?php echo json_encode($pos_by_reg_sums) ?>;
 
@@ -342,20 +346,26 @@ ctrllers.DashController=function($scope,$timeout){
     $scope.nums_by_region=<?php echo json_encode($nums_by_region) ?>;
     $scope.nums_by_dist=<?php echo json_encode($nums_by_dist) ?>;
 
+    $scope.regions_slct=<?php echo json_encode($regions) ?>;
     $scope.districts_slct=<?php echo json_encode($districts) ?>;
     $scope.facility_levels_slct=<?php echo json_encode($facility_levels) ?>
 
     $scope.filter=function(filterer){
+        if(filterer=='region'){
+            $scope.district="all";
+            if($scope.region=="all"){
+                $scope.districts_slct=districts_json;
+            }else{
+               $scope.districts_slct=reg_districts[$scope.region]; 
+           }            
+        }
+
         $scope.setCountPos(filterer);
         $scope.avUptakeRate(filterer);
         $scope.avInitRate(filterer);
         $scope.avPositivity(filterer);
         $scope.setAdditionalMetrics(filterer);
 
-
-        if(filterer=='region'){
-            $scope.districts_slct=reg_districts[$scope.region];
-        }
 
         if($scope.region!=null){
             $scope.region_label=regions_json[$scope.region];
@@ -373,64 +383,143 @@ ctrllers.DashController=function($scope,$timeout){
     };
 
     $scope.setAdditionalMetrics=function(filterer){
-        if(filterer=='region'){
-            $scope.first_pcr_total=first_pcr_total_reg[$scope.region];
-            $scope.sec_pcr_total=sec_pcr_total_reg[$scope.region];
-            $scope.total_samples=total_samples_reg[$scope.region];
-            $scope.total_initiated=total_initiated_reg[$scope.region];
-            //console.log("filtering for religions");
-        }else if(filterer=='district'){
-            $scope.first_pcr_total=first_pcr_total_dist[$scope.district];
-            $scope.sec_pcr_total=sec_pcr_total_dist[$scope.district];
-            $scope.total_samples=total_samples_dist[$scope.district];
-            $scope.total_initiated=total_initiated_dist[$scope.district];
-            //console.log("filtering for districts");
+        var first_pcr_ttl=0;
+        var sec_pcr_ttl=0;
+        var ttl_smpls=0;
+        var ttl_init=0;
+        if($scope.district!="all"){
+           var reg_id=dist_n_reg_ids[$scope.district];
+            if($scope.care_level!="all"){
+                first_pcr_ttl=first_pcr_ttl_grped[$scope.care_level][reg_id][$scope.district]||0; 
+                sec_pcr_ttl=sec_pcr_ttl_grped[$scope.care_level][reg_id][$scope.district]||0; 
+                ttl_smpls=samples_ttl_grped[$scope.care_level][reg_id][$scope.district]||0; 
+                ttl_init=initiated_ttl_grped[$scope.care_level][reg_id][$scope.district]||0; 
+            }else{
+                for(var lvl_id in first_pcr_ttl_grped){
+                    first_pcr_ttl+=Number(first_pcr_ttl_grped[lvl_id][reg_id][$scope.district])||0; 
+                    sec_pcr_ttl+=Number(sec_pcr_ttl_grped[lvl_id][reg_id][$scope.district])||0; 
+                    ttl_smpls+=Number(samples_ttl_grped[lvl_id][reg_id][$scope.district])||0; 
+                    ttl_init+=Number(initiated_ttl_grped[lvl_id][reg_id][$scope.district])||0;                    
+                }
+
+            }
+        }else if ($scope.region!="all"){
+            if($scope.care_level!="all"){
+                var res_data=first_pcr_ttl_grped[$scope.care_level][$scope.region];
+                for(var dist_id in res_data){
+                    first_pcr_ttl+=Number(res_data[dist_id])||0; 
+                    sec_pcr_ttl+=Number(sec_pcr_ttl_grped[$scope.care_level][$scope.region][dist_id])||0; 
+                    ttl_smpls+=Number(samples_ttl_grped[$scope.care_level][$scope.region][dist_id])||0; 
+                    ttl_init+=Number(initiated_ttl_grped[$scope.care_level][$scope.region][dist_id])||0; 
+                }
+            }else{
+                for(var lvl_id in first_pcr_ttl_grped){
+                    var res_data=first_pcr_ttl_grped[lvl_id][$scope.region];
+                    for(var dist_id in res_data){
+                        first_pcr_ttl+=Number(res_data[dist_id])||0;
+                        sec_pcr_ttl+=Number(sec_pcr_ttl_grped[lvl_id][$scope.region][dist_id])||0; 
+                        ttl_smpls+=Number(samples_ttl_grped[lvl_id][$scope.region][dist_id])||0; 
+                        ttl_init+=Number(initiated_ttl_grped[lvl_id][$scope.region][dist_id])||0;                        
+                    }
+                }
+
+            }
+        }else if($scope.care_level!="all"){
+            var level_data=first_pcr_ttl_grped[$scope.care_level]; 
+            for(var reg_id in level_data){
+                var reg_arr=level_data[reg_id];
+                for(var dist_id in reg_arr){
+                    first_pcr_ttl+=Number(reg_arr[dist_id])||0; 
+                    sec_pcr_ttl+=Number(sec_pcr_ttl_grped[$scope.care_level][reg_id][dist_id])||0; 
+                    ttl_smpls+=Number(samples_ttl_grped[$scope.care_level][reg_id][dist_id])||0; 
+                    ttl_init+=Number(initiated_ttl_grped[$scope.care_level][reg_id][dist_id])||0; 
+                }
+            }
         }else{
-            console.log("nara");
-        }        
+            first_pcr_ttl=first_pcr_total_init;
+            sec_pcr_ttl=sec_pcr_total_init;
+            ttl_smpls=total_samples_init;
+            ttl_init=total_initiated_init;
+        }
+
+        $scope.first_pcr_total=first_pcr_ttl;
+        $scope.sec_pcr_total=sec_pcr_ttl;
+        $scope.total_samples=ttl_smpls;
+        $scope.total_initiated=ttl_init;
     }
 
     $scope.setCountPos=function(filterer){
         var filtered_data=months_init;
-        if(filterer=='region'){
-            $scope.count_positives=$scope.pos_by_reg_sums[$scope.region];
-            filtered_data=$scope.positives_by_region[$scope.region];
-            //$scope.facility_pos_counts=facility_pos_counts_regs[$scope.region];
-            //$('#tab_id').DataTable();
-        }else if(filterer=='district'){
-            $scope.count_positives=$scope.pos_by_dist_sums[$scope.district];
-            filtered_data=$scope.positives_by_dist[$scope.district];
-            //$scope.facility_pos_counts=facility_pos_counts_dist[$scope.district];
-        }else if(filterer=='level'){
-            var level_data=nice_counts_positives[$scope.care_level];
-            var pos_num=0;
-            var filtered_data={"1":0, "2":0, "3":0, "4":0, "5":0, "6":0, "7":0,"8":0,"9":0,"10":0,"11":0,"12":0};
-            for(var reg_id in level_data){
-                var reg_arr=level_data[reg_id];
-                for(var dist_id in reg_arr){
-                    var dist_arr=reg_arr[dist_id];
+        var pos_num=0;
+        var filtered_data={"1":0, "2":0, "3":0, "4":0, "5":0, "6":0, "7":0,"8":0,"9":0,"10":0,"11":0,"12":0};
+
+        if($scope.district!="all"){
+            var reg_id=dist_n_reg_ids[$scope.district];
+            if($scope.care_level!="all"){
+               var res_data=nice_counts_positives[$scope.care_level][reg_id][$scope.district]; 
+               for(var i in res_data){
+                var val=Number(res_data[i]);
+                pos_num+=val;
+                filtered_data[i]=filtered_data[i]+val;
+               }
+            }else{
+                console.log("right there ... reg id is:"+reg_id);
+                for(var lvl_id in nice_counts_positives){
+                    var res_data=nice_counts_positives[lvl_id][reg_id][$scope.district];  
+                    //console.log("right there ...level is "+lvl_id+" reg id is:"+reg_id+"district is "+$scope.district);
+                    var reg_data={};               
+                    for(var i in res_data){
+                        var val=Number(res_data[i]);
+                        pos_num+=val;
+                        filtered_data[i]=filtered_data[i]+val;
+                    }
+                }
+
+            }
+
+        }else if ($scope.region!="all"){
+            if($scope.care_level!="all"){
+                var res_data=nice_counts_positives[$scope.care_level][$scope.region];
+                for(var dist_id in res_data){
+                    var dist_arr=res_data[dist_id];
                     for(var i in dist_arr){
                        var val=Number(dist_arr[i]);
                        pos_num+=val;
                        filtered_data[i]=filtered_data[i]+val;
                     }
                 }
-            }
-            $scope.count_positives=pos_num;
-            console.log(filtered_data);
-            
-        }else{
-             if($scope.district!=null){
-                $scope.count_positives=$scope.pos_by_dist_sums[$scope.district];
-                filtered_data=$scope.positives_by_dist[$scope.district];
-            }else if($scope.region!="all"){
-                $scope.count_positives=$scope.pos_by_reg_sums[$scope.region];
-                filtered_data=$scope.positives_by_region[$scope.region];
             }else{
-                $scope.count_positives=<?php echo $count_positives ?>;
-                filtered_data={};
-            }   
+                for(var lvl_id in nice_counts_positives){
+                    var res_data=nice_counts_positives[lvl_id][$scope.region];
+                    for(var dist_id in res_data){
+                        var dist_arr=res_data[dist_id];
+                        for(var i in dist_arr){
+                            var val=Number(dist_arr[i]);
+                            pos_num+=val;
+                            filtered_data[i]=filtered_data[i]+val;
+                        }
+                    }
+                }
+
+            }
+        }else if($scope.care_level!="all"){
+            var level_data=nice_counts_positives[$scope.care_level]; 
+            for(var reg_id in level_data){
+                var reg_arr=level_data[reg_id];
+                for(var dist_id in reg_arr){
+                    var dist_arr=reg_arr[dist_id];
+                    for(var i in dist_arr){
+                        var val=Number(dist_arr[i]);
+                        pos_num+=val;
+                        filtered_data[i]=filtered_data[i]+val;
+                    }
+                }
+            }
+        }else{
+            pos_num=$scope.count_positives_init;
+            filtered_data={};
         }
+        $scope.count_positives=pos_num;
         
         $timeout(function(){
             if($("#tb_hd1").hasClass('tab-current')){
@@ -455,21 +544,76 @@ ctrllers.DashController=function($scope,$timeout){
     };
 
     $scope.avUptakeRate=function(filterer){
-        var filtered_data={};
-        if(filterer=='region'){
-            filtered_data=$scope.nums_by_region[$scope.region];
-        }else if(filterer=='district'){
-            filtered_data=$scope.nums_by_dist[$scope.district];
-        }else{
-             if($scope.district!=null){
-                filtered_data=$scope.nums_by_dist[$scope.district];
-            }else if($scope.region!="all"){
-                filtered_data=$scope.nums_by_region[$scope.region];
+        var count_num=0;
+        var filtered_data={"1":0, "2":0, "3":0, "4":0, "5":0, "6":0, "7":0,"8":0,"9":0,"10":0,"11":0,"12":0};
+
+        if($scope.district!="all"){
+            var reg_id=dist_n_reg_ids[$scope.district];
+            if($scope.care_level!="all"){
+               var res_data=nice_counts[$scope.care_level][reg_id][$scope.district]; 
+               for(var i in res_data){
+                var val=Number(res_data[i]);
+                count_num+=val;
+                filtered_data[i]=filtered_data[i]+val;
+               }
             }else{
-                filtered_data={};
-            }   
+                console.log("right there ... reg id is:"+reg_id);
+                for(var lvl_id in nice_counts){
+                    var res_data=nice_counts[lvl_id][reg_id][$scope.district];  
+                    //console.log("right there ...level is "+lvl_id+" reg id is:"+reg_id+"district is "+$scope.district);
+                    for(var i in res_data){
+                        var val=Number(res_data[i]);
+                        count_num+=val;
+                        filtered_data[i]=filtered_data[i]+val;
+                    }
+                }
+
+            }
+
+        }else if ($scope.region!="all"){
+            if($scope.care_level!="all"){
+                var res_data=nice_counts[$scope.care_level][$scope.region];
+                for(var dist_id in res_data){
+                    var dist_arr=res_data[dist_id];
+                    for(var i in dist_arr){
+                       var val=Number(dist_arr[i]);
+                       count_num+=val;
+                       filtered_data[i]=filtered_data[i]+val;
+                    }
+                }
+            }else{
+                for(var lvl_id in nice_counts){
+                    var res_data=nice_counts[lvl_id][$scope.region];
+                    for(var dist_id in res_data){
+                        var dist_arr=res_data[dist_id];
+                        for(var i in dist_arr){
+                            var val=Number(dist_arr[i]);
+                            count_num+=val;
+                            filtered_data[i]=filtered_data[i]+val;
+                        }
+                    }
+                }
+
+            }
+        }else if($scope.care_level!="all"){
+            var level_data=nice_counts[$scope.care_level]; 
+            for(var reg_id in level_data){
+                var reg_arr=level_data[reg_id];
+                for(var dist_id in reg_arr){
+                    var dist_arr=reg_arr[dist_id];
+                    for(var i in dist_arr){
+                        var val=Number(dist_arr[i]);
+                        count_num+=val;
+                        filtered_data[i]=filtered_data[i]+val;
+                    }
+                }
+            }
+        }else{
+            count_num=$scope.total_samples_init;
+            filtered_data={};
         }
-        
+        $scope.total_samples=count_num;      
+        console.log(filtered_data);
         $timeout(function(){
             if($("#tb_hd2").hasClass('tab-current')){
                 var ctx = $("#average_uptake_rate").get(0).getContext("2d");
@@ -487,9 +631,6 @@ ctrllers.DashController=function($scope,$timeout){
                     }] 
                 };
                 var myLineChart = new Chart(ctx).Line(data);
-                console.log("inside");
-            }else{
-                console.log("outside");
             }
 
         },1);
@@ -497,24 +638,112 @@ ctrllers.DashController=function($scope,$timeout){
     };
 
     $scope.avInitRate=function(filterer){
-        var filtered_data={};
-        if(filterer=='region'){
-            $scope.av_initiation_rate=av_initiation_rate_reg[$scope.region];
-            filtered_data=av_initiation_rate_regM[$scope.region];
-        }else if(filterer=='district'){
-            $scope.av_initiation_rate=av_initiation_rate_dist[$scope.district];
-            filtered_data=av_initiation_rate_distM[$scope.district];
-        }else{
-             if($scope.district!=null){
-                $scope.av_initiation_rate=av_initiation_rate_dist[$scope.district];
-                filtered_data=av_initiation_rate_distM[$scope.district];
-            }else if($scope.region!="all"){
-                $scope.av_initiation_rate=av_initiation_rate_reg[$scope.region];
-                filtered_data=av_initiation_rate_regM[$scope.region];
+        var init_num=0;
+        var pos_num=0;
+        var av_init=0;
+        var filtered_data={"1":0, "2":0, "3":0, "4":0, "5":0, "6":0, "7":0,"8":0,"9":0,"10":0,"11":0,"12":0};
+        var init_arr={"1":0, "2":0, "3":0, "4":0, "5":0, "6":0, "7":0,"8":0,"9":0,"10":0,"11":0,"12":0};
+        var positives_arr={"1":0, "2":0, "3":0, "4":0, "5":0, "6":0, "7":0,"8":0,"9":0,"10":0,"11":0,"12":0};
+
+        if($scope.district!="all"){
+            var reg_id=dist_n_reg_ids[$scope.district];
+            if($scope.care_level!="all"){
+               var res_data=nice_counts_art_inits[$scope.care_level][reg_id][$scope.district]; 
+               var res_data_p=nice_counts_positives[$scope.care_level][reg_id][$scope.district];
+               for(var i in res_data){
+                var val=Number(res_data[i])||0;
+                var val_p=Number(res_data_p[i])||0;
+                init_num+=val;
+                pos_num+=val_p;
+                init_arr[i]=init_arr[i]+val;
+                positives_arr[i]=positives_arr[i]+val_p;
+               }
             }else{
-                filtered_data={};
-            }   
+                //console.log("right there ... reg id is:"+reg_id);
+                for(var lvl_id in nice_counts){
+                    var res_data=nice_counts_art_inits[lvl_id][reg_id][$scope.district];  
+                    var res_data_p=nice_counts_positives[lvl_id][reg_id][$scope.district];  
+                    //console.log("right there ...level is "+lvl_id+" reg id is:"+reg_id+"district is "+$scope.district);
+                    for(var i in res_data){
+                        var val=Number(res_data[i])||0;
+                        var val_p=Number(res_data_p[i])||0;
+                        //console.log("value is "+val+" val_p is "+val_p);
+                        init_num+=val;
+                        pos_num+=val_p;
+                        init_arr[i]=init_arr[i]+val;
+                        positives_arr[i]=positives_arr[i]+val_p;
+                    }
+                }
+
+            }
+
+        }else if ($scope.region!="all"){
+            if($scope.care_level!="all"){
+                var res_data=nice_counts_art_inits[$scope.care_level][$scope.region];
+                var res_data_p=nice_counts_positives[$scope.care_level][$scope.region];
+                for(var dist_id in res_data){
+                    var dist_arr=res_data[dist_id];
+                    var dist_arr_p=res_data_p[dist_id];
+                    for(var i in dist_arr){
+                       var val=Number(dist_arr[i])||0;
+                       var val_p=Number(dist_arr_p[i])||0;
+                       init_num+=val;
+                       pos_num+=val_p;
+                       init_arr[i]=init_arr[i]+val;
+                       positives_arr[i]=positives_arr[i]+val_p;
+                    }
+                }
+            }else{
+                for(var lvl_id in nice_counts){
+                    var res_data=nice_counts_art_inits[lvl_id][$scope.region];
+                    var res_data_p=nice_counts_positives[lvl_id][$scope.region];
+                    for(var dist_id in res_data){
+                        var dist_arr=res_data[dist_id];
+                        var dist_arr_p=res_data_p[dist_id];
+                        for(var i in dist_arr){
+                            var val=Number(dist_arr[i])||0;
+                            var val_p=Number(dist_arr_p[i])||0;
+                            init_num+=val;
+                            pos_num+=val_p;
+                            init_arr[i]=init_arr[i]+val;
+                            positives_arr[i]=positives_arr[i]+val_p;
+                        }
+                    }
+                }
+
+            }
+        }else if($scope.care_level!="all"){
+            var level_data=nice_counts_art_inits[$scope.care_level]; 
+            var level_data_p=nice_counts_positives[$scope.care_level];
+            for(var reg_id in level_data){
+                var reg_arr=level_data[reg_id];
+                var reg_arr_p=level_data_p[reg_id];
+                for(var dist_id in reg_arr){
+                    var dist_arr=reg_arr[dist_id];
+                    var dist_arr_p=reg_arr_p[dist_id];
+                    for(var i in dist_arr){
+                        var val=Number(dist_arr[i])||0;
+                        var val_p=Number(dist_arr_p[i])||0;
+                        init_num+=val;
+                        pos_num+=val_p;
+                        init_arr[i]=init_arr[i]+val;
+                        positives_arr[i]=positives_arr[i]+val_p;
+                    }
+                }
+            }
+        }else{
+            init_num=$scope.total_initiated_init;
+            pos_num=$scope.count_positives_init;
+            filtered_data={};
         }
+        av_init=((init_num/pos_num)*100)||0;
+        $scope.av_initiation_rate=av_init;   
+
+        for(var i in init_arr){
+            var nana=((init_arr[i]/positives_arr[i])*100)||0;
+            filtered_data[i]=nana.toFixed(1);
+        }
+       
         
         $timeout(function(){
             if($("#tb_hd3").hasClass('tab-current')){
@@ -541,25 +770,112 @@ ctrllers.DashController=function($scope,$timeout){
 
 
     $scope.avPositivity=function (filterer){
-        var filtered_data={};
-        if(filterer=='region'){
-            $scope.av_positivity=$scope.av_by_region[$scope.region];
-            filtered_data=$scope.av_by_reg_mth[$scope.region];
-        }else if(filterer=='district'){
-            $scope.av_positivity=$scope.av_by_dist[$scope.district];
-            filtered_data=$scope.av_by_dist_mth[$scope.district];
-        }else{
-            if($scope.district!=null){
-                $scope.av_positivity=$scope.av_by_dist[$scope.district];
-                filtered_data=$scope.av_by_dist_mth[$scope.district];
-            }else if($scope.region!="all"){
-                $scope.av_positivity=$scope.av_by_region[$scope.region];
-                filtered_data=$scope.av_by_reg_mth[$scope.region];
+        var count_num=0;
+        var pos_num=0;
+        var av_pos=0;
+        var filtered_data={"1":0, "2":0, "3":0, "4":0, "5":0, "6":0, "7":0,"8":0,"9":0,"10":0,"11":0,"12":0};
+        var counts_arr={"1":0, "2":0, "3":0, "4":0, "5":0, "6":0, "7":0,"8":0,"9":0,"10":0,"11":0,"12":0};
+        var positives_arr={"1":0, "2":0, "3":0, "4":0, "5":0, "6":0, "7":0,"8":0,"9":0,"10":0,"11":0,"12":0};
+
+        if($scope.district!="all"){
+            var reg_id=dist_n_reg_ids[$scope.district];
+            if($scope.care_level!="all"){
+               var res_data=nice_counts[$scope.care_level][reg_id][$scope.district]; 
+               var res_data_p=nice_counts_positives[$scope.care_level][reg_id][$scope.district];
+               for(var i in res_data){
+                var val=Number(res_data[i])||0;
+                var val_p=Number(res_data_p[i])||0;
+                count_num+=val;
+                pos_num+=val_p;
+                counts_arr[i]=counts_arr[i]+val;
+                positives_arr[i]=positives_arr[i]+val_p;
+               }
             }else{
-                $scope.av_positivity=<?php echo $av_positivity ?>;
-                filtered_data={};
-            }       
+                //console.log("right there ... reg id is:"+reg_id);
+                for(var lvl_id in nice_counts){
+                    var res_data=nice_counts[lvl_id][reg_id][$scope.district];  
+                    var res_data_p=nice_counts_positives[lvl_id][reg_id][$scope.district];  
+                    //console.log("right there ...level is "+lvl_id+" reg id is:"+reg_id+"district is "+$scope.district);
+                    for(var i in res_data){
+                        var val=Number(res_data[i])||0;
+                        var val_p=Number(res_data_p[i])||0;
+                        console.log("value is "+val+" val_p is "+val_p);
+                        count_num+=val;
+                        pos_num+=val_p;
+                        counts_arr[i]=counts_arr[i]+val;
+                        positives_arr[i]=positives_arr[i]+val_p;
+                    }
+                }
+
+            }
+
+        }else if ($scope.region!="all"){
+            if($scope.care_level!="all"){
+                var res_data=nice_counts[$scope.care_level][$scope.region];
+                var res_data_p=nice_counts_positives[$scope.care_level][$scope.region];
+                for(var dist_id in res_data){
+                    var dist_arr=res_data[dist_id];
+                    var dist_arr_p=res_data_p[dist_id];
+                    for(var i in dist_arr){
+                       var val=Number(dist_arr[i])||0;
+                       var val_p=Number(dist_arr_p[i])||0;
+                       count_num+=val;
+                       pos_num+=val_p;
+                       counts_arr[i]=counts_arr[i]+val;
+                       positives_arr[i]=positives_arr[i]+val_p;
+                    }
+                }
+            }else{
+                for(var lvl_id in nice_counts){
+                    var res_data=nice_counts[lvl_id][$scope.region];
+                    var res_data_p=nice_counts_positives[lvl_id][$scope.region];
+                    for(var dist_id in res_data){
+                        var dist_arr=res_data[dist_id];
+                        var dist_arr_p=res_data_p[dist_id];
+                        for(var i in dist_arr){
+                            var val=Number(dist_arr[i])||0;
+                            var val_p=Number(dist_arr_p[i])||0;
+                            count_num+=val;
+                            pos_num+=val_p;
+                            counts_arr[i]=counts_arr[i]+val;
+                            positives_arr[i]=positives_arr[i]+val_p;
+                        }
+                    }
+                }
+
+            }
+        }else if($scope.care_level!="all"){
+            var level_data=nice_counts[$scope.care_level]; 
+            var level_data_p=nice_counts_positives[$scope.care_level];
+            for(var reg_id in level_data){
+                var reg_arr=level_data[reg_id];
+                var reg_arr_p=level_data_p[reg_id];
+                for(var dist_id in reg_arr){
+                    var dist_arr=reg_arr[dist_id];
+                    var dist_arr_p=reg_arr_p[dist_id];
+                    for(var i in dist_arr){
+                        var val=Number(dist_arr[i])||0;
+                        var val_p=Number(dist_arr_p[i])||0;
+                        count_num+=val;
+                        pos_num+=val_p;
+                        counts_arr[i]=counts_arr[i]+val;
+                        positives_arr[i]=positives_arr[i]+val_p;
+                    }
+                }
+            }
+        }else{
+            count_num=$scope.total_samples_init;
+            pos_num=$scope.count_positives_init;
+            filtered_data={};
         }
+        av_pos=((pos_num/count_num)*100)||0;
+        $scope.av_positivity=av_pos;   
+
+        for(var i in counts_arr){
+            var nana=((positives_arr[i]/counts_arr[i])*100)||0;
+            filtered_data[i]=nana.toFixed(1);
+        }
+       
         
         $timeout(function(){
             if($("#tb_hd4").hasClass('tab-current')){

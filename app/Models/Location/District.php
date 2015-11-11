@@ -72,4 +72,13 @@ class District extends Model {
 		}
 		return $arr;
 	}
+
+	public static function distsNregs(){
+		$res=District::all();
+		$ret=[];
+		foreach ($res as $rw) {
+			$ret[$rw->id]=$rw->regionID;
+		}
+		return $ret;
+	}
 }

@@ -190,7 +190,7 @@ class DashboardController extends Controller {
 			foreach ($months as $mth => $mth_ttl){
 				$m_av=0.0;
 				if(array_key_exists($k, $arr_vals)){
-					$m_av=$mth_ttl>0?(($arr_vals[$k][$mth])/$mth_ttl)*100:0;
+					if(array_key_exists($mth, $arr_vals[$k])) $m_av=$mth_ttl>0?(($arr_vals[$k][$mth])/$mth_ttl)*100:0;
 				}
 				
 				$ret[$k][$mth]=round($m_av,1);

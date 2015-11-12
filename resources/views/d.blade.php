@@ -366,18 +366,9 @@ ctrllers.DashController=function($scope,$timeout){
         $scope.avPositivity(filterer);
         $scope.setAdditionalMetrics(filterer);
 
-
-        if($scope.region!=null){
-            $scope.region_label=regions_json[$scope.region];
-        }
-
-        if($scope.district!=null){
-            $scope.district_label=districts_json[$scope.district];
-        }
-
-        if($scope.care_level!=null){
-            $scope.care_level_label=facility_levels_json[$scope.care_level];
-        }      
+        $scope.region_label=$scope.region!="all"?"Region: "+regions_json[$scope.region]:"~";
+        $scope.district_label=$scope.district!="all"?"District: "+districts_json[$scope.district]:"~";
+        $scope.care_level_label=$scope.care_level!="all"?"Care Level: "+facility_levels_json[$scope.care_level]:"~"; 
         
         
     };

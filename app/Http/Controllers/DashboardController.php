@@ -27,7 +27,7 @@ class DashboardController extends Controller {
 	public function show($time=""){
 		if(empty($time)) $time=date("Y");
 
-		$regions=['all'=>'REGION']+Region::regionsArr();
+		$regions=Region::regionsArr();
 		$districts=District::districtsArr();
 		$reg_districts=District::districtsByRegions();
 		$facility_levels=FacilityLevel::facilityLevelsArr();
@@ -66,7 +66,6 @@ class DashboardController extends Controller {
 		$sec_pcr_ttl_grped=Sample::getNumberTotals($time,"SECOND");
 		$samples_ttl_grped=Sample::getNumberTotals($time);
 		$initiated_ttl_grped=Sample::getNumberTotals($time,"",1);
-
 		
 		$first_pcr_total=$this->totalSums($first_pcr_ttl_grped);
 		$sec_pcr_total=$this->totalSums($sec_pcr_ttl_grped);
@@ -78,18 +77,6 @@ class DashboardController extends Controller {
 		$sec_pcr_ages=Sample::PCRAges($time,"SECOND");
 		$sec_pcr_median_age=$this->median($sec_pcr_ages);
 
-		/*//other metrics by region
-		$first_pcr_total_reg=Sample::NumberTotalsGroupBy($time,"FIRST","","regionID");
-		$sec_pcr_total_reg=Sample::NumberTotalsGroupBy($time,"SECOND","","regionID");
-		$total_samples_reg=Sample::NumberTotalsGroupBy($time,"","","regionID");
-		$total_initiated_reg=Sample::NumberTotalsGroupBy($time,"",1,"regionID");
-
-		//other metrics by district
-		$first_pcr_total_dist=Sample::NumberTotalsGroupBy($time,"FIRST","","districtID");
-		$sec_pcr_total_dist=Sample::NumberTotalsGroupBy($time,"SECOND","","districtID");
-		$total_samples_dist=Sample::NumberTotalsGroupBy($time,"","","districtID");
-		$total_initiated_dist=Sample::NumberTotalsGroupBy($time,"",1,"districtID");
-*/
 		//
 		$inits_by_regM=Sample::InitsGroupByM($time,"",1,"regionID");
 		$inits_by_distM=Sample::InitsGroupByM($time,"",1,"districtID");
@@ -108,12 +95,6 @@ class DashboardController extends Controller {
 		$av_initiation_rate_months=$this->artInitRates($nice_counts_art_inits,$nice_counts_positives);
 
 		$dist_n_reg_ids=District::distsNregs();
-
-		//facility lists
-		/*$facility_pos_counts_regs=Sample::countPositivesByFacilities($time,"regionID");
-		$facility_pos_counts_dist=Sample::countPositivesByFacilities($time,"districtID");
-		$facility_pos_counts=Sample::countPositivesByFacilities($time);
-		$facility_pos_counts=json_encode($facility_pos_counts);*/
 
 		return view('d',compact(
 			"time",
@@ -152,16 +133,6 @@ class DashboardController extends Controller {
 			"samples_ttl_grped",
 			"initiated_ttl_grped",
 
-			/*"first_pcr_total_reg",
-			"sec_pcr_total_reg",
-			"total_samples_reg",
-			"total_initiated_reg",
-
-			"first_pcr_total_dist",
-			"sec_pcr_total_dist",
-			"total_samples_dist",			
-			"total_initiated_dist",
-*/
 			"nums_by_months",
 			"nums_by_region",
 			"nums_by_dist",

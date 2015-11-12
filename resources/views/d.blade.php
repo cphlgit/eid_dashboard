@@ -818,11 +818,11 @@ ctrllers.DashController=function($scope,$timeout){
                 }
             }else{
                 for(var lvl_id in nice_counts){
-                    var res_data=nice_counts[lvl_id][$scope.region];
-                    var res_data_p=nice_counts_positives[lvl_id][$scope.region];
+                    var res_data=nice_counts[lvl_id][$scope.region]||{};
+                    var res_data_p=nice_counts_positives[lvl_id][$scope.region]||{};
                     for(var dist_id in res_data){
-                        var dist_arr=res_data[dist_id];
-                        var dist_arr_p=res_data_p[dist_id];
+                        var dist_arr=res_data[dist_id]||{};
+                        var dist_arr_p=res_data_p[dist_id]||{};
                         for(var i in dist_arr){
                             var val=Number(dist_arr[i])||0;
                             var val_p=Number(dist_arr_p[i])||0;

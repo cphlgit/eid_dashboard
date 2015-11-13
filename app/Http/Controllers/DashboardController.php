@@ -19,8 +19,8 @@ use Session;
 
 class DashboardController extends Controller {
 
-	public function __construct()
-	{
+	public function __construct(){
+		$this->months=\MyHTML::initMonths();
 		//$this->middleware('auth');
 	}
 
@@ -31,35 +31,6 @@ class DashboardController extends Controller {
 		$districts=District::districtsArr();
 		$reg_districts=District::districtsByRegions();
 		$facility_levels=FacilityLevel::facilityLevelsArr();
-		//$count_positives=Sample::countPositives($time);
-		$av_positivity=Sample::avPositivity($time);
-		$count_positives_arr=Sample::countPositives2($time);
-		$count_positives=array_sum($count_positives_arr);
-		$av_positivity_arr=Sample::avPositivity2($time);
-		//$av_positivity=array_sum($av_positivity_arr)/count($av_positivity_arr);
-
-		$nums_by_months=Sample::countAllByMonths($time);
-
-		//for regions filtering -- positive numbers
-		$positives_by_region=Sample::countPositivesByRegions($time);
-		$pos_by_reg_sums=$this->arrSums($positives_by_region);
-		$pos_by_reg_sums["all"]=$count_positives;
-
-		//for districts filtering -- positive numbers
-		$positives_by_dist=Sample::countPositivesByDistricts($time);
-		$pos_by_dist_sums=$this->arrSums($positives_by_dist);
-
-
-		//filtering by regions -- average positive rates
-		$nums_by_region=Sample::sampleNumbersByRegions($time);
-		$av_by_region=$this->arrAvs($nums_by_region,$positives_by_region);
-		$av_by_region["all"]=$av_positivity;
-		$av_by_reg_mth=$this->arrMonthAvs($nums_by_region,$positives_by_region);
-
-		//filtering by districts -- average positive rates
-		$nums_by_dist=Sample::sampleNumbersByDistricts($time);
-		$av_by_dist=$this->arrAvs($nums_by_dist,$positives_by_dist);
-		$av_by_dist_mth=$this->arrMonthAvs($nums_by_dist,$positives_by_dist);
 
 		//other metrics
 		$first_pcr_ttl_grped=Sample::getNumberTotals($time,"FIRST");
@@ -77,22 +48,23 @@ class DashboardController extends Controller {
 		$sec_pcr_ages=Sample::PCRAges($time,"SECOND");
 		$sec_pcr_median_age=$this->median($sec_pcr_ages);
 
-		//
-		$inits_by_regM=Sample::InitsGroupByM($time,"",1,"regionID");
-		$inits_by_distM=Sample::InitsGroupByM($time,"",1,"districtID");
-		$inits_by_M=Sample::InitsGroupByM($time,"",1);
-
-		$av_initiation_rate=($total_initiated/$count_positives)*100;
-		$av_initiation_rate=round($av_initiation_rate,1);
-		$av_initiation_rate_reg=$this->arrAvs($positives_by_region,$inits_by_regM);		
-		$av_initiation_rate_dist=$this->arrAvs($positives_by_dist,$inits_by_distM);		
-		$av_initiation_rate_regM=$this->arrMonthAvs($positives_by_region,$inits_by_regM);
-		$av_initiation_rate_distM=$this->arrMonthAvs($positives_by_dist,$inits_by_distM);
-
 		$nice_counts=Sample::niceCounts($time);
 		$nice_counts_positives=Sample::niceCounts($time,1);
 		$nice_counts_art_inits=Sample::niceCounts($time,1,1);
-		$av_initiation_rate_months=$this->artInitRates($nice_counts_art_inits,$nice_counts_positives);
+		
+		$av_initiation_rate_months=$this->getAverageRatesByMonth($nice_counts_art_inits,$nice_counts_positives);
+
+		$count_positives_arr=$this->getTotalsByMonth($nice_counts_positives);
+		$count_positives=array_sum($count_positives_arr);
+
+		$nums_by_months=$this->getTotalsByMonth($nice_counts);
+
+		$av_positivity=$this->getAverageRate($nice_counts_positives,$nice_counts);
+		$av_positivity_arr=$this->getAverageRatesByMonth($nice_counts_positives,$nice_counts);
+
+		$av_initiation_rate=$count_positives>0?($total_initiated/$count_positives)*100:0;		
+		$av_initiation_rate=round($av_initiation_rate,1);
+		
 
 		$dist_n_reg_ids=District::distsNregs();
 
@@ -106,14 +78,6 @@ class DashboardController extends Controller {
 			"av_positivity",
 			"count_positives_arr",
 			"av_positivity_arr",
-			"positives_by_region",
-			"pos_by_reg_sums",
-			"av_by_region",
-			"av_by_reg_mth",
-			"positives_by_dist",
-			"pos_by_dist_sums",
-			"av_by_dist",
-			"av_by_dist_mth",
 
 			"first_pcr_total",
 			"sec_pcr_total",
@@ -123,10 +87,6 @@ class DashboardController extends Controller {
 			"total_samples",
 
 			"av_initiation_rate",
-			"av_initiation_rate_reg",
-			"av_initiation_rate_dist",
-			"av_initiation_rate_regM",
-			"av_initiation_rate_distM",
 
 			"first_pcr_ttl_grped",
 			"sec_pcr_ttl_grped",
@@ -134,9 +94,6 @@ class DashboardController extends Controller {
 			"initiated_ttl_grped",
 
 			"nums_by_months",
-			"nums_by_region",
-			"nums_by_dist",
-
 			"av_initiation_rate_months",
 
 			"nice_counts",
@@ -213,28 +170,6 @@ class DashboardController extends Controller {
 		return $ret;
 	}
 
-	private function artInitRates($nice_counts_art_inits,$nice_counts_positives){
-		$months=\MyHTML::initMonths();
-		$ttl_pos=$months;
-		$ttl_inits=$months;
-		$ret=$months;
-		foreach ($nice_counts_art_inits as $lvl_id => $reg_data) {
-			foreach ($reg_data as $reg_id => $dist_data) {
-				foreach ($dist_data as $dist_id => $month_data) {
-					foreach ($month_data as $mth => $v) {
-						$ttl_inits[$mth]=$ttl_inits[$mth]+$v;
-						$ttl_pos[$mth]=$ttl_pos[$mth]+$nice_counts_positives[$lvl_id][$reg_id][$dist_id][$mth];
-					}
-				}
-			}
-		}
-
-		foreach ($ttl_pos as $m => $v) {
-			$val=($v!=0)?($ttl_inits[$m]/$v)*100:0;
-			$ret[$m]=round($val,2);
-		}
-		return $ret;		
-	}
 
 	private function totalSums($totals){
 		$ret=0;
@@ -242,6 +177,69 @@ class DashboardController extends Controller {
 			foreach ($reg_data as $reg_id => $dist_data) {
 				$ret+=array_sum($dist_data);				
 			}
+		}
+		return $ret;
+	}
+
+	private function totalSums2($arr){
+		$ret=0;
+		foreach ($arr as $lvl_id => $reg_data) {
+			foreach ($reg_data as $reg_id => $dist_data) {
+				foreach ($dist_data as $month_data) {
+					$ret+=array_sum($month_data);					
+				}								
+			}
+		}
+		return $ret;
+	}
+
+	private function getTotalsByMonth($arr){
+		$ret=$this->months;
+		foreach ($arr as $lvl_id => $reg_data) {
+			foreach ($reg_data as $reg_id => $dist_data) {
+				foreach ($dist_data as $month_data) {
+					foreach ($month_data as $mth => $val) $ret[$mth]+=$val;			
+				}								
+			}
+		}
+		return $ret;
+	}
+
+	private function getAverageRate($arr_up,$arr_down){
+		$ret=0;
+		$ttl_up=0;
+		$ttl_down=0;
+		foreach ($arr_up as $lvl_id => $reg_data) {
+			foreach ($reg_data as $reg_id => $dist_data) {
+				foreach ($dist_data as $dist_id => $month_data) {
+					$ttl_up+=array_sum($month_data);
+					$ttl_down+=array_sum($arr_down[$lvl_id][$reg_id][$dist_id]);
+				}
+			}
+		}
+		$ret=$ttl_down>0?($ttl_up/$ttl_down)*100:0;
+		$ret=round($ret,1);
+		return $ret;
+	}
+
+	private function getAverageRatesByMonth($arr_up,$arr_down){
+		$up_res=$this->months;
+		$down_res=$this->months;
+		$ret=$this->months;
+		foreach ($arr_up as $lvl_id => $reg_data) {
+			foreach ($reg_data as $reg_id => $dist_data) {
+				foreach ($dist_data as $dist_id => $month_data) {
+					foreach ($month_data as $mth => $val){
+						$up_res[$mth]+=$val;
+						$down_res[$mth]+=$arr_down[$lvl_id][$reg_id][$dist_id][$mth];
+					}		
+				}								
+			}
+		}
+
+		foreach ($up_res as $m => $v) {			
+			$ret_val=$down_res[$m]>0?($up_res[$m]/$down_res[$m])*100:0;
+			$ret[$m]=round($ret_val,1);
 		}
 		return $ret;
 	}

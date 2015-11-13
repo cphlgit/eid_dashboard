@@ -279,17 +279,6 @@ var sec_pcr_median_age_init=<?php echo $sec_pcr_median_age ?>;
 var total_initiated_init=<?php echo $total_initiated ?>;
 var total_samples_init=<?php echo $total_samples ?>;
 
-//average initiation rates
-/*var av_initiation_rate_reg=<?php echo json_encode($av_initiation_rate_reg) ?>;
-var av_initiation_rate_dist=<?php echo json_encode($av_initiation_rate_dist) ?>;
-var av_initiation_rate_regM=<?php echo json_encode($av_initiation_rate_regM) ?>;
-var av_initiation_rate_distM=<?php echo json_encode($av_initiation_rate_distM) ?>;*/
-
-var av_initiation_rate_reg=<?php echo json_encode($av_initiation_rate_reg) ?>;
-var av_initiation_rate_dist=<?php echo json_encode($av_initiation_rate_dist) ?>;
-var av_initiation_rate_regM=<?php echo json_encode($av_initiation_rate_regM) ?>;
-var av_initiation_rate_distM=<?php echo json_encode($av_initiation_rate_distM) ?>;
-
 var av_initiation_rate_months_json=<?php echo json_encode($chart_stuff+["data"=>$av_initiation_rate_months]) ?>;
 
 
@@ -329,22 +318,6 @@ ctrllers.DashController=function($scope,$timeout){
     $scope.av_positivity_init=<?php echo $av_positivity ?>;
     $scope.total_initiated_init=<?php echo $total_initiated ?>
     //for filtering by region
-
-    $scope.positives_by_region=<?php echo json_encode($positives_by_region) ?>;   
-    $scope.pos_by_reg_sums=<?php echo json_encode($pos_by_reg_sums) ?>;
-
-    $scope.av_by_region=<?php echo json_encode($av_by_region) ?>;
-    $scope.av_by_reg_mth=<?php echo json_encode($av_by_reg_mth) ?>;
-
-    //for filtering by district
-    $scope.positives_by_dist=<?php echo json_encode($positives_by_dist) ?>;   
-    $scope.pos_by_dist_sums=<?php echo json_encode($pos_by_dist_sums) ?>;
-
-    $scope.av_by_dist=<?php echo json_encode($av_by_dist) ?>;
-    $scope.av_by_dist_mth=<?php echo json_encode($av_by_dist_mth) ?>;
-
-    $scope.nums_by_region=<?php echo json_encode($nums_by_region) ?>;
-    $scope.nums_by_dist=<?php echo json_encode($nums_by_dist) ?>;
 
     $scope.regions_slct=<?php echo json_encode($regions) ?>;
     $scope.districts_slct=<?php echo json_encode($districts) ?>;

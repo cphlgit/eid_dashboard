@@ -29,6 +29,8 @@
     <script src="{{ asset('/js/angular.min.js')}}" type="text/javascript"></script>
     <script src="{{ asset('/js/angular-route.js')}}" type="text/javascript"></script>
 
+    <script src="{{ asset('/js/angular-datatables.min.js') }}" type="text/javascript"></script>
+
     
 </head>
 
@@ -83,7 +85,7 @@
             </td>
         </tr>
      </table>
-     <br><br>
+     <br>
      <label class='hdr hdr-grey'> KEY METRICS</label>
      <br>
      <div class="tabss tabs-style-flip">
@@ -127,28 +129,121 @@
 
         <div class="content-wrap">
             <section id="tab1">
-                {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
-                <label class='sm_box hiv-positive-numbers'>&nbsp;</label>&nbsp;Selection
-                <br>
-                <canvas id="hiv_postive_infants" class='db-charts'></canvas> 
+                <div class="row">
+                    <div class="col-lg-6">
+                        {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
+                        <label class='sm_box hiv-positive-numbers'>&nbsp;</label>&nbsp;Selection
+                        <br><br>
+                        <canvas id="hiv_postive_infants" class='db-charts'></canvas> 
+                    </div>
+                   
+                    <div class="col-lg-6 facilties-sect facilities-sect-hiv-pstv" >
+                        <table datatable="ng" class="row-border hover table table-bordered table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Facility</th>
+                                    <th>Absolute Positives</th>
+                                    <th>Total Results</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="f in facility_numbers | filter:compare('abs_positives','ge',1)">
+                                    <td width='80%'><% f.facility_name %></td>
+                                    <td width='10%'><% f.abs_positives %></td>
+                                    <td width='10%'><% f.total_results %></td>
+                                </tr>                        
+                             </tbody>
+                         </table>
+                    </div>
+
+                </div>
             </section>
 
             <section id="tab2">
-                {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
-                <label class='sm_box uptake'>&nbsp;</label>&nbsp;Selection
-                <br>
-                <canvas id="average_uptake_rate" class='db-charts'></canvas>
+                <div class="row">
+                    <div class="col-lg-6">
+                        {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
+                        <label class='sm_box uptake'>&nbsp;</label>&nbsp;Selection<br><br>
+                        <canvas id="average_uptake_rate" class='db-charts'></canvas>
+                    </div>
+                   
+                    <div class="col-lg-6 facilties-sect facilities-sect-uptake" >
+                        <table datatable="ng" class="row-border hover table table-bordered table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th width='90%'>Facility</th>                                   
+                                    <th width='10%'>Total </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="f in facility_numbers | filter:compare('facility_name','ne',null)">
+                                    <td><% f.facility_name %></td>
+                                    <td><% f.total_results %></td>
+                                </tr>                        
+                             </tbody>
+                         </table>
+                    </div>
+                </div> 
             </section>
             <section id="tab3">
-                {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
-                <label class='sm_box init-rate'>&nbsp;</label>&nbsp;Selection
-                <br>
-                <canvas id="average_init_rate" class='db-charts'></canvas> 
+                <div class="row">
+                    <div class="col-lg-6">
+                        {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
+                        <label class='sm_box init-rate'>&nbsp;</label>&nbsp;Selection<br><br>
+                        <canvas id="average_init_rate" class='db-charts'></canvas> 
+                    </div>
+                   
+                    <div class="col-lg-6 facilties-sect facilities-sect-init-rates" >
+                        <table datatable="ng" class="row-border hover table table-bordered table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th width='80%'>Facility</th>
+                                    <th width='10%'>Initiation Rate (%)</th>
+                                    <th width='10%'>Absolute Positives</th>                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="f in facility_numbers | filter:compare('initiation_rate','gt',0)">
+                                    <td><% f.facility_name %></td>
+                                    <td><% f.initiation_rate %></td>
+                                    <td><% f.abs_positives %></td>
+                                </tr>                        
+                             </tbody>
+                         </table>
+                    </div>
+                </div>                
             </section>
             <section id="tab4">
-                {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
-                <label class='sm_box hiv-positive-average'>&nbsp;</label>&nbsp;Selection<br>
-                <canvas id="av_positivity_canvas" class='db-charts'></canvas>
+                <div class="row">
+                    <div class="col-lg-6">
+                        {!!$key_nat !!}&nbsp;&nbsp;&nbsp;
+                        <label class='sm_box hiv-positive-average'>&nbsp;</label>&nbsp;Selection<br><br>
+                        <canvas id="av_positivity_canvas" class='db-charts'></canvas>
+                    </div>
+                   
+                    <div class="col-lg-6 facilties-sect facilities-sect-pstv-rates" >
+                        <table datatable="ng" class="row-border hover table table-bordered table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th width='70%'>Facility</th>
+                                    <th width='10%'>Positivity Rate (%)</th>
+                                    <th width='10%'>Absolute Positives</th>                                    
+                                    <th width='10%'>Total Results</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="f in facility_numbers | filter:compare('facility_name','ne',null)">
+                                    <td><% f.facility_name %></td>
+                                    <td><% f.positivity_rate %></td>
+                                    <td><% f.abs_positives %></td>
+                                    <td><% f.total_results %></td>
+                                </tr>                        
+                             </tbody>
+                         </table>
+                    </div>
+
+                </div>                
             </section>
         </div><!-- /content -->
     </div><!-- /tabs -->
@@ -304,7 +399,7 @@ $("#time_fltr").change(function(){
 
 
 //angular stuff
-var app=angular.module('dashboard', [], function($interpolateProvider) {
+var app=angular.module('dashboard', ['datatables'], function($interpolateProvider) {
         $interpolateProvider.startSymbol('<%');
         $interpolateProvider.endSymbol('%>');
     });
@@ -321,7 +416,68 @@ ctrllers.DashController=function($scope,$timeout){
 
     $scope.regions_slct=<?php echo json_encode($regions) ?>;
     $scope.districts_slct=<?php echo json_encode($districts) ?>;
-    $scope.facility_levels_slct=<?php echo json_encode($facility_levels) ?>
+    $scope.facility_levels_slct=<?php echo json_encode($facility_levels) ?>;
+
+    $scope.facility_numbers=<?php echo json_encode($facility_numbers) ?>;
+    $scope.facility_numbers_init=<?php echo json_encode($facility_numbers) ?>;
+
+
+    $scope.compare = function(prop,comparator, val){
+        return function(item){
+            if(comparator=='eq'){
+                return item[prop] == val;
+            }else if (comparator=='ne'){
+               return item[prop] != val;
+            }else if (comparator=='gt'){
+               return item[prop] > val;
+            }else if (comparator=='lt'){
+               return item[prop] < val;
+            }else if (comparator=='ge'){
+               return (item[prop] > val)||(item[prop] == val);
+            }else if (comparator=='le'){
+               return (item[prop] < val)||(item[prop] == val);
+            }else{
+                return false;
+            }
+        }
+    }
+
+    $scope.facility_filter=function(){
+        if($scope.district!="all"){
+            if($scope.care_level!="all"){
+                $scope.facility_numbers=$scope.filteredfcltys({"district_id":$scope.district,"level_id":$scope.care_level});
+            }else{
+                $scope.facility_numbers=$scope.filteredfcltys({"district_id":$scope.district});
+            }
+        }else if ($scope.region!="all"){
+            if($scope.care_level!="all"){
+                $scope.facility_numbers=$scope.filteredfcltys({"region_id":$scope.region,"level_id":$scope.care_level});
+            }else{
+                $scope.facility_numbers=$scope.filteredfcltys({"region_id":$scope.region});
+            }
+        }else if($scope.care_level!="all"){
+            $scope.facility_numbers=$scope.filteredfcltys({"level_id":$scope.care_level});
+        }else{
+            $scope.facility_numbers=$scope.facility_numbers_init;    
+        }       
+    };
+
+    $scope.filteredfcltys=function(options){
+        var ret={};
+        for (var i in $scope.facility_numbers_init){
+            var arr=$scope.facility_numbers_init[i];
+            var no_match=0;
+            for(var j in options){
+                if((options[j] != arr[j])){
+                    no_match=1;
+                }
+            }            
+            if(no_match==0){
+                ret[i]=arr;
+            }
+        };
+        return ret;
+    };
 
     $scope.filter=function(filterer){
         if(filterer=='region'){
@@ -343,6 +499,7 @@ ctrllers.DashController=function($scope,$timeout){
         $scope.district_label=$scope.district!="all"?"District: "+districts_json[$scope.district]:"~";
         $scope.care_level_label=$scope.care_level!="all"?"Care Level: "+facility_levels_json[$scope.care_level]:"~"; 
         
+        $scope.facility_filter();
         
     };
 

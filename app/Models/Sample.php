@@ -106,35 +106,51 @@ class Sample extends Model {
 		return $ret;
 	}
 
-	public static function niceCounts($year="",$postives="",$art_inits=""){
+	public static function niceCounts($year="",$postives="",$art_inits="",$grpby_fclts=""){
 		if(empty($year)) $year=date("Y");
 		$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
 				->leftjoin("facilities AS f","f.id","=","b.facility_id")
 				->leftjoin("districts AS d","d.id","=","f.districtID")
-				->select(\DB::raw("d.regionID,f.facilityLevelID,f.districtID,month(date_results_entered) AS mth, count(s.id) AS number_positive"))
+				->select(\DB::raw("d.regionID,f.facilityLevelID,f.facility,f.districtID,b.facility_id,month(date_results_entered) AS mth, count(s.id) AS number"))
 				->from("dbs_samples AS s")
 				->whereYear('s.date_results_entered','=',$year);
 		$res=$postives==1?$res->where('s.accepted_result','=','POSITIVE'):$res;
 		$res=$art_inits==1?$res->where('s.f_ART_initiated','=','YES'):$res;
-		$res=$res->groupby('facilityLevelID','regionID','districtID','mth')->get();
+		$res=$grpby_fclts==1?$res->groupby("facility_id"):$res->groupby('facilityLevelID','regionID','districtID','mth');
+		$res=$res->get();
 
 		$levels=FacilityLevel::facilityLevelsArr();
 		$months=\MyHTML::initMonths();
 		$regs=Location\District::districtsByRegions();
 
 		$ret=[];
-		
-		foreach ($levels as $lvl_id => $level) {
-			foreach ($regs as $reg_id => $dists) {
-				foreach ($dists as $dist_id => $dist) $ret[$lvl_id][$reg_id][$dist_id]=$months;
-			}			
+
+		if($grpby_fclts==1){
+			foreach ($res as $row) {
+				$ret[$row->facility_id]=[
+						"facility_id"=>$row->facility_id,
+						"facility_name"=>$row->facility,
+						"district_id"=>$row->districtID,
+						"region_id"=>$row->regionID,
+						"level_id"=>$row->facilityLevelID,
+						"value"=>$row->number
+						];
+			}
+
+		}else{
+
+			foreach ($levels as $lvl_id => $level) {
+				foreach ($regs as $reg_id => $dists) {
+					foreach ($dists as $dist_id => $dist) $ret[$lvl_id][$reg_id][$dist_id]=$months;
+				}		
+			}
+
+			foreach ($res as $rw) {
+				$ret[$rw->facilityLevelID][$rw->regionID][$rw->districtID][$rw->mth]=$rw->number;
+			}
+			unset($ret[""]);
+			unset($ret[0]);
 		}
-		
-		foreach ($res as $rw) {
-			$ret[$rw->facilityLevelID][$rw->regionID][$rw->districtID][$rw->mth]=$rw->number_positive;
-		}
-		unset($ret[""]);
-		unset($ret[0]);
 		return $ret;
 	}
 
@@ -245,4 +261,15 @@ class Sample extends Model {
 
 /*
 Your lim
+
+ $scope.filteredfcltys=function(option,val){
+        var ret=[];
+        for (var i $scope.facility_numbers_init){
+            var arr=$scope.facility_numbers_init[i];
+            if(val==arr[option]){
+                ret[i]=arr;
+            }
+        }
+        return ret;
+    }
 */

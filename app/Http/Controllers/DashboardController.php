@@ -63,10 +63,15 @@ class DashboardController extends Controller {
 		$av_positivity_arr=$this->getAverageRatesByMonth($nice_counts_positives,$nice_counts);
 
 		$av_initiation_rate=$count_positives>0?($total_initiated/$count_positives)*100:0;		
-		$av_initiation_rate=round($av_initiation_rate,1);
-		
+		$av_initiation_rate=round($av_initiation_rate,1);	
 
 		$dist_n_reg_ids=District::distsNregs();
+
+		$fclty_counts=Sample::niceCounts($time,"","",1);//niceCounts($year="",$postives="",$art_inits="",$grpby_fclts="")
+		$fclty_pos_counts=Sample::niceCounts($time,1,"",1);
+		$fclty_inits=Sample::niceCounts($time,1,1,1);
+
+		$facility_numbers=$this->facilityNumbers($fclty_counts,$fclty_pos_counts,$fclty_inits);
 
 		return view('d',compact(
 			"time",
@@ -99,61 +104,11 @@ class DashboardController extends Controller {
 			"nice_counts",
 			"nice_counts_positives",
 			"nice_counts_art_inits",
-			"dist_n_reg_ids"
+			"dist_n_reg_ids",
+
+			"facility_numbers"
 			
 			));
-	}
-
-	private function avInitRateM($count_positives_arr,$inits_by_M){
-		$ret=[];
-		$months=\MyHTML::initMonths();
-		foreach ($months as $m=>$v) {
-			$av=0;
-			if(array_key_exists($m, $inits_by_M) && array_key_exists($m, $count_positives_arr)){
-				$av=($inits_by_M[$m]/$count_positives_arr[$m])*100;
-			}			
-			$av=round($av,1);
-			$ret[$m]=$av;
-		}
-		return $ret;
-	}
-
-	private function arrSums($arr){
-		$ret=[];
-		foreach ($arr as $k => $v) {
-			$ret[$k]=array_sum($v);			
-		}
-		return $ret;
-	}
-
-	private function arrAvs($arr_ttls,$arr_vals){
-		$ret=[];
-		foreach ($arr_ttls as $k => $v) {
-			$ttl=array_sum($v);	
-			$val=0;
-			if(array_key_exists($k, $arr_vals)){
-				$val=array_sum($arr_vals[$k]);	
-			}
-			
-			$av=$ttl>0?($val/$ttl)*100:0;
-			$ret[$k]=round($av,1);	
-		}
-		return $ret;		
-	}
-
-	private function arrMonthAvs($arr_ttls,$arr_vals){
-		$ret=[];
-		foreach ($arr_ttls as $k => $months) {
-			foreach ($months as $mth => $mth_ttl){
-				$m_av=0.0;
-				if(array_key_exists($k, $arr_vals)){
-					if(array_key_exists($mth, $arr_vals[$k])) $m_av=$mth_ttl>0?(($arr_vals[$k][$mth])/$mth_ttl)*100:0;
-				}
-				
-				$ret[$k][$mth]=round($m_av,1);
-			}
-		}
-		return $ret;		
 	}
 
 
@@ -181,17 +136,6 @@ class DashboardController extends Controller {
 		return $ret;
 	}
 
-	private function totalSums2($arr){
-		$ret=0;
-		foreach ($arr as $lvl_id => $reg_data) {
-			foreach ($reg_data as $reg_id => $dist_data) {
-				foreach ($dist_data as $month_data) {
-					$ret+=array_sum($month_data);					
-				}								
-			}
-		}
-		return $ret;
-	}
 
 	private function getTotalsByMonth($arr){
 		$ret=$this->months;
@@ -244,6 +188,35 @@ class DashboardController extends Controller {
 		return $ret;
 	}
 
+	private function facilityNumbers($counts,$positive_counts,$init_counts){
+		$ret=[];
+		foreach ($counts as $k => $v) {
+			extract($v);			
+			$abs_positives=array_key_exists($k, $positive_counts)?$positive_counts[$k]["value"]:0;
+			$positivity_rate=$value>0?($abs_positives/$value)*100:0;
+			$positivity_rate=round($positivity_rate,1);
+
+			$initiated=array_key_exists($k, $init_counts)?$init_counts[$k]["value"]:0;
+			$initiation_rate=$abs_positives>0?($initiated/$abs_positives)*100:0;
+			$initiation_rate=round($initiation_rate);
+
+
+			$ret[]=[
+				"facility_id"=>$facility_id,
+				"facility_name"=>$facility_name,
+				"district_id"=>$district_id,
+				"region_id"=>$region_id,
+				"level_id"=>$level_id,
+				"abs_positives"=>$abs_positives,
+				"total_results"=>$value,
+				"positivity_rate"=>$positivity_rate,
+				"initiation_rate"=>$initiation_rate
+				];
+				
+		}
+		return $ret;
+	}
+
 	/*
 
 	I would say that he is a ‘master’, if it were not for my belief that no one ‘masters’ anything, that each finds or makes his candle, then tries to see by the guttering light. Mum has made a good candle. And Mum has good eyes.
@@ -254,9 +227,7 @@ class DashboardController extends Controller {
 	Whether you are witness or executioner, the victim whose humanity you can never erase
 	knows with clarity, more solid than granite that no matter which side you are on,
 	any day or night, an injury to one remains an injury to all
-	some where on this coninent, the voice of the ancient warns, that those who shit on the road, will find flies on their way back...
-
-
+	some where on this coninent, the voice of the ancient warns, that those who shit on the road, will find flies on their way back..
 
 	*/
 

@@ -37,10 +37,10 @@
     color: orange !important;
 }
 
-table tr th,table thead tr{
+/*table tr th,table thead tr{
 	background-color: #337ab7;
 	color: white;
-}
+}*/
 
 .td_label label,.td_label{
 	text-align: left;
@@ -366,3 +366,32 @@ div.addition-metrics{
 	padding: 10px;
 	border-radius: 20px;
 }
+
+.facilties-sect{
+	font-size: 11px;
+	padding-left: 50px;
+}
+
+.facilties-sect table tr th,
+.facilties-sect table thead tr,
+.facilties-sect table tbody tr{
+	height: 12px;
+}
+
+.facilities-sect-hiv-pstv table tbody tr{
+	color: #357BB8;
+}
+
+.facilities-sect-uptake table tbody tr{
+	color: #5EA361;
+}
+
+.facilities-sect-init-rates table tbody tr{
+	color: #F5A623;
+}
+
+.facilities-sect-pstv-rates table tbody tr{
+	color: #9F82D1;
+}
+
+

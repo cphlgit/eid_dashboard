@@ -248,7 +248,7 @@
         </div><!-- /content -->
     </div><!-- /tabs -->
     
-    <br><br>
+    <br>
     <label class='hdr hdr-grey'> ADDITIONAL METRICS</label>
     <div class='addition-metrics'>
        <div class='row'>
@@ -286,6 +286,7 @@
         </div>
        </div>
     </div>
+    <br>
 </div>
 <script src=" {{ asset('js/cbpFWTabs.js') }} "></script>
         <script>

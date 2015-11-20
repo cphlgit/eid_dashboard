@@ -106,6 +106,34 @@ class Sample extends Model {
 		return $ret;
 	}
 
+	public static function counts($year="",$postives="",$art_inits=""){
+		if(empty($year)) $year=date("Y");
+		$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
+				->leftjoin("facilities AS f","f.id","=","b.facility_id")
+				->leftjoin("districts AS d","d.id","=","f.districtID")
+				->select(\DB::raw("d.regionID,f.facilityLevelID,f.facility,f.districtID,b.facility_id,month(date_results_entered) AS mth, count(s.id) AS number"))
+				->from("dbs_samples AS s")
+				->whereYear('s.date_results_entered','=',$year);
+		$res=$postives==1?$res->where('s.accepted_result','=','POSITIVE'):$res;
+		$res=$art_inits==1?$res->where('s.f_ART_initiated','=','YES'):$res;
+		$res=$res->groupby("facility_id","mth")->get();
+
+
+		$ret=[];
+		foreach ($res as $row) {
+			$ret[$row->facility_id."_".$row->mth]=[
+					"facility_id"=>$row->facility_id,
+					"month"=>$row->mth,
+					"facility_name"=>$row->facility,
+					"district_id"=>$row->districtID,
+					"region_id"=>$row->regionID,
+					"level_id"=>$row->facilityLevelID,
+					"value"=>$row->number
+					];
+		}
+		return $ret;
+	}
+
 	public static function niceCounts($year="",$postives="",$art_inits="",$grpby_fclts=""){
 		if(empty($year)) $year=date("Y");
 		$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
@@ -168,40 +196,6 @@ class Sample extends Model {
 		return $ret;
 	}
 
-	public static function countPositivesByFacilities($year="",$groupby=""){
-		if(empty($year)) $year=date("Y");
-		$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
-				->leftjoin("facilities AS f","f.id","=","b.facility_id")
-				->leftjoin("districts AS d","d.id","=","f.districtID")
-				->select(\DB::raw("f.facility,d.regionID, f.districtID,b.facility_id, count(s.id) AS number_positive"))
-				->from("dbs_samples AS s")
-				->whereYear('s.date_results_entered','=',$year)
-				->where('s.accepted_result','=','POSITIVE');
-
-		$res=!empty($groupby)?$res->groupby($groupby,'facility_id')->get():$res->groupby('facility_id')->get();
-				
-		$ret=[];
-		if($groupby=='regionID'){
-			$regs=Location\Region::regionsFacilitiesInit();
-			foreach ($res as $rw) {
-				$regs[$rw->regionID][]=["facility"=>$rw->facility,"pos_count"=>$rw->number_positive];
-			}
-			$ret=$regs;
-		}else if($groupby=='districtID'){
-			$districts=Location\District::districtsFacilitiesInit();
-			foreach ($res as $rw) {
-				$districts[$rw->districtID][]=["facility"=>$rw->facility,"pos_count"=>$rw->number_positive];
-			}
-			$ret=$districts;
-		}else{
-			foreach ($res as $rw) {
-				$ret[]=["facility"=>$rw->facility,"pos_count"=>$rw->number_positive];
-			}
-		}
-				
-		
-		return $ret;
-	}
 
 	private static function cleanAge($age=0){
 		$ret=0;
@@ -253,7 +247,7 @@ class Sample extends Model {
 	[Kampala] => Array ( [9] => 8 [10] => 9 ) 
 	[Mid Eastern] => Array ( [9] => 1 [10] => 4 ) 
 	[Mid Northern] => Array ( [9] => 4 [10] => 9 ) 
-	[Mid Western] => Array ( [9] => 5 [10] => 5 ) 
+	[Mid Western] => Array ( [9] => 5 [10] => 5 ) http://www.azlyrics.com/lyrics/hoobastank/incomplete.html
 	[North East] => Array ( [9] => 1 [10] => 1 ) 
 	[South Western] => Array ( [9] => 5 [10] => 9 ) 
 	[West Nile] => Array ( [9] => 1 ) )*/

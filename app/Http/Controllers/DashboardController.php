@@ -217,6 +217,36 @@ class DashboardController extends Controller {
 		return $ret;
 	}
 
+	private function numberMaps($counts,$positive_counts,$init_counts){
+		$ret=[];
+		foreach ($counts as $k => $v) {
+			extract($v);
+			$abs_positives=array_key_exists($k, $positive_counts)?$positive_counts[$k]["value"]:0;
+			$positivity_rate=$value>0?($abs_positives/$value)*100:0;
+			$positivity_rate=round($positivity_rate,1);
+
+			$initiated=array_key_exists($k, $init_counts)?$init_counts[$k]["value"]:0;
+			$initiation_rate=$abs_positives>0?($initiated/$abs_positives)*100:0;
+			$initiation_rate=round($initiation_rate);
+
+
+			$ret[]=[
+				"facility_id"=>$facility_id,
+				"month"=>$month,				
+				"facility_name"=>$facility_name,
+				"district_id"=>$district_id,
+				"region_id"=>$region_id,
+				"level_id"=>$level_id,
+				"abs_positives"=>$abs_positives,
+				"total_results"=>$value,
+				"positivity_rate"=>$positivity_rate,
+				"initiation_rate"=>$initiation_rate
+				];
+				
+		}
+		return $ret;
+	}
+
 	/*
 
 	I would say that he is a ‘master’, if it were not for my belief that no one ‘masters’ anything, that each finds or makes his candle, then tries to see by the guttering light. Mum has made a good candle. And Mum has good eyes.

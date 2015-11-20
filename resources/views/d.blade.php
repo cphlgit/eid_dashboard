@@ -54,10 +54,10 @@
     <?php //if(!isset($filter_val)) $filter_val="National Metrics, ".$time." thus far" ?>
      <label class='hdr hdr-grey'> FILTERS:</label> 
      <label class='hdr val-grey'>
-        <label class='filter-val' ng-model='time' ng-init='time={!! $time !!}'>YEAR: <% time %></label> 
-        <label class='filter-val' ng-model='region_label' ng-init="region_label='~'"><% region_label %></label> 
-        <label class='filter-val' ng-model='district_label' ng-init="district_label='~'"><% district_label %></label> 
-        <label class='filter-val' ng-model='care_level_label' ng-init="care_level_label='~'"><% care_level_label %></label> 
+        <label class='filter-val ng-cloak' ng-model='time' ng-init='time={!! $time !!}'>YEAR: <% time %></label> 
+        <label class='filter-val ng-cloak' ng-model='region_label' ng-init="region_label='~'"><% region_label %></label> 
+        <label class='filter-val ng-cloak' ng-model='district_label' ng-init="district_label='~'"><% district_label %></label> 
+        <label class='filter-val ng-cloak' ng-model='care_level_label' ng-init="care_level_label='~'"><% care_level_label %></label> 
     </label><br>
 
      <table border='1' cellpadding='0' cellspacing='0' class='filter-tb'>
@@ -67,20 +67,26 @@
             <td width='25%' id='dist_elmt'>
                 <select ng-model="region" ng-init="region='all'" ng-change="filter('region')">
                     <option value="all">REGIONS</option>
-                    <option ng-repeat="(reg_nr,reg_name) in regions_slct" value="<% reg_nr %>"><% reg_name %></option>
+                    <option class="ng-cloak" ng-repeat="(reg_nr,reg_name) in regions_slct" value="<% reg_nr %>">
+                        <% reg_name %>
+                    </option>
                 </select>
             </td>
             <td width='25%' id='dist_elmt'>
                 <select ng-model="district" ng-init="district='all'" ng-change="filter('district')">
                     <option value="all">DISTRICTS</option>
-                    <option ng-repeat="(dist_nr,dist_name) in districts_slct" value="<% dist_nr %>"><% dist_name %></option>
+                    <option class="ng-cloak" ng-repeat="(dist_nr,dist_name) in districts_slct" value="<% dist_nr %>">
+                        <% dist_name %>
+                    </option>
                 </select>
             </td>
 
              <td width='25%' id='dist_elmt'>
                 <select ng-model="care_level" ng-init="care_level='all'" ng-change="filter('level')">
                     <option selected="selected" value="all">CARE LEVELS</option>
-                    <option ng-repeat="(level_nr,level_name) in facility_levels_slct" value="<% level_nr %>"><% level_name %></option>
+                    <option class="ng-cloak" ng-repeat="(level_nr,level_name) in facility_levels_slct" value="<% level_nr %>">
+                        <% level_name %>
+                    </option>
                 </select>
             </td>
         </tr>
@@ -93,7 +99,7 @@
             <ul>
                 <li id='tb_hd1'>
                     <a href="#tab1" id='tb_lnk1' ng-click="setCountPos()">
-                        <span class="num" ng-model="count_positives" ng-init="count_positives={!! $count_positives !!}" >
+                        <span class="num ng-cloak" ng-model="count_positives" ng-init="count_positives={!! $count_positives !!}" >
                             <% count_positives|number %>
                         </span>
                         <span class="desc">hiv positive infants</span>
@@ -101,7 +107,7 @@
                 </li>
                 <li id='tb_hd2'>
                     <a href="#tab2" id='tb_lnk2'  ng-click="avUptakeRate()">
-                        <span class="num" ng-model="total_samples" ng-init="total_samples={!! $total_samples !!}">
+                        <span class="num ng-cloak" ng-model="total_samples" ng-init="total_samples={!! $total_samples !!}">
                             <% total_samples|number %>
                         </span>
                         <span class="desc">uptake</span>
@@ -109,7 +115,7 @@
                 </li>
                 <li id='tb_hd3'>
                     <a href="#tab3" id='tb_lnk3' ng-click="avInitRate()">
-                        <span class="num" ng-model="av_initiation_rate" ng-init="av_initiation_rate={!! $av_initiation_rate !!}">
+                        <span class="num ng-cloak" ng-model="av_initiation_rate" ng-init="av_initiation_rate={!! $av_initiation_rate !!}">
                             <% av_initiation_rate|number:1 %>%
                         </span>
                         <span class="desc">average initiation rate</span>
@@ -117,7 +123,7 @@
                 </li>
                 <li id='tb_hd4'>
                     <a href="#tab4" id='tb_lnk4' ng-click="avPositivity()">
-                        <span class="num" ng-model="av_positivity" ng-init="av_positivity={!! $av_positivity !!}">
+                        <span class="num ng-cloak" ng-model="av_positivity" ng-init="av_positivity={!! $av_positivity !!}">
                             <% av_positivity|number:1 %>%
                         </span>
                         <span class="desc">average positivity rate</span>
@@ -149,9 +155,9 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="f in facility_numbers | filter:compare('abs_positives','ge',1)">
-                                    <td width='80%'><% f.facility_name %></td>
-                                    <td width='10%'><% f.abs_positives %></td>
-                                    <td width='10%'><% f.total_results %></td>
+                                    <td class="ng-cloak" width='80%'><% f.facility_name %></td>
+                                    <td class="ng-cloak" width='10%'><% f.abs_positives %></td>
+                                    <td class="ng-cloak" width='10%'><% f.total_results %></td>
                                 </tr>                        
                              </tbody>
                          </table>
@@ -178,8 +184,8 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="f in facility_numbers | filter:compare('facility_name','ne',null)">
-                                    <td><% f.facility_name %></td>
-                                    <td><% f.total_results %></td>
+                                    <td class="ng-cloak"><% f.facility_name %></td>
+                                    <td class="ng-cloak"><% f.total_results %></td>
                                 </tr>                        
                              </tbody>
                          </table>
@@ -205,9 +211,9 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="f in facility_numbers | filter:compare('initiation_rate','gt',0)">
-                                    <td><% f.facility_name %></td>
-                                    <td><% f.initiation_rate %></td>
-                                    <td><% f.abs_positives %></td>
+                                    <td class="ng-cloak"><% f.facility_name %></td>
+                                    <td class="ng-cloak"><% f.initiation_rate %></td>
+                                    <td class="ng-cloak"><% f.abs_positives %></td>
                                 </tr>                        
                              </tbody>
                          </table>
@@ -234,10 +240,10 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="f in facility_numbers | filter:compare('facility_name','ne',null)">
-                                    <td><% f.facility_name %></td>
-                                    <td><% f.positivity_rate %></td>
-                                    <td><% f.abs_positives %></td>
-                                    <td><% f.total_results %></td>
+                                    <td class="ng-cloak"><% f.facility_name %></td>
+                                    <td class="ng-cloak"><% f.positivity_rate %></td>
+                                    <td class="ng-cloak"><% f.abs_positives %></td>
+                                    <td class="ng-cloak"><% f.total_results %></td>
                                 </tr>                        
                              </tbody>
                          </table>
@@ -253,33 +259,33 @@
     <div class='addition-metrics'>
        <div class='row'>
         <div class='col-sm-2'>
-            <font class='addition-metrics figure' ng-init="first_pcr_total={!! $first_pcr_total !!}" ng-model='first_pcr_total'><% first_pcr_total|number %></font><br>
+            <font class='addition-metrics figure ng-cloak' ng-init="first_pcr_total={!! $first_pcr_total !!}" ng-model='first_pcr_total'><% first_pcr_total|number %></font><br>
             <font class='addition-metrics desc'>TOTAL 1ST PCR</font>            
         </div>
         <div class='col-sm-2'>
-            <font class='addition-metrics figure' ng-init="sec_pcr_total={!! $sec_pcr_total !!}" ng-model='sec_pcr_total'><% sec_pcr_total|number %></font><br>
+            <font class='addition-metrics figure ng-cloak' ng-init="sec_pcr_total={!! $sec_pcr_total !!}" ng-model='sec_pcr_total'><% sec_pcr_total|number %></font><br>
             <font class='addition-metrics desc'>TOTAL 2ND PCR</font>            
         </div>       
         <div class='col-sm-2'>
-            <font class='addition-metrics figure' ng-init="first_pcr_median_age={!! $first_pcr_median_age !!}" ng-model="first_pcr_median_age">
+            <font class='addition-metrics figure ng-cloak' ng-init="first_pcr_median_age={!! $first_pcr_median_age !!}" ng-model="first_pcr_median_age">
                 <% first_pcr_median_age|number:1 %>
             </font><br>
             <font class='addition-metrics desc'>MEDIAN MONTHS 1ST PCR</font>            
         </div>
         <div class='col-sm-2'>
-            <font class='addition-metrics figure' ng-init="sec_pcr_median_age={!! $sec_pcr_median_age !!}" ng-model="sec_pcr_median_age">
+            <font class='addition-metrics figure ng-cloak' ng-init="sec_pcr_median_age={!! $sec_pcr_median_age !!}" ng-model="sec_pcr_median_age">
                 <% sec_pcr_median_age|number:1 %>
             </font><br>
             <font class='addition-metrics desc'>MEDIAN MONTHS 2ND PCR</font>            
         </div>
         <div class='col-sm-2'>
-            <font class='addition-metrics figure' ng-init="total_initiated={!! $total_initiated !!}" ng-model="total_initiated">
+            <font class='addition-metrics figure ng-cloak' ng-init="total_initiated={!! $total_initiated !!}" ng-model="total_initiated">
                 <% total_initiated|number %>
             </font><br>
             <font class='addition-metrics desc'>TOTAL ART INITIATED CHILDREN</font>            
         </div>
         <div class='col-sm-2'>
-            <font class='addition-metrics figure' ng-init="total_samples={!! $total_samples !!}" ng-model='total_samples'>
+            <font class='addition-metrics figure ng-cloak' ng-init="total_samples={!! $total_samples !!}" ng-model='total_samples'>
                 <% total_samples|number %>
             </font><br>
             <font class='addition-metrics desc'>TOTAL TESTS</font>            

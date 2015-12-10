@@ -10,7 +10,6 @@
 }
 
 body{
-	background-color: #fff;
 	font-family: OpenSans;
 }
 
@@ -26,7 +25,7 @@ body{
 
 .tabs-style-flip nav li a{
 	/*padding-bottom: 0.082em;*/
-	padding-bottom: 3.47%;
+	padding-bottom: 2.8%;
 	color: #74777b;
 }
 
@@ -37,7 +36,7 @@ body{
 
 }
 
-.tabs-style-flip nav a:hover#tb_lnk1,
+/*.tabs-style-flip nav a:hover#tb_lnk1,
 .tabs-style-flip nav a:focus#tb_lnk1,
 .tabs-style-flip nav li.tab-current a#tb_lnk1{
 	border-color:  #357BB8;
@@ -63,6 +62,13 @@ body{
 .tabs-style-flip nav li.tab-current a#tb_lnk4{
 	border-color:  #9F82D1;
 	color: #9F82D1;
+}*/
+
+.tabs-style-flip nav a:hover,
+.tabs-style-flip nav a:focus,
+.tabs-style-flip nav li.tab-current a{
+	border-color:  #F44336;
+	color: #F44336;
 }
 
 
@@ -73,11 +79,12 @@ body{
 }
 
 .tabs-style-flip nav a span.num {
-	letter-spacing: 1px;
+	letter-spacing: 1.5px;
 	font-size:30px;
 }
 
 .tabs-style-flip nav a span.desc {
+	letter-spacing: 1px;
 	display:block;
 	font-size:12px;
 }
@@ -113,7 +120,8 @@ body{
 	padding: 30px;
 }
 
-#tab1{
+
+/*#tab1{
 	border-color: #357BB8;
 }
 
@@ -127,4 +135,20 @@ body{
 
 #tab4{
 	border-color: #9F82D1;
+}*/
+
+#tab1,#tab2,#tab3,#tab4{
+	border-color: #F44336;
+}
+
+.nv-controlsWrap .disabled text {
+    font-weight: normal !important;
+}
+
+// Make the active link bold
+.nv-controlsWrap .nv-series text,.nv-legend-text {
+    font-size: 12px;
+    font-family: OpenSans;
+    letter-spacing: 1px;
+    color: red;
 }

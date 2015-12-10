@@ -1,3 +1,14 @@
+/*@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(http://fonts.gstatic.com/s/opensans/v13/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+
+body{
+	font-family:'Open Sans';
+}*/
+
 #save_btn_hide{
 	display: none;
 }
@@ -98,18 +109,23 @@ body{
 }
 
 .navbar-custom .navbar-nav > li > a:hover, .navbar-custom .navbar-nav > li > a:focus {
-background-color: #346290;
+/*background-color: #346290;*/
+background-color: #00786A;
 }
 
 .navbar-custom .navbar-nav > .active > a, .navbar-custom .navbar-nav > .active >
  a:hover, .navbar-custom .navbar-nav > .active > a:focus {
 color: white; /*BACKGROUND color for active*/
-background-color: #346290;
+/*background-color: #346290;*/
+/*background-color: red;*/
+background-color: #D32F2F;
 }
 
   .navbar-custom {
-    background-color: #337ab7;
-    border-color: #337ab7;
+   /* background-color: #337ab7;
+    border-color: #337ab7;*/
+    border-color: #F44336 ;
+    background-color: #F44336;
 }
 
  .navbar-custom .dropdown-menu > li > a:hover,
@@ -123,8 +139,10 @@ background-color: #346290;
  .navbar-custom .navbar-nav > .open > a:focus,
  .navbar-inverse .navbar-nav > .open > a {
     text-decoration: none;
-    background-color: #346290; /*Change rollover cell color here*/
+    /*background-color: #346290;*/ /*Change rollover cell color here*/
+    background-color: #D32F2F;
   }
+
 
 
   .navbar-custom .navbar-nav > li > a {
@@ -176,13 +194,11 @@ dsktp img{
 .home-headers{
 	font-size: 20px;
 	letter-spacing: 2px;
-	font: helvetica neue regular;
 }
 
 .hdr{
 	font-size: 15px;
-	letter-spacing: 1px;
-	font: helvetica neue regular;
+	letter-spacing: 1.5px;
 }
 
 .hdr-grey{
@@ -196,7 +212,6 @@ dsktp img{
 .home-links{
 	font-size: 16px;
 	letter-spacing: 2px;
-	font: helvetica neue regular;
 	text-align: center;
 	width: 250px;
 	height: 138px;
@@ -272,20 +287,22 @@ dsktp img{
 }
 
 .db-charts{
-    width: 550px;
-    height: 350px;
+	overflow: auto;
+	white-space: nowrap;
+    width: 600px;
+    height: 450px;
 }
 
 div.addition-metrics{ 
-    padding: 10px; 
+    padding: 20px; 
     min-height: 80px;
     border:1px solid #C0C0C0;
     text-align: center;
+    letter-spacing: 1.5px;
 }
 
 .addition-metrics.figure,.addition-metrics.desc{
     color: #74777b;
-    font-family: helvetica neue regular;
     text-transform: uppercase;
 	line-height: 25px;
 }
@@ -295,7 +312,7 @@ div.addition-metrics{
 }
 
 .addition-metrics.desc{
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .filter-tb {
@@ -303,7 +320,8 @@ div.addition-metrics{
     color: #74777b;
     text-align: center;
     width: 100%;
-    font-size: 15px;
+    font-size: 12px; 
+    letter-spacing: 1px;   
 }
 
 .filter-tb select{
@@ -362,9 +380,30 @@ div.addition-metrics{
 
 .filter-val{
 	color: #fff;
-	background-color: #337ab7;
-	padding: 10px;
-	border-radius: 20px;
+	/*background-color: #90B4FF;*/
+	/*background-color: #009688;*/
+	background-color: #F44336;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 7px;
+	padding-bottom: 7px;
+	border-radius: 15px;
+	font-size: 13px;
+}
+
+.filter-val>.remove{
+	-webkit-box-shadow: 0px 0px 2px #641818;
+	 box-shadow: 0px 0px 2px #641818;
+}
+
+.filter-val>x{
+	color: #d2d2d2;
+	cursor: pointer;
+	font-size: 18px;
+}
+
+.filter-val>x:hover{
+	color: #fff;
 }
 
 .facilties-sect{
@@ -393,5 +432,56 @@ div.addition-metrics{
 .facilities-sect-pstv-rates table tbody tr{
 	color: #9F82D1;
 }
+
+.dist_faclty_toggle{
+	cursor: pointer;
+	margin-left: 30%;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	border: 1px solid #F44336 
+}
+
+.dist_faclty_toggle>.active{
+	background-color:#F44336; 
+	color:#FFF;
+	padding-top: inherit;
+	padding-bottom: inherit;
+}
+
+
+.filter-section{
+	overflow: auto;
+	padding:15px;
+	white-space: nowrap;
+}
+
+.date_drpdwn{
+	max-height: 150px;
+	border: 1px solid;
+	border-color: inherit;
+	background-color:#fff; 
+	position: relative;
+	border-radius: 2px;
+	-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    padding-left:5px;
+    overflow-y:auto;
+}
+
+.filter_clear{
+	cursor: pointer;
+	color: #F44336;
+}
+
+.navbar-custom > navbar-brand{
+	letter-spacing: 1px;
+	font-weight: 800px;
+	color: white;
+	padding-right: 30px;
+	padding-top: 100px;
+	font-size: 50px;
+}
+
+
 
 

@@ -418,7 +418,7 @@ ctrllers.DashController=function($scope,$timeout){
     $scope.total_samples_init=<?php echo $total_samples ?>;
     $scope.av_initiation_rate_init=<?php echo $av_initiation_rate ?>;
     $scope.av_positivity_init=<?php echo $av_positivity ?>;
-    $scope.total_initiated_init=<?php echo $total_initiated ?>
+    $scope.total_initiated_init=<?php echo $total_initiated ?>;
     //for filtering by region
 
     $scope.regions_slct=<?php echo json_encode($regions) ?>;

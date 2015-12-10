@@ -13,5 +13,6 @@
 
 //Route::get('/',function(){ return view('db/show'); });
 
-Route::get('/{time?}',"DashboardController@show");
+//Route::get('/{time?}',"DashboardController@show");
 
+Route::get('/',function(){ return view('dash'); });

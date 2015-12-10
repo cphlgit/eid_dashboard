@@ -28,11 +28,12 @@ function hubs(){
 }*/
 
 function districts(){
-	$ret=[];
-	$res=mysql_query("SELECT id,district from districts");
+	$ret=["dists","reg_dists"];
+	$res=mysql_query("SELECT id,district,regionID from districts");
 	while ($row=mysql_fetch_array($res)){
 		extract($row);
-		$ret[$id]=$district;
+		$ret["dists"][$id]=$district;
+		$ret["reg_dists"][$regionID][$id]=$district;
 	}
 	return $ret;
 }
@@ -88,7 +89,9 @@ function facilities(){
 
 $data=[];
 $data['regions']=regions();
-$data['districts']=districts();
+$ds=districts();
+$data['districts']=$ds["dists"];
+$data['dists_by_region']=$ds["reg_dists"];
 $data['care_levels']=careLevels();
 $data['facilities']=facilities();
 $data['age_group']=[1=>" < 5",2=>" 5 - 9",3=>" 10 - 18",4=>"19 - 25","26+"];

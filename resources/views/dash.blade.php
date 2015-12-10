@@ -200,7 +200,7 @@
                 <li id='tb_hd2'>
                     <a href="#tab2" id='tb_lnk2'  ng-click="displayHIVPositiveInfants()">
                         <span class="num ng-cloak" ng-model="hiv_positive_infants" ng-init="hiv_positive_infants=0">
-                            <% hiv_positive_infants|number %>%
+                            <% hiv_positive_infants|number %>
                         </span>
                         <span class="desc">hiv positive infants</span>
                     </a>
@@ -232,22 +232,20 @@
                         </div>                        
                     </div>
                    
-                    <div class="col-lg-6 facilties-sect " >
+                    <div class="col-lg-6 facilties-sect facilties-sect-list1" >
                         <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
-                                    <th width='60%'>Facility</th>
-                                    <th width='10%'>Samples Received</th>
-                                    <th width='20%'>DBS (%)</th>
-                                    <th width='10%'>Samples Tested</th>
+                                    <th width='70%'>Facility</th>
+                                    <th width='10%'>Total Tests</th>
+                                    <th width='20%'>Total 1st PCR</th>
                                 </tr>
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="f in facility_numbers" >
                                     <td class="ng-cloak"><% f.name %></td>
                                     <td class="ng-cloak"><% f.samples_received|number %></td>
-                                    <td class="ng-cloak"><% ((f.dbs_samples/f.samples_received)*100 )| number:1 %> %</td>
-                                    <td class="ng-cloak"><% f.total_results|number %></td>
+                                    <td class="ng-cloak"><% f.pcr_one|number %></td>
                                 </tr>                        
                              </tbody>
                          </table>
@@ -264,20 +262,20 @@
                         </div>
                     </div>
                    
-                    <div class="col-lg-6 facilties-sect" >
+                    <div class="col-lg-6 facilties-sect facilties-sect-list2" >
                         <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
-                                    <th width='90%'>Facility</th>
-                                    <th width='5%'>Valid Results</th>
-                                    <th width='5%'>Suppression rate (%)</th>
+                                    <th width='80%'>Facility</th>
+                                    <th width='10%'>Absolute Positives</th>
+                                    <th width='10%'>Total Tests</th>
                                 </tr>
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="f in facility_numbers" >
                                     <td class="ng-cloak"><% f.name %></td>
-                                    <td class="ng-cloak"><% f.valid_results|number %></td>
-                                    <td class="ng-cloak"><% ((f.suppressed/f.valid_results)*100)|number:1 %> %</td>
+                                    <td class="ng-cloak"><% f.hiv_positive_infants|number %></td>
+                                    <td class="ng-cloak"><% f.samples_received|number %></td>
                                 </tr>                        
                              </tbody>
                          </table>
@@ -292,20 +290,22 @@
                         </div>
                     </div>
                    
-                    <div class="col-lg-6 facilties-sect" >
+                    <div class="col-lg-6 facilties-sect facilties-sect-list3" >
                         <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
-                                    <th width='90%'>Facility</th>
-                                    <th width='5%'>Samples Received</th>
-                                    <th width='5%'>Rejection rate (%)</th>
+                                    <th width='70%'>Facility</th>
+                                    <th width='10%'>Positivity Rate</th>
+                                    <th width='10%'>Absolute Positives</th>
+                                    <th width='10%'>Total Tests</th>
                                 </tr>
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="f in facility_numbers" >
                                     <td class="ng-cloak"><% f.name %></td>
-                                    <td class="ng-cloak"><% f.samples_received %></td>
-                                    <td class="ng-cloak"><% ((f.rejected_samples/f.samples_received)*100)|number:1 %> %</td>
+                                    <td class="ng-cloak"><% ((f.hiv_positive_infants/f.samples_received)*100)|number:1 %>%</td>
+                                    <td class="ng-cloak"><% f.hiv_positive_infants|number %></td>
+                                    <td class="ng-cloak"><% f.samples_received|number %></td>
                                 </tr>                        
                              </tbody>
                          </table>
@@ -320,20 +320,21 @@
                         </div>
                     </div>
                    
-                    <div class="col-lg-6 facilties-sect" >
+                    <div class="col-lg-6 facilties-sect facilties-sect-list4" >
                         <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
-                            <thead>
+                             <thead>
                                 <tr>
-                                    <th width='90%'>Facility</th>
-                                    <th width='5%'>Samples Received</th>
-                                    <th width='5%'>Rejection rate (%)</th>
+                                    <th width='80%'>Facility</th>
+                                    <th width='10%'>Initiation Rate</th>
+                                    <th width='10%'>Absolute Positives</th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="f in facility_numbers" >
                                     <td class="ng-cloak"><% f.name %></td>
-                                    <td class="ng-cloak"><% f.samples_received %></td>
-                                    <td class="ng-cloak"><% ((f.rejected_samples/f.samples_received)*100)|number:1 %> %</td>
+                                    <td class="ng-cloak"><% ((f.initiated/f.hiv_positive_infants)*100)|number:1 %>%</td>
+                                    <td class="ng-cloak"><% f.hiv_positive_infants %></td>                    
                                 </tr>                        
                              </tbody>
                          </table>
@@ -349,28 +350,28 @@
        <div class='row'>
         <div class='col-sm-1'></div>
         <div class='col-sm-2'>
-            <font class='addition-metrics figure ng-cloak' ng-model='first_pcr_total' ng-init="first_pcr_total=0"><% first_pcr_total|number %></font><br>
+            <font class='addition-metrics figure ng-cloak' ng-model='pcr_one' ng-init="pcr_one=0"><% pcr_one|number %></font><br>
             <font class='addition-metrics desc'>TOTAL 1ST PCR</font>            
         </div>
         <div class='col-sm-2'>
-            <font class='addition-metrics figure ng-cloak' ng-model='sec_pcr_total' ng-init="sec_pcr_total=0"><% sec_pcr_total|number %></font><br>
+            <font class='addition-metrics figure ng-cloak' ng-model='pcr_two' ng-init="pcr_two=0"><% pcr_two|number %></font><br>
             <font class='addition-metrics desc'>TOTAL 2ND PCR</font>            
         </div>       
         <div class='col-sm-2'>
-            <font class='addition-metrics figure ng-cloak' ng-model="first_pcr_median_age" ng-init="first_pcr_median_age=0">
+            <font class='addition-metrics figure ng-cloak' ng-model="first_pcr_median_age" ng-init="first_pcr_median_age=1.5">
                 <% first_pcr_median_age|number:1 %>
             </font><br>
             <font class='addition-metrics desc'>MEDIAN MONTHS 1ST PCR</font>            
         </div>
         <div class='col-sm-2'>
-            <font class='addition-metrics figure ng-cloak' ng-model="sec_pcr_median_age" ng-init="sec_pcr_median_age=0">
+            <font class='addition-metrics figure ng-cloak' ng-model="sec_pcr_median_age" ng-init="sec_pcr_median_age=13">
                 <% sec_pcr_median_age|number:1 %>
             </font><br>
             <font class='addition-metrics desc'>MEDIAN MONTHS 2ND PCR</font>            
         </div>
         <div class='col-sm-2'>
-            <font class='addition-metrics figure ng-cloak' ng-model="total_initiated" ng-init="total_initiated=0">
-                <% total_initiated|number %>
+            <font class='addition-metrics figure ng-cloak' ng-model="initiated" ng-init="initiated=0">
+                <% initiated|number %>
             </font><br>
             <font class='addition-metrics desc'>TOTAL ART INITIATED CHILDREN</font>            
         </div>

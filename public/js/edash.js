@@ -1,4 +1,3 @@
-
 //angular stuff
 
 /*
@@ -46,6 +45,7 @@ var ctrllers={};
 
 ctrllers.DashController=function($scope,$http){
     var regions_json={};
+    var dists_by_region={};
     var districts_json={};    
     var care_levels_json={};   
     var facilities_json={};   
@@ -53,10 +53,11 @@ ctrllers.DashController=function($scope,$http){
 
 
     $http.get("../json/data.json").success(function(data) {
-        regions_json=data.regions;
-        districts_json=data.districts;        
-        care_levels_json=data.care_levels;
-        facilities_json=data.facilities;
+        regions_json=data.regions||{};
+        districts_json=data.districts||{};        
+        care_levels_json=data.care_levels||{};
+        facilities_json=data.facilities||{};
+        dists_by_region=data.dists_by_region||{};
 
         $scope.regions_slct=pairize(regions_json);       
         $scope.districts_slct=pairize(districts_json);        
@@ -136,6 +137,20 @@ ctrllers.DashController=function($scope,$http){
         }
     }
 
+    var reduceDistByReg=function(){
+        var regs=count($scope.filter_regions);
+        if(regs==0){
+            $scope.districts_slct=districts_json;
+        }else{
+            $scope.districts_slct={};
+            for(var i in $scope.filter_regions){
+                $scope.districts_slct.concat(dists_by_region[i]);
+            }
+        }
+    }
+
+dists_by_region
+
     $scope.filter=function(mode){
         switch(mode){
             case "region":
@@ -197,8 +212,8 @@ ctrllers.DashController=function($scope,$http){
         $scope.pcr_one+=that.pcr_one;
         $scope.pcr_two+=that.pcr_two;
 
-        $scope.pcr_one_ages.concat(that.pcr_one_ages);
-        $scope.pcr_two_ages.concat(that.pcr_two_ages);
+        //$scope.pcr_one_ages.concat(that.pcr_one_ages);
+        //$scope.pcr_two_ages.concat(that.pcr_two_ages);
     }
 
     var setDataByDuration=function(that){
@@ -215,16 +230,19 @@ ctrllers.DashController=function($scope,$http){
     var setDataByFacility=function(that){
         $scope.facility_numbers[that.facility_id]=$scope.facility_numbers[that.facility_id]||{};
         var f_smpls_rvd=$scope.facility_numbers[that.facility_id].samples_received||0;
+        var f_pcr1=$scope.facility_numbers[that.facility_id].pcr_one||0;
         var f_hpi=$scope.facility_numbers[that.facility_id].hiv_positive_infants||0;
         var f_i=$scope.facility_numbers[that.facility_id].initiated||0;
 
         $scope.facility_numbers[that.facility_id].samples_received=f_smpls_rvd+that.samples_received;
+        $scope.facility_numbers[that.facility_id].pcr_one=f_pcr1+that.pcr_one;
         $scope.facility_numbers[that.facility_id].hiv_positive_infants=f_hpi+that.hiv_positive_infants;
         $scope.facility_numbers[that.facility_id].initiated=f_i+that.initiated;       
         $scope.facility_numbers[that.facility_id].name=that.facility_name;
     }
 
     var generalFilter=function(){
+        //reduceDistByReg();
         $scope.loading=true;
         $scope.samples_received=0;$scope.hiv_positive_infants=0;$scope.initiated=0;
 
@@ -246,8 +264,9 @@ ctrllers.DashController=function($scope,$http){
                 setDataByFacility(that); //set data by facility to be displayed in tables
             }         
         }
-/*
         $scope.displaySamplesRecieved();
+/*
+        
         $scope.displaySupressionRate();
         $scope.displayRejectionRate();
 */
@@ -257,21 +276,31 @@ ctrllers.DashController=function($scope,$http){
 
 
     $scope.displaySamplesRecieved=function(){       //$scope.samples_received=100000;
-        var srd=$scope.samples_received_data;        
-        var data=[{"key":"DBS","values":[] },{"key":"PLASMA","values":[] }];
+        var srd=$scope.sr_by_duration; 
+        var data=[{"key":"Selection","values":[],"color":"#357BB8" }];
 
-        for(var i in srd.dbs){
-            data[0].values.push({"x":dateFormat(i),"y":Math.round(srd.dbs[i])});
-            data[1].values.push({"x":dateFormat(i),"y":Math.round(srd.plasma[i])});            
+        for(var i in srd){
+            //data[0].values.push({"x":dateFormat(i),"y":Math.round(srd[i])});
+            data[0].values.push([dateFormat(i),Math.round(srd[i])]);
         }
 
-        nv.addGraph( function(){
-            var chart = nv.models.multiBarChart().color(["#F44336","#607D8B"]);
-            if(count(srd.dbs)<=8) { chart.reduceXTicks(false); }
+        console.log("sr data is here"+JSON.stringify(data));
+
+        nv.addGraph(function() {
+            var chart = nv.models.lineChart()
+                        .x(function(d,i) { return i })
+                        .y(function(d) {return d[1] });
+            
+            chart.xAxis.tickFormat(function(d) {
+                return data[0].values[d][0] || " ";
+            });
+            chart.useInteractiveGuideline(true)
 
             chart.yAxis.tickFormat(d3.format(',.0d'));
-            $('#samples_received svg').html(" ");
-            d3.select('#samples_received svg').datum(data).transition().duration(500).call(chart);
+            chart.forceY([0,8000]);
+            if(count(srd)<=8) { chart.reduceXTicks(false); }
+
+            d3.select('#visual svg').datum(data).transition().duration(500).call(chart);
             return chart;
         });
     };

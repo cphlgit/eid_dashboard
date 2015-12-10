@@ -110,7 +110,7 @@ body{
 
 .navbar-custom .navbar-nav > li > a:hover, .navbar-custom .navbar-nav > li > a:focus {
 /*background-color: #346290;*/
-background-color: #00786A;
+background-color: #346290;
 }
 
 .navbar-custom .navbar-nav > .active > a, .navbar-custom .navbar-nav > .active >
@@ -118,19 +118,17 @@ background-color: #00786A;
 color: white; /*BACKGROUND color for active*/
 /*background-color: #346290;*/
 /*background-color: red;*/
-background-color: #D32F2F;
+background-color: #346290;
 }
 
   .navbar-custom {
-   /* background-color: #337ab7;
-    border-color: #337ab7;*/
-    border-color: #F44336 ;
-    background-color: #F44336;
+    border-color: #337AB7 ;
+    background-color: #337AB7;
 }
 
  .navbar-custom .dropdown-menu > li > a:hover,
   .navbar-custom .dropdown-menu > li > a:focus {
-    color: #3572b0;
+    color: #346290;
    text-decoration: none;
    }
 
@@ -140,7 +138,7 @@ background-color: #D32F2F;
  .navbar-inverse .navbar-nav > .open > a {
     text-decoration: none;
     /*background-color: #346290;*/ /*Change rollover cell color here*/
-    background-color: #D32F2F;
+    background-color: #346290;
   }
 
 
@@ -380,9 +378,7 @@ div.addition-metrics{
 
 .filter-val{
 	color: #fff;
-	/*background-color: #90B4FF;*/
-	/*background-color: #009688;*/
-	background-color: #F44336;
+	background-color:#337AB7;
 	padding-left: 15px;
 	padding-right: 15px;
 	padding-top: 7px;
@@ -417,19 +413,19 @@ div.addition-metrics{
 	height: 12px;
 }
 
-.facilities-sect-hiv-pstv table tbody tr{
+.facilties-sect-list1 table tbody tr{
 	color: #357BB8;
 }
 
-.facilities-sect-uptake table tbody tr{
+.facilties-sect-list2 table tbody tr{
 	color: #5EA361;
 }
 
-.facilities-sect-init-rates table tbody tr{
+.facilties-sect-list3 table tbody tr{
 	color: #F5A623;
 }
 
-.facilities-sect-pstv-rates table tbody tr{
+.facilties-sect-list4 table tbody tr{
 	color: #9F82D1;
 }
 
@@ -470,7 +466,7 @@ div.addition-metrics{
 
 .filter_clear{
 	cursor: pointer;
-	color: #F44336;
+	color: #337AB7;
 }
 
 .navbar-custom > navbar-brand{

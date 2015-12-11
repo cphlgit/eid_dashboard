@@ -59,6 +59,8 @@ ctrllers.DashController=function($scope,$http){
         facilities_json=data.facilities||{};
         dists_by_region=data.dists_by_region||{};
 
+        //console.log(JSON.stringify(dists_by_region));
+
         $scope.regions_slct=pairize(regions_json);       
         $scope.districts_slct=pairize(districts_json);        
         $scope.care_levels_slct=pairize(care_levels_json);
@@ -137,15 +139,18 @@ ctrllers.DashController=function($scope,$http){
         }
     }
 
-    var reduceDistByReg=function(){
+    var reduceDistsByReg=function(){
         var regs=count($scope.filter_regions);
         if(regs==0){
-            $scope.districts_slct=districts_json;
+            $scope.districts_slct=pairize(districts_json);
         }else{
             $scope.districts_slct={};
+            var nu_dists=[];
             for(var i in $scope.filter_regions){
-                $scope.districts_slct.concat(dists_by_region[i]);
+                var dsts=pairize(dists_by_region[i]);
+                nu_dists=nu_dists.concat(dsts);
             }
+            $scope.districts_slct=nu_dists;
         }
     }
 
@@ -242,7 +247,7 @@ dists_by_region
     }
 
     var generalFilter=function(){
-        //reduceDistByReg();
+        reduceDistsByReg();
         $scope.loading=true;
         $scope.samples_received=0;$scope.hiv_positive_infants=0;$scope.initiated=0;
 

@@ -265,103 +265,163 @@ dists_by_region
             }         
         }
         $scope.displaySamplesRecieved();
-/*
-        
-        $scope.displaySupressionRate();
-        $scope.displayRejectionRate();
-*/
+        $scope.displayHIVPositiveInfants();
+        $scope.displayPositivityRate();
+        $scope.displayInitiationRate();
+
         $scope.filtered=count($scope.filter_regions)>0||count($scope.filter_districts)>0||count($scope.filter_care_levels)>0||$scope.date_filtered;
         $scope.loading=false;    
     };
 
 
-    $scope.displaySamplesRecieved=function(){       //$scope.samples_received=100000;
+    $scope.displaySamplesRecieved=function(){     
         var srd=$scope.sr_by_duration; 
         var data=[{"key":"Selection","values":[],"color":"#357BB8" }];
 
-        for(var i in srd){
-            //data[0].values.push({"x":dateFormat(i),"y":Math.round(srd[i])});
-            data[0].values.push([dateFormat(i),Math.round(srd[i])]);
-        }
+        var labels=[];
+        var x=0;
+        var y_vals=[];
 
-        console.log("sr data is here"+JSON.stringify(data));
+        for(var i in srd){
+            var y_val=Math.round(srd[i]);
+            y_vals.push(y_val);
+            data[0].values.push({"x":x,"y":y_val});
+            labels.push(dateFormat(i));
+            x++;
+        }
 
         nv.addGraph(function() {
             var chart = nv.models.lineChart()
-                        .x(function(d,i) { return i })
-                        .y(function(d) {return d[1] });
+                        .margin({right: 50})
+                        .useInteractiveGuideline(true)
+                        .x(function(d) { return d.x })
+                        .y(function(d) { return d.y })
+                        .forceY(y_terminals(y_vals));
             
             chart.xAxis.tickFormat(function(d) {
-                return data[0].values[d][0] || " ";
+                return labels[d];
             });
-            chart.useInteractiveGuideline(true)
 
             chart.yAxis.tickFormat(d3.format(',.0d'));
-            chart.forceY([0,8000]);
-            if(count(srd)<=8) { chart.reduceXTicks(false); }
 
-            d3.select('#visual svg').datum(data).transition().duration(500).call(chart);
+            d3.select('#visual1 svg').datum(data).transition().duration(500).call(chart);
             return chart;
         });
     };
 
+    $scope.displayHIVPositiveInfants=function(){  
+        var hbd=$scope.hpi_by_duration; 
+        var data=[{"key":"Selection","values":[],"color":"#5EA361" }];
 
-    $scope.displaySupressionRate=function(){
-        var data=[{"key":"SUPRESSION RATE","color": "#607D8B","values":[] },
-                  {"key":"VALID RESULTS","bar":true,"color": "#F44336","values":[]}];
+        var labels=[];
+        var x=0;
+        var y_vals=[];
 
-        for(var i in $scope.valid_res_by_duration){
-            var sprsd=$scope.suppressed_by_duration[i]||0;
-            var vld=$scope.valid_res_by_duration[i]||0;
-            var s_rate=(sprsd/vld)*100;
-            //s_rate.toPrecision(3);
-            data[0].values.push([dateFormat(i),Math.round(s_rate)]);
-            data[1].values.push([dateFormat(i),vld]);
-        } 
-        nv.addGraph( function() {
-            var chart = nv.models.linePlusBarChart()
-                        .margin({right: 60,})
-                        .x(function(d,i) { return i })
-                        .y(function(d,i) {return d[1] }).focusEnable(false);
-
-            chart.xAxis.tickFormat(function(d) {
-                return data[0].values[d] && data[0].values[d][0] || " ";
-            });
-            //chart.reduceXTicks(false);
-            //chart.bars.forceY([0]);
-            chart.lines.forceY([0,100]);
-            chart.legendRightAxisHint(" (R)").legendLeftAxisHint(" (L)")
-
-            $('#supression_rate svg').html(" ");
-            d3.select('#supression_rate svg').datum(data).transition().duration(500).call(chart);
-            return chart;
-        });
-    }
-
-    $scope.displayRejectionRate=function(){
-        var rbd=$scope.rejected_by_duration;
-        var data=[{"key":"SAMPLE QUALITY","values":[]},
-                  {"key":"INCOMPLETE FORM","values":[] },
-                  {"key":"ELIGIBILITY","values":[] }];
-
-        for(var i in rbd.sample_quality){
-            var ttl=rbd.sample_quality[i]+rbd.incomplete_form[i]+rbd.eligibility[i];
-            var sq_rate=(rbd.sample_quality[i]/ttl)*100;
-            var inc_rate=(rbd.incomplete_form[i]/ttl)*100;
-            var el_rate=(rbd.eligibility[i]/ttl)*100;
-            data[0].values.push({"x":dateFormat(i),"y":Math.round(sq_rate) });
-            data[1].values.push({"x":dateFormat(i),"y":Math.round(inc_rate)});
-            data[2].values.push({"x":dateFormat(i),"y":Math.round(el_rate)});
+        for(var i in hbd){
+            var y_val=Math.round(hbd[i]);
+            y_vals.push(y_val);
+            data[0].values.push({"x":x,"y":y_val});
+            labels.push(dateFormat(i));
+            x++;
         }
-        nv.addGraph( function(){
-            var chart = nv.models.multiBarChart().stacked(true).color(["#607D8B","#FFCDD2","#F44336"]);
-            if(count(rbd.sample_quality)<=8) { chart.reduceXTicks(false); }
+
+        nv.addGraph(function() {
+            var chart = nv.models.lineChart()
+                        .margin({right: 50})
+                        .useInteractiveGuideline(true)
+                        .x(function(d) { return d.x })
+                        .y(function(d) { return d.y })
+                        .forceY(y_terminals(y_vals));
+            
+            chart.xAxis.tickFormat(function(d) {
+                return labels[d];
+            });
+
             chart.yAxis.tickFormat(d3.format(',.0d'));
-            $('#rejection_rate svg').html(" ");
-            d3.select('#rejection_rate svg').datum(data).transition().duration(500).call(chart);
+
+            d3.select('#visual2 svg').datum(data).transition().duration(500).call(chart);
             return chart;
         });
     };
+
+
+     $scope.displayPositivityRate=function(){ 
+        var srd=$scope.sr_by_duration; 
+        var hbd=$scope.hpi_by_duration;
+        var data=[{"key":"Selection","values":[],"color":"#F5A623" }];
+
+        var labels=[];
+        var x=0;
+        var y_vals=[];
+
+        for(var i in hbd){ 
+            var y_val=Math.round((hbd[i]/srd[i])*100);
+            y_vals.push(y_val);
+            data[0].values.push({"x":x,"y":y_val});
+            labels.push(dateFormat(i));
+            x++;
+        }
+
+        nv.addGraph(function() {
+            var chart = nv.models.lineChart()
+                        .margin({right: 50})
+                        .useInteractiveGuideline(true)
+                        .x(function(d) { return d.x })
+                        .y(function(d) { return d.y })
+                        .forceY(y_terminals(y_vals));
+            
+            chart.xAxis.tickFormat(function(d) {
+                return labels[d];
+            });
+
+            chart.yAxis.tickFormat(d3.format(',.0d'));
+
+            d3.select('#visual3 svg').datum(data).transition().duration(500).call(chart);
+            return chart;
+        });
+    };
+
+
+     $scope.displayInitiationRate=function(){  
+        var hbd=$scope.hpi_by_duration;
+        var ibd=$scope.i_by_duration; 
+
+        var data=[{"key":"Selection","values":[],"color":"#9F82D1" }];
+
+        var labels=[];
+        var x=0;
+        var y_vals=[];
+
+        for(var i in ibd){
+            var y_val=Math.round((ibd[i]/hbd[i])*100);
+            y_vals.push(y_val);
+            data[0].values.push({"x":x,"y":y_val});
+            labels.push(dateFormat(i));
+            x++;
+        }
+
+        nv.addGraph(function() {
+            var chart = nv.models.lineChart()
+                        .margin({right: 50})
+                        .useInteractiveGuideline(true)
+                        .x(function(d) { return d.x })
+                        .y(function(d) { return d.y })
+                        .forceY(y_terminals(y_vals));
+            
+            chart.xAxis.tickFormat(function(d) {
+                return labels[d];
+            });
+
+            chart.yAxis.tickFormat(d3.format(',.0d'));
+
+            d3.select('#visual4 svg').datum(data).transition().duration(500).call(chart);
+            return chart;
+        });
+    };
+
+
+
+
 
      $scope.removeTag=function(mode,nr){
         switch(mode){
@@ -473,6 +533,16 @@ dists_by_region
         }
         return ret;
     }
+
+    var y_terminals=function(y_vals){
+        var first_y=Math.min.apply(Math, y_vals);
+        first_y=Math.round(first_y-(0.03*first_y));
+        var last_y=Math.max.apply(Math, y_vals);
+        last_y=Math.round(last_y+(0.03*last_y));
+        return [first_y,last_y];
+    }
+
+    
 
 };
 

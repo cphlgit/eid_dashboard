@@ -82,8 +82,8 @@ ctrllers.DashController=function($scope,$http){
            results_json[i].initiated=Number(that.initiated)||0;
            results_json[i].pcr_one=Number(that.pcr_one)||0;
            results_json[i].pcr_two=Number(that.pcr_two)||0;
-           results_json[i].pcr_one_ages=Number(that.pcr_one_ages)||{};
-           results_json[i].pcr_two_ages=Number(that.pcr_two_ages)||{};           
+           results_json[i].pcr_one_ages=that.pcr_one_ages;
+           results_json[i].pcr_two_ages=that.pcr_two_ages;           
         }
 
         // console.log("first facility:"+JSON.stringify(results_json[0]));
@@ -144,7 +144,6 @@ ctrllers.DashController=function($scope,$http){
         if(regs==0){
             $scope.districts_slct=pairize(districts_json);
         }else{
-            $scope.districts_slct={};
             var nu_dists=[];
             for(var i in $scope.filter_regions){
                 var dsts=pairize(dists_by_region[i]);
@@ -153,8 +152,6 @@ ctrllers.DashController=function($scope,$http){
             $scope.districts_slct=nu_dists;
         }
     }
-
-dists_by_region
 
     $scope.filter=function(mode){
         switch(mode){
@@ -213,12 +210,27 @@ dists_by_region
         $scope.initiated+=that.initiated;
     }
 
+   /* var reduceDistsByReg=function(){
+        var regs=count($scope.filter_regions);
+        if(regs==0){
+            $scope.districts_slct=pairize(districts_json);
+        }else{
+            var nu_dists=[];
+            for(var i in $scope.filter_regions){
+                var dsts=pairize(dists_by_region[i]);
+                nu_dists=nu_dists.concat(dsts);
+            }
+            $scope.districts_slct=nu_dists;
+        }
+    }*/
+
     var setOtherIndicators=function(that){
         $scope.pcr_one+=that.pcr_one;
         $scope.pcr_two+=that.pcr_two;
+        //console.log("one :"+JSON.stringify(that.pcr_one_ages))
 
-        //$scope.pcr_one_ages.concat(that.pcr_one_ages);
-        //$scope.pcr_two_ages.concat(that.pcr_two_ages);
+        $scope.pcr_one_ages=$scope.pcr_one_ages.concat(that.pcr_one_ages)||[];
+        $scope.pcr_two_ages=$scope.pcr_two_ages.concat(that.pcr_two_ages)||[];
     }
 
     var setDataByDuration=function(that){
@@ -257,8 +269,8 @@ dists_by_region
         $scope.facility_numbers={};//data to be used in the facility lists for each key indicator
 
         $scope.pcr_one=0;$scope.pcr_two=0;
-        $scope.pcr_one_ages={};//create list to be used for 1st pcr median age
-        $scope.pcr_two_ages={};//create list to be used for 2nd pcr median age       
+        $scope.pcr_one_ages=[];//create list to be used for 1st pcr median age
+        $scope.pcr_two_ages=[];//create list to be used for 2nd pcr median age       
 
         for(var i in results_json){
             var that = results_json[i];
@@ -269,6 +281,9 @@ dists_by_region
                 setDataByFacility(that); //set data by facility to be displayed in tables
             }         
         }
+        //console.log("pcr 1 ages: "+JSON.stringify($scope.pcr_one_ages));
+        $scope.first_pcr_median_age=median($scope.pcr_one_ages);
+        $scope.sec_pcr_median_age=median($scope.pcr_two_ages);
         $scope.displaySamplesRecieved();
         $scope.displayHIVPositiveInfants();
         $scope.displayPositivityRate();
@@ -547,6 +562,14 @@ dists_by_region
         return [first_y,last_y];
     }
 
+    var median=function(values) {
+        values.sort( function(a,b) {return a - b;} );
+        var half = Math.floor(values.length/2);
+        if(values.length % 2)
+            return values[half];
+        else
+            return (values[half-1] + values[half]) / 2.0;
+    }
     
 
 };

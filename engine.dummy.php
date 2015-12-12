@@ -94,7 +94,6 @@ $data['districts']=$ds["dists"];
 $data['dists_by_region']=$ds["reg_dists"];
 $data['care_levels']=careLevels();
 $data['facilities']=facilities();
-$data['age_group']=[1=>" < 5",2=>" 5 - 9",3=>" 10 - 18",4=>"19 - 25","26+"];
 
 
 $years=[2014,2015];

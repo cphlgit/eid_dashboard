@@ -107,13 +107,13 @@
 
         <span ng-model='filter_regions' ng-init='filter_regions={}'>
             <span ng-repeat="(r_nr,r_name) in filter_regions">
-                <span class="filter-val ng-cloak"> <% r_name %> (r) <x ng-click='removeTag("region",r_nr)'>&#120;</x></span> 
+                <span class="filter-val ng-cloak"> <% r_name %> (r) <x class='glyphicon glyphicon-remove' ng-click='removeTag("region",r_nr)'></x></span> 
             </span>
         </span>
 
         <span ng-model='filter_districts' ng-init='filter_districts={}'>
             <span ng-repeat="(d_nr,d_name) in filter_districts"> 
-                <span class="filter-val ng-cloak"> <% d_name %> (d) <x ng-click='removeTag("district",d_nr)'>&#120;</x></span> 
+                <span class="filter-val ng-cloak"> <% d_name %> (d) <x class='glyphicon glyphicon-remove' ng-click='removeTag("district",d_nr)'></x></span> 
             </span>
         </span>
 
@@ -121,7 +121,7 @@
 
         <span ng-model='filter_care_levels' ng-init='filter_care_levels={}'>
             <span ng-repeat="(cl_nr,cl_name) in filter_care_levels">
-                <span class="filter-val ng-cloak"> <% cl_name %> (a) <x ng-click='removeTag("care_level",cl_nr)'>&#120;</x></span> 
+                <span class="filter-val ng-cloak"> <% cl_name %> (a) <x class='glyphicon glyphicon-remove' ng-click='removeTag("care_level",cl_nr)'></x></span> 
             </span>
         </span>
 
@@ -358,13 +358,13 @@
             <font class='addition-metrics desc'>TOTAL 2ND PCR</font>            
         </div>       
         <div class='col-sm-2'>
-            <font class='addition-metrics figure ng-cloak' ng-model="first_pcr_median_age" ng-init="first_pcr_median_age=1.5">
+            <font class='addition-metrics figure ng-cloak' ng-model="first_pcr_median_age" ng-init="first_pcr_median_age=0">
                 <% first_pcr_median_age|number:1 %>
             </font><br>
             <font class='addition-metrics desc'>MEDIAN MONTHS 1ST PCR</font>            
         </div>
         <div class='col-sm-2'>
-            <font class='addition-metrics figure ng-cloak' ng-model="sec_pcr_median_age" ng-init="sec_pcr_median_age=13">
+            <font class='addition-metrics figure ng-cloak' ng-model="sec_pcr_median_age" ng-init="sec_pcr_median_age=0">
                 <% sec_pcr_median_age|number:1 %>
             </font><br>
             <font class='addition-metrics desc'>MEDIAN MONTHS 2ND PCR</font>            

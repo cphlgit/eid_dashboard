@@ -380,7 +380,7 @@ div.addition-metrics{
 	color: #fff;
 	background-color:#337AB7;
 	padding-left: 15px;
-	padding-right: 15px;
+	padding-right: 10px;
 	padding-top: 7px;
 	padding-bottom: 7px;
 	border-radius: 15px;
@@ -395,7 +395,7 @@ div.addition-metrics{
 .filter-val>x{
 	color: #d2d2d2;
 	cursor: pointer;
-	font-size: 18px;
+	font-size: 13px;
 }
 
 .filter-val>x:hover{

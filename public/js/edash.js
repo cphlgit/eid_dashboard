@@ -243,6 +243,16 @@ ctrllers.DashController=function($scope,$http){
         $scope.i_by_duration[that.year_month]=prev_i+that.initiated;
     }
 
+    var setNationalDataByDuration=function(that){
+        var prev_sr=$scope.nat_sr_by_duration[that.year_month]||0;
+        var prev_hpi=$scope.nat_hpi_by_duration[that.year_month]||0;
+        var prev_i=$scope.nat_i_by_duration[that.year_month]||0;
+
+        $scope.nat_sr_by_duration[that.year_month]=prev_sr+that.samples_received;
+        $scope.nat_hpi_by_duration[that.year_month]=prev_hpi+that.hiv_positive_infants;
+        $scope.nat_i_by_duration[that.year_month]=prev_i+that.initiated;
+    }
+
 
     var setDataByFacility=function(that){
         $scope.facility_numbers[that.facility_id]=$scope.facility_numbers[that.facility_id]||{};
@@ -265,15 +275,19 @@ ctrllers.DashController=function($scope,$http){
 
         //this is data to be used in the graphs
         $scope.sr_by_duration={};$scope.hpi_by_duration={};$scope.i_by_duration={};
+        $scope.nat_sr_by_duration={};$scope.nat_hpi_by_duration={};$scope.nat_i_by_duration={};
 
         $scope.facility_numbers={};//data to be used in the facility lists for each key indicator
 
         $scope.pcr_one=0;$scope.pcr_two=0;
         $scope.pcr_one_ages=[];//create list to be used for 1st pcr median age
-        $scope.pcr_two_ages=[];//create list to be used for 2nd pcr median age       
+        $scope.pcr_two_ages=[];//create list to be used for 2nd pcr median age     
 
         for(var i in results_json){
             var that = results_json[i];
+            if(inArray(that.year_month,$scope.filter_duration)){
+                setNationalDataByDuration(that);
+            }  
             if(evaluator(that)){
                 setKeyIndicators(that); //set the values for the key indicators
                 setOtherIndicators(that); //set the values for other indicators
@@ -368,16 +382,19 @@ ctrllers.DashController=function($scope,$http){
      $scope.displayPositivityRate=function(){ 
         var srd=$scope.sr_by_duration; 
         var hbd=$scope.hpi_by_duration;
-        var data=[{"key":"Selection","values":[],"color":"#F5A623" }];
+        var nat_srd=$scope.nat_sr_by_duration; 
+        var nat_hbd=$scope.nat_hpi_by_duration;
 
+        var data=[{"key":"National","values":[],"color":"#6D6D6D" }];
+
+        var slct=count($scope.filter_regions)>0||count($scope.filter_districts)>0||count($scope.filter_care_levels)>0;
+        if(slct){ data.push({"key":"Selection","values":[],"color":"#F5A623" }); }
         var labels=[];
         var x=0;
-        var y_vals=[];
 
-        for(var i in hbd){ 
-            var y_val=Math.round((hbd[i]/srd[i])*100);
-            y_vals.push(y_val);
-            data[0].values.push({"x":x,"y":y_val});
+        for(var i in nat_hbd){             
+            data[0].values.push({"x":x,"y":Math.round((nat_hbd[i]/nat_srd[i])*100)});
+            if(slct){ data[1].values.push({"x":x,"y":Math.round((hbd[i]/srd[i])*100)}); }
             labels.push(dateFormat(i));
             x++;
         }
@@ -388,7 +405,7 @@ ctrllers.DashController=function($scope,$http){
                         .useInteractiveGuideline(true)
                         .x(function(d) { return d.x })
                         .y(function(d) { return d.y })
-                        .forceY(y_terminals(y_vals));
+                        .forceY([0,100]);
             
             chart.xAxis.tickFormat(function(d) {
                 return labels[d];
@@ -405,17 +422,20 @@ ctrllers.DashController=function($scope,$http){
      $scope.displayInitiationRate=function(){  
         var hbd=$scope.hpi_by_duration;
         var ibd=$scope.i_by_duration; 
+        var nat_hbd=$scope.nat_hpi_by_duration;
+        var nat_ibd=$scope.nat_i_by_duration; 
 
-        var data=[{"key":"Selection","values":[],"color":"#9F82D1" }];
+        var data=[{"key":"National","values":[],"color":"#6D6D6D" }];
+
+        var slct=count($scope.filter_regions)>0||count($scope.filter_districts)>0||count($scope.filter_care_levels)>0;
+        if(slct){ data.push({"key":"Selection","values":[],"color":"#9F82D1" }); }
 
         var labels=[];
         var x=0;
-        var y_vals=[];
 
-        for(var i in ibd){
-            var y_val=Math.round((ibd[i]/hbd[i])*100);
-            y_vals.push(y_val);
-            data[0].values.push({"x":x,"y":y_val});
+        for(var i in nat_ibd){
+            data[0].values.push({"x":x,"y":Math.round((nat_ibd[i]/nat_hbd[i])*100)});
+            if(slct){ data[1].values.push({"x":x,"y":Math.round((ibd[i]/hbd[i])*100)}); }
             labels.push(dateFormat(i));
             x++;
         }
@@ -426,7 +446,7 @@ ctrllers.DashController=function($scope,$http){
                         .useInteractiveGuideline(true)
                         .x(function(d) { return d.x })
                         .y(function(d) { return d.y })
-                        .forceY(y_terminals(y_vals));
+                        .forceY([0,100]);
             
             chart.xAxis.tickFormat(function(d) {
                 return labels[d];

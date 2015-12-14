@@ -98,7 +98,7 @@
         $init_duration[]="$current_year-$m";
         $m++;
      }
-     $months_by_years=yearByMonths(2011,1); 
+     $months_by_years=yearByMonths(2014,1); 
      //krsort($months_by_years);
      ?>
      <span ng-model="month_labels" ng-init='month_labels={!! json_encode(MyHTML::months()) !!}'></span>

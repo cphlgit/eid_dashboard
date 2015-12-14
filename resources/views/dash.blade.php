@@ -88,7 +88,7 @@
         $init_duration[]="$current_year-$m";
         $m++;
      }
-     $months_by_years=yearByMonths(2014,1); 
+     $months_by_years=yearByMonths(2011,1); 
      //krsort($months_by_years);
      ?>
      <span ng-model="month_labels" ng-init='month_labels={!! json_encode(MyHTML::months()) !!}'></span>
@@ -133,7 +133,7 @@
         <tr>
             <td width='20%' >
                 <span ng-model='fro_date_slct' ng-init='fro_date_slct={!! json_encode($months_by_years) !!}'></span>
-                <select ng-model="fro_date" ng-init="fro_date='all'" ng-change="dateFilter('fro')">
+                <select ng-model="fro_date" ng-init="fro_date='all'">
                     <option value='all'>FROM DATE</option>
                     <optgroup class="ng-cloak" ng-repeat="(yr,mths) in fro_date_slct | orderBy:'-yr'" label="<% yr %>">
                         <option class="ng-cloak" ng-repeat="mth in mths" value="<% yr %>-<% mth %>"> 

@@ -49,10 +49,75 @@ ctrllers.DashController=function($scope,$http){
     var districts_json={};    
     var care_levels_json={};   
     var facilities_json={};   
-    var results_json={}; //to hold a big map will all processed data to later on be used in the generalFilter
+    var results_json=[]; //to hold a big map will all processed data to later on be used in the generalFilter
+    var loaded_years=[];
+
+    $http.get("../json/care_levels.json").success(function(data){
+        care_levels_json=data||{};       
+        $scope.care_levels_slct=pairize(care_levels_json);
+    });
+
+    $http.get("../json/districts.json").success(function(data){
+        districts_json=data||{};     
+        $scope.districts_slct=pairize(districts_json);
+    });
+
+    $http.get("../json/districts_by_region.json").success(function(data){
+        dists_by_region=data||{};
+    });
+
+    $http.get("../json/facilities.json").success(function(data){
+        facilities_json=data||{};
+    });
+
+    $http.get("../json/regions.json").success(function(data){
+        regions_json=data||{};
+        $scope.regions_slct=pairize(regions_json);
+        initializeSys();        
+    });
+
+    var initializeSys=function(){
+        console.log("entered to initialize");
+        var d=new Date();
+        var y=d.getFullYear();
+        getYearData(y);
+    }
+
+    //
+
+    var getYearData=function(year){
+        $http.get("../json/data.json").success(function(data) {
+            var res=data.results||{};
+            //var res=data||{};
+            for(var i in res){
+                console.log("mapping");
+                var that=res[i];
+                var facility_details=facilities_json[that.facility_id]||{};
+                this_obj={};
+                this_obj.year_month=that.year+"-"+that.month;
+                this_obj.facility_id=that.facility_id;
+                this_obj.facility_name=facility_details.name||"";
+                this_obj.region_id=facility_details.region_id;
+                this_obj.district_id=facility_details.district_id;
+                this_obj.care_level_id=facility_details.care_level_id;
+
+                this_obj.samples_received=Number(that.samples_received)||0;
+                this_obj.hiv_positive_infants=Number(that.hiv_positive_infants)||0;
+                this_obj.initiated=Number(that.initiated)||0;
+                this_obj.pcr_one=Number(that.pcr_one)||0;
+                this_obj.pcr_two=Number(that.pcr_two)||0;
+                this_obj.pcr_one_ages=that.pcr_one_ages;
+                this_obj.pcr_two_ages=that.pcr_two_ages; 
+                results_json.push(this_obj);
+            }
+            //loaded_years.push(year);
+            //if(!$scope.date_filtered){ generalFilter(); }//call the filter for the first time
+            generalFilter();
+        });
+    }
 
 
-    $http.get("../json/data.json").success(function(data) {
+    /*$http.get("../json/data.json").success(function(data) {
         regions_json=data.regions||{};
         districts_json=data.districts||{};        
         care_levels_json=data.care_levels||{};
@@ -85,12 +150,8 @@ ctrllers.DashController=function($scope,$http){
            results_json[i].pcr_one_ages=that.pcr_one_ages;
            results_json[i].pcr_two_ages=that.pcr_two_ages;           
         }
-
-        // console.log("first facility:"+JSON.stringify(results_json[0]));
-
-        //console.log("number of data records:"+count(data));
        generalFilter(); //call the filter for the first time
-    });
+    });*/
 
     $scope.dateFilter=function(mode){
         if($scope.fro_date!="all" && $scope.to_date!="all"){
@@ -106,15 +167,8 @@ ctrllers.DashController=function($scope,$http){
 
             if(eval1 && (eval2||eval3)){
                 //console.log("duration expression passed");
-                computeDuration(vals);
-               /* if(count($scope.filter_duration)<=12){
-                    
-                }else{
-                    alert("Please choose a duration of 12 months or less");
-                }*/
                 $scope.date_filtered=true;
-               /* $scope.fro_date="all";
-                $scope.to_date="all";*/
+                computeDuration(vals);                
                 $scope.filter("duration");                
             }else{
                 alert("Please make sure that the fro date is earlier than the to date");
@@ -127,7 +181,7 @@ ctrllers.DashController=function($scope,$http){
     var computeDuration=function(vals){
         $scope.filter_duration=[];
         var i=vals.from_year;
-        while(i<=vals.to_year){
+        while(i<=vals.to_year){                       
             var stat=(i==vals.from_year)?vals.from_month:1;
             var end=(i==vals.to_year)?vals.to_month:12;
             var j=stat;
@@ -136,6 +190,7 @@ ctrllers.DashController=function($scope,$http){
                 j++;   
             }   
             i++;  
+            //if(!inArray(i,loaded_years)){ getYearData(i);  }
         }
     }
 
@@ -269,6 +324,7 @@ ctrllers.DashController=function($scope,$http){
     }
 
     var generalFilter=function(){
+        console.log("entered the general filter");
         reduceDistsByReg();
         $scope.loading=true;
         $scope.samples_received=0;$scope.hiv_positive_infants=0;$scope.initiated=0;
@@ -590,7 +646,6 @@ ctrllers.DashController=function($scope,$http){
         else
             return (values[half-1] + values[half]) / 2.0;
     }
-    
 
 };
 

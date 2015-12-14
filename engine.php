@@ -26,23 +26,13 @@ function hubs(){
 	}
 	return $ret;
 }*/
-
-function regions(){
-	$ret=[];
-	$res=mysql_query("SELECT id,region FROM regions");
-	while ($row=mysql_fetch_array($res)){
-		extract($row);
-		$ret[$id]=$region;
-	}
-	return $ret;
-}
-
 function districts(){
-	$ret=[];
-	$res=mysql_query("SELECT id,district from districts");
+	$ret=["dists","reg_dists"];
+	$res=mysql_query("SELECT id,district,regionID from districts");
 	while ($row=mysql_fetch_array($res)){
 		extract($row);
-		$ret[$id]=$district;
+		$ret["dists"][$id]=$district;
+		$ret["reg_dists"][$regionID][$id]=$district;
 	}
 	return $ret;
 }
@@ -57,7 +47,7 @@ function hubs(){
 	return $ret;
 }
 
-function levels(){
+function careLevels(){
 	$ret=[];
 	$res=mysql_query("SELECT id,facility_level FROM facility_levels");
 	while ($row=mysql_fetch_array($res)){
@@ -67,110 +57,176 @@ function levels(){
 	return $ret;
 }
 
-function facilities(){
+function regions(){
 	$ret=[];
-	$res=mysql_query("SELECT id,facility,districtID,hubID from facilities where facility!='' LIMIT 500");
+	$res=mysql_query("SELECT id,region FROM regions");
 	while ($row=mysql_fetch_array($res)){
 		extract($row);
-		$ret[$id]=['id'=>$id,'name'=>$facility,'district_id'=>$districtID,'hub_id'=>$hubID];
+		$ret[$id]=$region;
+	}
+	return $ret;
+}
+
+function facilities(){
+	$ret=[];
+	$res=mysql_query("SELECT f.id,facility,districtID,hubID,f.facilityLevelID,d.regionID
+					  FROM facilities AS f
+					  LEFT JOIN districts AS d ON f.districtID=d.id 
+					  WHERE facility!='' LIMIT 500");
+	while ($row=mysql_fetch_array($res)){
+		extract($row);
+		$ret[$id]=[ 'id'=>$id,
+					'name'=>$facility,
+					'district_id'=>$districtID,
+					'region_id'=>$regionID,
+					'care_level_id'=>$facilityLevelID];
 	}
 	return $ret;
 }
 
 function getData($year,$cond=1){
-	$sql="SELECT count(s.id) AS num,MONTH(s.date_results_entered),facility_id AS mth FROM dbs_samples AS s 
+	$ret=[];
+	$sql="SELECT count(s.id) AS num,MONTH(s.date_results_entered) AS mth,facility_id FROM dbs_samples AS s 
 		  LEFT JOIN batches AS b ON s.batch_id=b.id
 		  LEFT JOIN facilities AS f ON b.facility_id=f.id
-		  LEFT JOIN districts AS d ON f.districtID=d.id
-		  WHERE YEAR(s.date_data_entered)=$year AND s.PCR_test_requested='YES'  AND $cond
+		  WHERE YEAR(s.date_results_entered)=$year AND s.PCR_test_requested='YES'  AND $cond
 		  GROUP BY facility_id,mth";
-	return mysql_query($sql);
-}
-
-
-function makeDataJSON($year){
-	$data_arr=[];
-	$smpls_rvd_res=getData($year,"1","");
-
-	While($row=mysql_fetch_array($smpls_rvd_res)){
+	$res=mysql_query($sql);
+	while($row=mysql_fetch_array($res)){ 
 		extract($row);
-		$data_arr[]=["facility_id"=>$facility_id,"year_month"=>$year."_$mth", "samples_received"=>$num];
+		$ret[$mth][$facility_id]=$num;
 	}
+	return $ret;
+}
 
+function getAges($year,$pcr){
+	$ret=[];
+	$sql="SELECT infant_age,MONTH(s.date_results_entered) AS mth,facility_id FROM dbs_samples AS s 
+		  LEFT JOIN batches AS b ON s.batch_id=b.id
+		  LEFT JOIN facilities AS f ON b.facility_id=f.id
+		  WHERE YEAR(s.date_results_entered)=$year AND s.PCR_test_requested='YES' AND pcr='$pcr'
+		  GROUP BY facility_id,mth";
+	$res=mysql_query($sql);
+	while($row=mysql_fetch_array($res)){ 
+		extract($row);
+		$ret[$mth][$facility_id][]=cleanAge($infant_age);
+	}
+	return $ret;
+}
+
+/*function getAges($year,$month,$facility_id,$pcr,$cond=1){
+	$ret=[];
+	$sql="SELECT infant_age,MONTH(s.date_results_entered) AS mth,facility_id FROM dbs_samples AS s 
+		  LEFT JOIN batches AS b ON s.batch_id=b.id
+		  LEFT JOIN facilities AS f ON b.facility_id=f.id
+		  WHERE YEAR(s.date_results_entered)=$year AND MONTH(s.date_results_entered)=$month 
+		  AND s.PCR_test_requested='YES' AND facility_id=$facility_id AND $cond
+		  ";
+	$res=mysql_query($sql);
+	while($row=mysql_fetch_array($res)){ 
+		extract($row);
+		$ret[]=cleanAge($infant_age);
+	}
+	return $ret;
+}*/
+
+function cleanAge($age=0){
+	$ret=0;
+	$age_arr=explode(" ", $age);
+	$years=0;$months=0;$weeks=0;$days=0;
+	foreach ($age_arr as $k => $val) {
+		if($val=='year'||$val=='years'){
+			$years=str_replace(" ", "",$age_arr[($k-1)]);
+		}elseif($val=='months'||$val=='month'){
+			$months=str_replace(" ", "",$age_arr[($k-1)]);
+		}elseif($val=='weeks'||$val=='week'){
+			$weeks=str_replace(" ", "",$age_arr[($k-1)]);
+		}elseif($val=='days'||$val=='day'){
+			$days=str_replace(" ", "",$age_arr[($k-1)]);
+		}else{
+			$months=$val;
+		}
+	}
+	$ret= ($years*12)+$months+($weeks/4)+($days/30);
+	return round($ret,2);
 }
 
 
-$data=[];
+
+
+$regions=regions();
+$ds=districts();
+$districts=$ds["dists"];
+$districts_by_region=$ds["reg_dists"];
+$care_levels=careLevels();
+$facilities=facilities();
+
+file_put_contents("public/json/regions.json", json_encode($regions));
+file_put_contents("public/json/districts.json", json_encode($districts));
+file_put_contents("public/json/districts_by_region.json", json_encode($districts_by_region));
+file_put_contents("public/json/care_levels.json", json_encode($care_levels));
+file_put_contents("public/json/facilities.json", json_encode($facilities));
+
+
+/*$data=[];
 $data['districts']=districts();
 $data['hubs']=hubs();
 $data['facilities']=facilities();
-$data['age_group']=[1=>" < 5",2=>" 5 - 9",3=>" 10 - 18",4=>"19 - 25","26+"];
+$data['age_group']=[1=>" < 5",2=>" 5 - 9",3=>" 10 - 18",4=>"19 - 25","26+"];*/
 
+$all_results=[];
 
-$years=[2014,2015];
-$results=[];
+$current_yr=date("Y");
+$year=$current_yr;
 $x=1;
-foreach ($years as $year) {
+while ($year>=2011) {
 	$month=1;
-	while ($month <= 12) {
-		foreach ($data['facilities'] as $facility) {
-			foreach ($data['age_group'] as $ag_k=>$ag) {
-				$samples_received=rand(10,20);
-				$dbs_samples=rand(1,$samples_received-5);
-				$total_results=rand(10,$samples_received-1);
-				$valid_results=rand(0,$total_results);
-				$rejected_samples=$samples_received-$total_results;
-				$suppressed=rand(0,$valid_results);
+	$results=[];
+	$samples_received_res=getData($year);
+	$hpi_res=getData($year," accepted_result='POSITIVE'");
+	$i_res=getData($year," f_ART_initiated='YES'");
+	$pcr1_res=getData($year," pcr='FIRST'");
+	$pcr2_res=getData($year," pcr='SECOND'");
+	$pcr_one_ages_res=getAges($year,'FIRST');
+	$pcr_two_ages_res=getAges($year,'SECOND');
 
-				$sqr=rand(0,$rejected_samples);
-				$er=rand(0,($rejected_samples-$sqr));
-				$ifr=$rejected_samples-($sqr+$er);
-				$sqr=$sqr>0?$sqr:0;
-				$er=$er>0?$er:0;
-				$ifr=$ifr>0?$ifr:0;
+	foreach ($samples_received_res as $mth => $f_arr) {
+		foreach ($f_arr as $f_id => $num) {
+			$samples_received=$num;
+			$hpi= isset($hpi_res[$mth][$f_id])?$hpi_res[$mth][$f_id]:0;
+			$intd=isset($i_res[$mth][$f_id])?$i_res[$mth][$f_id]:0;
+			$pcr_one=isset($pcr1_res[$mth][$f_id])?$pcr1_res[$mth][$f_id]:0;
+			$pcr_two=isset($pcr2_res[$mth][$f_id])?$pcr2_res[$mth][$f_id]:0;
+			$pcr_one_ages=isset($pcr_one_ages_res[$mth][$f_id])?$pcr_one_ages_res[$mth][$f_id]:[];
+			$pcr_two_ages=isset($pcr_two_ages_res[$mth][$f_id])?$pcr_two_ages_res[$mth][$f_id]:[];
 
-				$cd4_less_than_500=rand(1,2);
-				$pmtct_option_b_plus=rand(1,2);
-				$children_under_15=rand(1,2);
-				$other_treatment=rand(1,2);
-				$treatment_blank_on_form=$samples_received-($cd4_less_than_500+$pmtct_option_b_plus+$children_under_15+$other_treatment);
-
-				$results[]=[
-					'month'=>$month,
-					'year'=>$year,
-					'facility_id'=>$facility['id'],
-					//'age_group_id'=>$ag['id'],
-					'age_group'=>$ag_k,
-
-					'samples_received'=>$samples_received,
-					'dbs_samples'=>$dbs_samples,
-					'total_results'=>$total_results,
-					'valid_results'=>$valid_results,
-					'rejected_samples'=>$rejected_samples,
-					'suppressed'=>$suppressed,
-
-					'sample_quality_rejections'=>$sqr,
-					'eligibility_rejections'=>$er,
-					'incomplete_form_rejections'=>$ifr,
-
-					'cd4_less_than_500'=>$cd4_less_than_500,
-					'pmtct_option_b_plus'=>$pmtct_option_b_plus,
-					'children_under_15'=>$children_under_15,
-					'other_treatment'=>$other_treatment,
-					'treatment_blank_on_form'=>$treatment_blank_on_form
-					];
-				echo "$x record in results\n";
-				$x++;
-			}
+			$rw=[
+			'month'=>$mth,
+			'year'=>$year,
+			'facility_id'=>$f_id,
+			'samples_received'=>$samples_received,
+			'hiv_positive_infants'=>$hpi,
+			'initiated'=>$intd,
+			'pcr_one'=>$pcr_one,
+			'pcr_two'=>$pcr_two,
+			'pcr_one_ages'=>$pcr_one_ages,
+			'pcr_two_ages'=>$pcr_two_ages
+			];
+			$results[]=$rw;
+			$all_results[]=$rw;
+		echo "record :: $x\n";
+		$x++;			
 		}
-		$month++;		
 	}
+	file_put_contents("public/json/data.$year.json", json_encode($results));
+	$year--;
 }
 
-$data['results']=$results;
+
+$data['results']=$all_results;
 echo file_put_contents("public/json/data.json", json_encode($data));
 
-echo "\n".count($results)." rows found in results";
+echo "\n".count($all_results)." rows found in results";
 
 echo "finished at ".date("H:i:s")."\n";
 

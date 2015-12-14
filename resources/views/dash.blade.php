@@ -38,6 +38,16 @@
     <script src="{{ asset('/js/nv.d3.min.js') }}"></script>
     <script src="{{ asset('/js/stream_layers.js') }}"></script>
 
+    <style type="text/css">
+
+    .nv-point {
+        stroke-opacity: 1!important;
+        stroke-width: 5px!important;
+        fill-opacity: 1!important;
+    }
+
+    </style>
+
     
 </head>
 

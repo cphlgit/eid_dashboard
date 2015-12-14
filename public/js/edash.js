@@ -110,43 +110,11 @@ ctrllers.DashController=function($scope,$http){
                 results_json.push(this_obj);
             }
 
-            //results_json.push(septData(sept_data));
-
             //loaded_years.push(year);
             //if(!$scope.date_filtered){ generalFilter(); }//call the filter for the first time
             generalFilter();
         });
     }
-
-   /* var septData=function(data){
-        var sept_obj={};
-
-        for(var i in data){
-            var that=data[i];
-            var facility_details=facilities_json[that.facility_id]||{};
-
-            sept_obj.year_month=that.year+"-"+that.month;
-            sept_obj.facility_id=that.facility_id;
-            sept_obj.facility_name=facility_details.name||"";
-            sept_obj.region_id=facility_details.region_id;
-            sept_obj.district_id=facility_details.district_id;
-            sept_obj.care_level_id=facility_details.care_level_id;
-
-            sept_obj.samples_received=(sept_obj.samples_received||0) + (Number(that.samples_received)||0);
-            sept_obj.hiv_positive_infants=(sept_obj.hiv_positive_infants||0) + (Number(that.hiv_positive_infants)||0);
-            sept_obj.initiated=(sept_obj.initiated||0)+(Number(that.initiated)||0);
-            sept_obj.pcr_one=(sept_obj.pcr_one||0)+(Number(that.pcr_one)||0);
-            sept_obj.pcr_two=(sept_obj.pcr_two||0)+(Number(that.pcr_two)||0);
-
-            sop_one=sept_obj.pcr_one_ages||[];
-            sop_two=sept_obj.pcr_two_ages||[];
-
-            sept_obj.pcr_one_ages=sop_one.concat(that.pcr_one_ages)||{};
-            sept_obj.pcr_two_ages=sop_two.concat(that.pcr_two_ages)||{}; 
-        }
-        return sept_obj;
-    }
-    */
 
 
     /*$http.get("../json/data.json").success(function(data) {
@@ -342,6 +310,7 @@ ctrllers.DashController=function($scope,$http){
 
 
     var setDataByFacility=function(that){
+        if(that.facility_name!=""){
         $scope.facility_numbers[that.facility_id]=$scope.facility_numbers[that.facility_id]||{};
         var f_smpls_rvd=$scope.facility_numbers[that.facility_id].samples_received||0;
         var f_pcr1=$scope.facility_numbers[that.facility_id].pcr_one||0;
@@ -354,6 +323,7 @@ ctrllers.DashController=function($scope,$http){
         $scope.facility_numbers[that.facility_id].initiated=f_i+that.initiated;       
         $scope.facility_numbers[that.facility_id].name=that.facility_name;
         $scope.facility_numbers[that.facility_id].id=that.facility_id;
+        }
     }
 
     var generalFilter=function(){
@@ -665,9 +635,9 @@ ctrllers.DashController=function($scope,$http){
 
     var y_terminals=function(y_vals){
         var first_y=Math.min.apply(Math, y_vals);
-        first_y=Math.round(first_y-(0.03*first_y));
+        first_y=Math.round(first_y-(0.5*first_y));
         var last_y=Math.max.apply(Math, y_vals);
-        last_y=Math.round(last_y+(0.03*last_y));
+        last_y=Math.round(last_y+(0.5*last_y));
         return [first_y,last_y];
     }
 

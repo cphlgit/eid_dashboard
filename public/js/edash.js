@@ -98,6 +98,7 @@ ctrllers.DashController=function($scope,$http){
                 this_obj.facility_name=facility_details.name||"";
                 this_obj.region_id=facility_details.region_id;
                 this_obj.district_id=facility_details.district_id;
+                this_obj.district_name=districts_json[this_obj.district_id];
                 this_obj.care_level_id=facility_details.care_level_id;
 
                 this_obj.samples_received=Number(that.samples_received)||0;
@@ -245,9 +246,9 @@ ctrllers.DashController=function($scope,$http){
 
         var eval1=r_num==0&&d_num==0&&c_num==0;     // regions(OFF) and districts(OFF) and care_levels (OFF)
         var eval2=reg_eval&&d_num==0&&c_num==0;     // regions(ON)  and districts(OFF) and care_levels (OFF)
-        var eval3=reg_eval&&dist_eval&&c_num==0;    // regions(ON)  and districts(ON)  and care_levels (OFF)
+        var eval3=(reg_eval||dist_eval)&&c_num==0;    // regions(ON)  or  districts(ON)  and care_levels (OFF)
         var eval4=reg_eval&&d_num==0&&cl_eval;      // regions(ON)  and districts(OFF) and care_levels (ON)
-        var eval5=reg_eval&&dist_eval&&cl_eval;     // regions(ON)  and districts(ON)  and care_levels (ON)
+        var eval5=(reg_eval||dist_eval)&&cl_eval;     // regions(ON)  or  districts(ON)  and care_levels (ON)
         var eval6=r_num==0&&dist_eval&&cl_eval;     // regions(OFF) and districts(ON)  and care_levels (ON)
         var eval7=r_num==0&&dist_eval&&c_num==0;    // regions(OFF) and districts(ON)  and care_levels (OFF)
         var eval8=r_num==0&&d_num==0&&cl_eval;      // regions(OFF) and districts(OFF) and care_levels (ON)
@@ -265,7 +266,8 @@ ctrllers.DashController=function($scope,$http){
         $scope.initiated+=that.initiated;
     }
 
-   /* var reduceDistsByReg=function(){
+   /* var reduceDistsByReg=function(){ clinic - hc2, hc, health care center, lab,medical center arrange accordingin to hierac
+    AIC - hc2, 
         var regs=count($scope.filter_regions);
         if(regs==0){
             $scope.districts_slct=pairize(districts_json);
@@ -311,18 +313,36 @@ ctrllers.DashController=function($scope,$http){
 
     var setDataByFacility=function(that){
         if(that.facility_name!=""){
-        $scope.facility_numbers[that.facility_id]=$scope.facility_numbers[that.facility_id]||{};
-        var f_smpls_rvd=$scope.facility_numbers[that.facility_id].samples_received||0;
-        var f_pcr1=$scope.facility_numbers[that.facility_id].pcr_one||0;
-        var f_hpi=$scope.facility_numbers[that.facility_id].hiv_positive_infants||0;
-        var f_i=$scope.facility_numbers[that.facility_id].initiated||0;
+            $scope.facility_numbers[that.facility_id]=$scope.facility_numbers[that.facility_id]||{};
+            var f_smpls_rvd=$scope.facility_numbers[that.facility_id].samples_received||0;
+            var f_pcr1=$scope.facility_numbers[that.facility_id].pcr_one||0;
+            var f_hpi=$scope.facility_numbers[that.facility_id].hiv_positive_infants||0;
+            var f_i=$scope.facility_numbers[that.facility_id].initiated||0;
 
-        $scope.facility_numbers[that.facility_id].samples_received=f_smpls_rvd+that.samples_received;
-        $scope.facility_numbers[that.facility_id].pcr_one=f_pcr1+that.pcr_one;
-        $scope.facility_numbers[that.facility_id].hiv_positive_infants=f_hpi+that.hiv_positive_infants;
-        $scope.facility_numbers[that.facility_id].initiated=f_i+that.initiated;       
-        $scope.facility_numbers[that.facility_id].name=that.facility_name;
-        $scope.facility_numbers[that.facility_id].id=that.facility_id;
+            $scope.facility_numbers[that.facility_id].samples_received=f_smpls_rvd+that.samples_received;
+            $scope.facility_numbers[that.facility_id].pcr_one=f_pcr1+that.pcr_one;
+            $scope.facility_numbers[that.facility_id].hiv_positive_infants=f_hpi+that.hiv_positive_infants;
+            $scope.facility_numbers[that.facility_id].initiated=f_i+that.initiated;
+            $scope.facility_numbers[that.facility_id].name=that.facility_name;
+            $scope.facility_numbers[that.facility_id].id=that.facility_id;
+        }
+    }
+
+
+    var setDataByDistrict=function(that){
+        if(that.district_name!=null){
+            $scope.district_numbers[that.district_id]=$scope.district_numbers[that.district_id]||{};
+            var d_smpls_rvd=$scope.district_numbers[that.district_id].samples_received||0;
+            var d_pcr1=$scope.district_numbers[that.district_id].pcr_one||0;
+            var d_hpi=$scope.district_numbers[that.district_id].hiv_positive_infants||0;
+            var d_i=$scope.district_numbers[that.district_id].initiated||0;
+
+            $scope.district_numbers[that.district_id].samples_received=d_smpls_rvd+that.samples_received;
+            $scope.district_numbers[that.district_id].pcr_one=d_pcr1+that.pcr_one;
+            $scope.district_numbers[that.district_id].hiv_positive_infants=d_hpi+that.hiv_positive_infants;
+            $scope.district_numbers[that.district_id].initiated=d_i+that.initiated; 
+            $scope.district_numbers[that.district_id].name=that.district_name;
+            $scope.district_numbers[that.district_id].id=that.district_id;
         }
     }
 
@@ -337,6 +357,7 @@ ctrllers.DashController=function($scope,$http){
         $scope.nat_sr_by_duration={};$scope.nat_hpi_by_duration={};$scope.nat_i_by_duration={};
 
         $scope.facility_numbers={};//data to be used in the facility lists for each key indicator
+        $scope.district_numbers={};//data to be used in the district lists for each key indicator
 
         $scope.pcr_one=0;$scope.pcr_two=0;
         $scope.pcr_one_ages=[];//create list to be used for 1st pcr median age
@@ -352,6 +373,7 @@ ctrllers.DashController=function($scope,$http){
                 setOtherIndicators(that); //set the values for other indicators
                 setDataByDuration(that); //set data by duration to be displayed in graphs                    
                 setDataByFacility(that); //set data by facility to be displayed in tables
+                setDataByDistrict(that); //set data by district to be displayed in tables
             }         
         }
         //console.log("pcr 1 ages: "+JSON.stringify($scope.pcr_one_ages));
@@ -579,6 +601,19 @@ ctrllers.DashController=function($scope,$http){
            
     };
 
+    var empty=function(val,status){
+        switch(val) {
+            case "":
+            case 0:
+            case "0":
+            case null:
+            case false:
+            case typeof this == "undefined":
+            if(status=='no'){ return false; } else { return true; };
+            default : if(status=='no'){ return true; } else { return false; };
+        }
+    }
+
     $scope.showF=function(i){
         var show_f=false;
         switch(i){
@@ -595,6 +630,11 @@ ctrllers.DashController=function($scope,$http){
             case 3:
             show_f=$scope.show_fclties3;
             $scope.show_fclties3=show_f==false?true:false;
+            break;
+
+            case 4:
+            show_f=$scope.show_fclties4;
+            $scope.show_fclties4=show_f==false?true:false;
             break;
         }
         if(show_f==true){

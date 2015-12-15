@@ -433,15 +433,47 @@ div.addition-metrics{
 	cursor: pointer;
 	margin-left: 30%;
 	padding-top: 4px;
-	padding-bottom: 4px;
-	border: 1px solid #F44336 
+	padding-bottom: 4px;	
 }
 
-.dist_faclty_toggle>.active{
-	background-color:#F44336; 
+.sect1{
+	border: 1px solid #337AB7;
+}
+
+.sect2{
+	border: 1px solid #5EA361;
+}
+
+.sect3{
+	border: 1px solid #F5A623;
+}
+
+.sect4{
+	border: 1px solid #9F82D1;
+}
+
+
+
+.dist_faclty_toggle>.active{	
 	color:#FFF;
 	padding-top: inherit;
 	padding-bottom: inherit;
+}
+
+.sect1>.active{
+	background-color:#337AB7;
+}
+
+.sect2>.active{
+	background-color:#5EA361;
+}
+
+.sect3>.active{
+	background-color:#F5A623;
+}
+
+.sect4>.active{
+	background-color:#9F82D1;
 }
 
 

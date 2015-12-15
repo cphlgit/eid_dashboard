@@ -39,13 +39,11 @@
     <script src="{{ asset('/js/stream_layers.js') }}"></script>
 
     <style type="text/css">
-
     .nv-point {
         stroke-opacity: 1!important;
         stroke-width: 5px!important;
         fill-opacity: 1!important;
     }
-
     </style>
 
     
@@ -243,7 +241,31 @@
                     </div>
                    
                     <div class="col-lg-6 facilties-sect facilties-sect-list1" >
-                        <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
+                        <span class='dist_faclty_toggle sect1' ng-model="show_fclties1" ng-init="show_fclties1=false" ng-click="showF(1)">
+                            <span class='active' id='d_shw1'>&nbsp;&nbsp;DISTRICTS&nbsp;&nbsp;</span>
+                            <span id='f_shw1'>&nbsp;&nbsp;FACILITIES &nbsp;&nbsp;</span>
+                        </span>
+                        <div ng-hide="show_fclties1">
+                          <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th width='70%'>District</th>
+                                    <th width='10%'>Total Tests</th>
+                                    <th width='20%'>Total 1st PCR</th>
+                                </tr>
+                            </thead>
+                            <tbody>                                
+                                <tr ng-repeat="d in district_numbers" >
+                                    <td class="ng-cloak"><% d.name %></td>
+                                    <td class="ng-cloak"><% d.samples_received|number %></td>
+                                    <td class="ng-cloak"><% d.pcr_one|number %></td>
+                                </tr>                        
+                             </tbody>
+                           </table>
+                        </div>
+
+                        <div ng-show="show_fclties1">
+                          <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
                                     <th width='70%'>Facility</th>
@@ -259,6 +281,7 @@
                                 </tr>                        
                              </tbody>
                          </table>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -273,7 +296,32 @@
                     </div>
                    
                     <div class="col-lg-6 facilties-sect facilties-sect-list2" >
-                        <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
+
+                        <span class='dist_faclty_toggle sect2' ng-model="show_fclties2" ng-init="show_fclties2=false" ng-click="showF(2)">
+                            <span class='active' id='d_shw2'>&nbsp;&nbsp;DISTRICTS&nbsp;&nbsp;</span>
+                            <span id='f_shw2'>&nbsp;&nbsp;FACILITIES &nbsp;&nbsp;</span>
+                        </span>
+                        <div ng-hide="show_fclties2">
+                          <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th width='70%'>District</th>
+                                    <th width='10%'>Absolute Positives</th>
+                                    <th width='20%'>Total Tests</th>
+                                </tr>
+                            </thead>
+                            <tbody>                                
+                                <tr ng-repeat="d in district_numbers" >
+                                    <td class="ng-cloak"><% d.name %></td>
+                                    <td class="ng-cloak"><% d.hiv_positive_infants|number %></td>
+                                    <td class="ng-cloak"><% d.samples_received|number %></td>
+                                </tr>                        
+                             </tbody>
+                           </table>
+                        </div>
+
+                        <div ng-show="show_fclties2">
+                         <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
                                     <th width='80%'>Facility</th>
@@ -289,6 +337,7 @@
                                 </tr>                        
                              </tbody>
                          </table>
+                        </div>
                     </div>
                 </div> 
             </section>
@@ -301,7 +350,34 @@
                     </div>
                    
                     <div class="col-lg-6 facilties-sect facilties-sect-list3" >
-                        <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
+
+                        <span class='dist_faclty_toggle sect3' ng-model="show_fclties3" ng-init="show_fclties3=false" ng-click="showF(3)">
+                            <span class='active' id='d_shw3'>&nbsp;&nbsp;DISTRICTS&nbsp;&nbsp;</span>
+                            <span id='f_shw3'>&nbsp;&nbsp;FACILITIES &nbsp;&nbsp;</span>
+                        </span>
+                        <div ng-hide="show_fclties3">
+                          <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th width='70%'>District</th>
+                                    <th width='10%'>Positivity Rate</th>
+                                    <th width='10%'>Absolute Positives</th>
+                                    <th width='10%'>Total Tests</th>
+                                </tr>
+                            </thead>
+                            <tbody>                                
+                                <tr ng-repeat="d in district_numbers" >
+                                    <td class="ng-cloak"><% d.name %></td>
+                                    <td class="ng-cloak"><% ((d.hiv_positive_infants/d.samples_received)*100)|number:1 %>%</td>
+                                    <td class="ng-cloak"><% d.hiv_positive_infants|number %></td>
+                                    <td class="ng-cloak"><% d.samples_received|number %></td>
+                                </tr>                        
+                             </tbody>
+                           </table>
+                        </div>
+
+                        <div ng-show="show_fclties3">
+                          <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
                                     <th width='70%'>Facility</th>
@@ -319,6 +395,7 @@
                                 </tr>                        
                              </tbody>
                          </table>
+                        </div>
                     </div>
                 </div>                
             </section>
@@ -331,13 +408,35 @@
                     </div>
                    
                     <div class="col-lg-6 facilties-sect facilties-sect-list4" >
-                        <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
+                        <span class='dist_faclty_toggle sect4' ng-model="show_fclties4" ng-init="show_fclties4=false" ng-click="showF(4)">
+                            <span class='active' id='d_shw4'>&nbsp;&nbsp;DISTRICTS&nbsp;&nbsp;</span>
+                            <span id='f_shw4'>&nbsp;&nbsp;FACILITIES &nbsp;&nbsp;</span>
+                        </span>
+                        <div ng-hide="show_fclties4">
+                          <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th width='80%'>District</th>
+                                    <th width='10%'>Initiation Rate</th>
+                                    <th width='10%'>Absolute Positives</th> 
+                                </tr>
+                            </thead>
+                            <tbody>                                
+                                <tr ng-repeat="d in district_numbers" >
+                                    <td class="ng-cloak"><% d.name %></td>
+                                    <td class="ng-cloak"><% ((d.initiated/d.hiv_positive_infants)*100)|number:1 %>%</td>
+                                    <td class="ng-cloak"><% d.hiv_positive_infants %></td>   
+                                </tr>                        
+                             </tbody>
+                           </table>
+                        </div>
+                        <div ng-show="show_fclties4">
+                           <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                              <thead>
                                 <tr>
                                     <th width='80%'>Facility</th>
                                     <th width='10%'>Initiation Rate</th>
-                                    <th width='10%'>Absolute Positives</th>
-                                   
+                                    <th width='10%'>Absolute Positives</th>                                   
                                 </tr>
                             </thead>
                             <tbody>                                
@@ -348,6 +447,7 @@
                                 </tr>                        
                              </tbody>
                          </table>
+                        </div>
                     </div>
                 </div>                
             </section>

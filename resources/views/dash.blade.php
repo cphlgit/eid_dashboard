@@ -102,20 +102,26 @@
      }
      $months_by_years=yearByMonths(2014,1); 
      //krsort($months_by_years);
+     $filtering_info="Filters allow you to see aggregate data. So if you select Region: Central 1 and District: Gulu, you will see statistics for all facilties in Central 1 and Gulu. If you then select HCIII, it will filter the data to only show HCIII numbers for Central 1 and Gulu facilities.";
      ?>
      <span ng-model="month_labels" ng-init='month_labels={!! json_encode(MyHTML::months()) !!}'></span>
      <span ng-model="filtered" ng-init='filtered=false'></span>
 
      <div class='row'>
-        <div class='col-md-1' style="padding-top:17px; font-size:bolder"><span class='hdr hdr-grey'>FILTERS:</span></div>
-         
-     <div class="filter-section col-md-9">        
+        <div class='col-md-1' style="padding-top:17px; font-size:bolder">
+            <span class='hdr hdr-grey'>FILTERS:</span> 
+        </div>
+        <div class="filter-section col-md-11">   
+
         <span ng-model='filter_duration' ng-init='filter_duration={!! json_encode($init_duration) !!};init_duration={!! json_encode($init_duration) !!};'>
           <span class="filter-val ng-cloak">
             <% filter_duration[0] |d_format %> - <% filter_duration[filter_duration.length-1] | d_format %> 
         </span>
         </span>
         &nbsp;
+
+        <span style="font-size:15px;cursor:pointer;color:#337AB7" onclick="alert('{!! $filtering_info !!}')" class='glyphicon glyphicon-info-sign' title="{!! $filtering_info !!}"></span>
+
 
         <span ng-model='filter_regions' ng-init='filter_regions={}'>
             <span ng-repeat="(r_nr,r_name) in filter_regions">
@@ -138,8 +144,8 @@
         </span>
 
         <span ng-show="filtered" class="filter_clear" ng-click="clearAllFilters()">reset all</span>
-
-     </div></div>
+        </div>
+     </div>
 
      <table border='1' cellpadding='0' cellspacing='0' class='filter-tb'>
         <tr>
@@ -228,7 +234,7 @@
                 <li id='tb_hd4'>
                     <a href="#tab4" id='tb_lnk4' ng-click="displayInitiationRate()">
                         <span class="num ng-cloak" ng-model="initiated" ng-init="initiated=0">
-                            <% ((initiated/hiv_positive_infants)*100)|number:1 %>%
+                            <% ((initiated/hiv_positive_infants)*100)|number:1 %>% <sup>*</sup>
                         </span>
                         <span class="desc">initiation rate</span>
                     </a>
@@ -453,7 +459,8 @@
                          </table>
                         </div>
                     </div>
-                </div>                
+                </div> 
+                <i style="font-size:12px;color:#9F82D1">* ART Initiation Rate is a preliminary estimate based on data collected at CPHL. CPHL is still revising the data collection mechanism</i>               
             </section>
         </div><!-- /content -->
     </div><!-- /tabs -->

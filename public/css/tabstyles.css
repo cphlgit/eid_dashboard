@@ -62,6 +62,7 @@ body{
 .tabs-style-flip nav li.tab-current a#tb_lnk4{
 	border-color:  #9F82D1;
 	color: #9F82D1;
+	display: "nnnnn";
 }
 
 /*.tabs-style-flip nav a:hover,

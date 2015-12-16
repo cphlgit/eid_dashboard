@@ -117,43 +117,6 @@ ctrllers.DashController=function($scope,$http){
         });
     }
 
-
-    /*$http.get("../json/data.json").success(function(data) {
-        regions_json=data.regions||{};
-        districts_json=data.districts||{};        
-        care_levels_json=data.care_levels||{};
-        facilities_json=data.facilities||{};
-        dists_by_region=data.dists_by_region||{};
-
-        //console.log(JSON.stringify(dists_by_region));
-
-        $scope.regions_slct=pairize(regions_json);       
-        $scope.districts_slct=pairize(districts_json);        
-        $scope.care_levels_slct=pairize(care_levels_json);
-
-        var res=data.results||{};
-        for(var i in res){
-           var that=res[i];
-           var facility_details=facilities_json[that.facility_id]||{};  
-           results_json[i]={}; 
-           results_json[i].year_month=that.year+"-"+that.month;
-           results_json[i].facility_id=that.facility_id;          
-           results_json[i].facility_name=facility_details.name||"";
-           results_json[i].region_id=facility_details.region_id;
-           results_json[i].district_id=facility_details.district_id;
-           results_json[i].care_level_id=facility_details.care_level_id;
-
-           results_json[i].samples_received=Number(that.samples_received)||0;
-           results_json[i].hiv_positive_infants=Number(that.hiv_positive_infants)||0;
-           results_json[i].initiated=Number(that.initiated)||0;
-           results_json[i].pcr_one=Number(that.pcr_one)||0;
-           results_json[i].pcr_two=Number(that.pcr_two)||0;
-           results_json[i].pcr_one_ages=that.pcr_one_ages;
-           results_json[i].pcr_two_ages=that.pcr_two_ages;           
-        }
-       generalFilter(); //call the filter for the first time
-    });*/
-
     $scope.dateFilter=function(mode){
         if($scope.fro_date!="all" && $scope.to_date!="all"){
             var vals={};var fro_s=$scope.fro_date.split("-");var to_s=$scope.to_date.split("-");
@@ -347,8 +310,8 @@ ctrllers.DashController=function($scope,$http){
     }
 
     var generalFilter=function(){
-        console.log("entered the general filter");
-        reduceDistsByReg();
+        //console.log("entered the general filter");
+        //reduceDistsByReg();
         $scope.loading=true;
         $scope.samples_received=0;$scope.hiv_positive_infants=0;$scope.initiated=0;
 

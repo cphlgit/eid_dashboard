@@ -53,12 +53,14 @@
 <div class="navbar-custom navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header"> 
-            <!-- <img src="{{ asset('/images/icon.png') }}" height="20" width="20"> -->
             <a class="navbar-brand" href="/" style="font-weight:800px;color:#FFF"> UGANDA EID</a>
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                     <li id='l1' class='active'>{!! link_to("/","DASHBOARD",['class'=>'hdr']) !!}</li>            
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><span style="font-size: 30px;vertical-align: middle;margin-right:25px;"> <img src="{{ asset('/images/icon.png') }}" height="35" width="35"> </span></li>
             </ul>
         </div>
     </div>
@@ -76,14 +78,16 @@
         $ret=[];
         $i=$from_year;
         while($i<=$to_year){
+            $yr_arr=["yr"=>$i,"y"=>substr($i,-2),"mths"=>[]];
             $stat=($i==$from_year)?$from_month:1;
             $end=($i==$to_year)?$to_month:12;
             $j=$stat;
             while($j<=$end){
-                $ret[$i][]=$j;
+                $yr_arr["mths"][]=$j;
                 $j++;   
             } 
             $i++; 
+            $ret[]=$yr_arr;
         }
         return $ret;
     }
@@ -143,9 +147,9 @@
                 <span ng-model='fro_date_slct' ng-init='fro_date_slct={!! json_encode($months_by_years) !!}'></span>
                 <select ng-model="fro_date" ng-init="fro_date='all'">
                     <option value='all'>FROM DATE</option>
-                    <optgroup class="ng-cloak" ng-repeat="(yr,mths) in fro_date_slct | orderBy:'-yr'" label="<% yr %>">
-                        <option class="ng-cloak" ng-repeat="mth in mths" value="<% yr %>-<% mth %>"> 
-                            <% month_labels[mth] %> '<% yr|slice:-2 %>
+                    <optgroup class="ng-cloak" ng-repeat="dt in fro_date_slct | orderBy:'-yr'" label="<% dt.yr %>">
+                        <option class="ng-cloak" ng-repeat="mth in dt.mths" value="<% dt.yr %>-<% mth %>"> 
+                            <% month_labels[mth] %> '<% dt.y %>
                         </option>
                     </optgroup>
                 </select>
@@ -154,9 +158,9 @@
                 <span ng-model='to_date_slct' ng-init='to_date_slct={!! json_encode($months_by_years) !!}'></span>
                 <select ng-model="to_date" ng-init="to_date='all'" ng-change="dateFilter('to')">
                     <option value='all'>TO DATE</option>
-                    <optgroup class="ng-cloak" ng-repeat="(yr,mths) in to_date_slct" label="<% yr %>">
-                        <option class="ng-cloak" ng-repeat="mth in mths" value="<% yr %>-<% mth %>"> 
-                            <% month_labels[mth] %> '<% yr|slice:-2 %>
+                    <optgroup class="ng-cloak" ng-repeat="dt in to_date_slct | orderBy:'-yr'" label="<% dt.yr %>">
+                        <option class="ng-cloak" ng-repeat="mth in dt.mths" value="<% dt.yr %>-<% mth %>"> 
+                            <% month_labels[mth] %> '<% dt.y %>
                         </option>
                     </optgroup>
                 </select>

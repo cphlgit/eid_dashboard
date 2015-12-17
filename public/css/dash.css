@@ -110,7 +110,7 @@ body{
 
 .navbar-custom .navbar-nav > li > a:hover, .navbar-custom .navbar-nav > li > a:focus {
 /*background-color: #346290;*/
-background-color: #346290;
+background-color: #000;
 }
 
 .navbar-custom .navbar-nav > .active > a, .navbar-custom .navbar-nav > .active >
@@ -118,17 +118,20 @@ background-color: #346290;
 color: white; /*BACKGROUND color for active*/
 /*background-color: #346290;*/
 /*background-color: red;*/
-background-color: #346290;
+background-color: #000;
 }
 
   .navbar-custom {
-    border-color: #337AB7 ;
-    background-color: #337AB7;
+    /*border-color: #337AB7 ;
+    background-color: #337AB7;*/
+    border-color: #000;
+    background-color: #000;
+
 }
 
  .navbar-custom .dropdown-menu > li > a:hover,
   .navbar-custom .dropdown-menu > li > a:focus {
-    color: #346290;
+    color: #000;
    text-decoration: none;
    }
 
@@ -138,7 +141,7 @@ background-color: #346290;
  .navbar-inverse .navbar-nav > .open > a {
     text-decoration: none;
     /*background-color: #346290;*/ /*Change rollover cell color here*/
-    background-color: #346290;
+    background-color: #000;
   }
 
 
@@ -378,7 +381,7 @@ div.addition-metrics{
 
 .filter-val{
 	color: #fff;
-	background-color:#337AB7;
+	background-color:#000;
 	padding-left: 15px;
 	padding-right: 10px;
 	padding-top: 7px;
@@ -414,7 +417,7 @@ div.addition-metrics{
 }
 
 .facilties-sect-list1 table tbody tr{
-	color: #357BB8;
+	color: #000;
 }
 
 .facilties-sect-list2 table tbody tr{
@@ -437,7 +440,7 @@ div.addition-metrics{
 }
 
 .sect1{
-	border: 1px solid #337AB7;
+	border: 1px solid #000;
 }
 
 .sect2{
@@ -461,7 +464,7 @@ div.addition-metrics{
 }
 
 .sect1>.active{
-	background-color:#337AB7;
+	background-color:#000;
 }
 
 .sect2>.active{
@@ -498,7 +501,7 @@ div.addition-metrics{
 
 .filter_clear{
 	cursor: pointer;
-	color: #337AB7;
+	color: #000;
 }
 
 .navbar-custom > navbar-brand{

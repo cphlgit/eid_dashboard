@@ -50,8 +50,11 @@
 </head>
 
 <body ng-app="dashboard" ng-controller="DashController">
+
 <div class="navbar-custom navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <img src="{{ asset('/images/uganda_flag2.png') }}" style="width:100%;height:10px;margin:0px">
     <div class="container">
+
         <div class="navbar-header"> 
             <a class="navbar-brand" href="/" style="font-weight:800px;color:#FFF"> UGANDA EID</a>
         </div>
@@ -60,9 +63,10 @@
                     <li id='l1' class='active'>{!! link_to("/","DASHBOARD",['class'=>'hdr']) !!}</li>            
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><span style="font-size: 30px;vertical-align: middle;margin-right:25px;"> <img src="{{ asset('/images/icon.png') }}" height="35" width="35"> </span></li>
+                <li><span style="font-size: 30px;vertical-align: middle;margin-right:25px;"> <img src="{{ asset('/images/ug.png') }}" height="35" width="35"> </span></li>
             </ul>
         </div>
+
     </div>
 </div> 
 
@@ -120,7 +124,7 @@
         </span>
         &nbsp;
 
-        <span style="font-size:15px;cursor:pointer;color:#337AB7" onclick="alert('{!! $filtering_info !!}')" class='glyphicon glyphicon-info-sign' title="{!! $filtering_info !!}"></span>
+        <span style="font-size:15px;cursor:pointer;color:#000" onclick="alert('{!! $filtering_info !!}')" class='glyphicon glyphicon-info-sign' title="{!! $filtering_info !!}"></span>
 
 
         <span ng-model='filter_regions' ng-init='filter_regions={}'>

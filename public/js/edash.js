@@ -354,7 +354,7 @@ ctrllers.DashController=function($scope,$http){
 
     $scope.displaySamplesRecieved=function(){     
         var srd=$scope.sr_by_duration; 
-        var data=[{"key":"Selection","values":[],"color":"#357BB8" }];
+        var data=[{"key":"Selection","values":[],"color":"#000" }];
 
         var labels=[];
         var x=0;

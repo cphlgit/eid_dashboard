@@ -449,7 +449,7 @@ ctrllers.DashController=function($scope,$http){
                         .useInteractiveGuideline(true)
                         .x(function(d) { return d.x })
                         .y(function(d) { return d.y })
-                        .forceY([0,100]);
+                        .forceY([0,20]);
             
             chart.xAxis.tickFormat(function(d) {
                 return labels[d];

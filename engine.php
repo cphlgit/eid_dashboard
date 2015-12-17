@@ -179,9 +179,9 @@ global $kitutu_results;
 
 $all_results=[];
 $current_yr=date("Y");
-$year=$current_yr;
+$year=2014;
 $x=1;
-while ($year>=2014) {
+while ($year<=$current_yr) {
 	$month=1;
 	$results=[];
 	if($db==2){
@@ -234,7 +234,7 @@ while ($year>=2014) {
 		}
 	}
 	//file_put_contents("public/json/data.$year.json", json_encode($results));
-	$year--;
+	$year++;
 }
 
 //return $all_results;

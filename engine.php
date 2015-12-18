@@ -279,6 +279,7 @@ res(2);
 //$data['results']+=res(2);
 
 $data['results']=$kitutu_results;
+$data['data_date']="Data last updated at ".date("H:i:s")." on ".date("d/m/Y");
 echo file_put_contents("public/json/data.json", json_encode($data));
 
 //echo "\n".count($all_results)." rows found in results";

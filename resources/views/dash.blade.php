@@ -110,6 +110,7 @@
      ?>
      <span ng-model="month_labels" ng-init='month_labels={!! json_encode(MyHTML::months()) !!}'></span>
      <span ng-model="filtered" ng-init='filtered=false'></span>
+     <span class="hdr hdr-grey" style="float:right;font-size:11px"><% data_date %></span><br>
 
      <div class='row'>
         <div class='col-md-1' style="padding-top:17px; font-size:bolder">

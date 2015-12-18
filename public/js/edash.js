@@ -52,6 +52,12 @@ ctrllers.DashController=function($scope,$http){
     var results_json=[]; //to hold a big map will all processed data to later on be used in the generalFilter
     var loaded_years=[];
 
+    var nat_sr_by_duration={};
+    var nat_hpi_by_duration={};
+    var nat_i_by_duration={};
+
+    var data_init={};
+
     $http.get("../json/care_levels.json").success(function(data){
         care_levels_json=data||{};       
         $scope.care_levels_slct=pairize(care_levels_json);
@@ -87,6 +93,7 @@ ctrllers.DashController=function($scope,$http){
     var getYearData=function(year){
         $http.get("../json/data.json").success(function(data) {
             var res=data.results||{};
+            $scope.data_date=data.data_date||"bbbb";
             //var res=data||{};
             for(var i in res){
                 //console.log("mapping");
@@ -264,13 +271,13 @@ ctrllers.DashController=function($scope,$http){
     }
 
     var setNationalDataByDuration=function(that){
-        var prev_sr=$scope.nat_sr_by_duration[that.year_month]||0;
-        var prev_hpi=$scope.nat_hpi_by_duration[that.year_month]||0;
-        var prev_i=$scope.nat_i_by_duration[that.year_month]||0;
+        var prev_sr=nat_sr_by_duration[that.year_month]||0;
+        var prev_hpi=nat_hpi_by_duration[that.year_month]||0;
+        var prev_i=nat_i_by_duration[that.year_month]||0;
 
-        $scope.nat_sr_by_duration[that.year_month]=prev_sr+that.samples_received;
-        $scope.nat_hpi_by_duration[that.year_month]=prev_hpi+that.hiv_positive_infants;
-        $scope.nat_i_by_duration[that.year_month]=prev_i+that.initiated;
+        nat_sr_by_duration[that.year_month]=prev_sr+that.samples_received;
+        nat_hpi_by_duration[that.year_month]=prev_hpi+that.hiv_positive_infants;
+        nat_i_by_duration[that.year_month]=prev_i+that.initiated;
     }
 
 
@@ -314,11 +321,9 @@ ctrllers.DashController=function($scope,$http){
         //reduceDistsByReg();
         $scope.loading=true;
         $scope.samples_received=0;$scope.hiv_positive_infants=0;$scope.initiated=0;
-
-        //this is data to be used in the graphs
         $scope.sr_by_duration={};$scope.hpi_by_duration={};$scope.i_by_duration={};
         var do_nat=$scope.date_filtered||init==1;
-        if(do_nat){ $scope.nat_sr_by_duration={};$scope.nat_hpi_by_duration={};$scope.nat_i_by_duration={}; }
+        if(do_nat){ nat_sr_by_duration={};nat_hpi_by_duration={};nat_i_by_duration={}; }
 
         $scope.facility_numbers={};//data to be used in the facility lists for each key indicator
         $scope.district_numbers={};//data to be used in the district lists for each key indicator
@@ -349,8 +354,51 @@ ctrllers.DashController=function($scope,$http){
         $scope.displayInitiationRate();
 
         $scope.filtered=count($scope.filter_regions)>0||count($scope.filter_districts)>0||count($scope.filter_care_levels)>0||$scope.date_filtered;
-        $scope.loading=false;    
+        if(init==1){ setInits(); }
+        $scope.loading=false;  
     };
+
+    var setInits=function(){
+        data_init.sr=$scope.samples_received;
+        data_init.hpi=$scope.hiv_positive_infants;
+        data_init.i=$scope.initiated;
+        data_init.sr_bd=$scope.sr_by_duration;
+        data_init.hpi_bd=$scope.hpi_by_duration;
+        data_init.i_bd=$scope.i_by_duration;
+        data_init.nat_srd=nat_sr_by_duration;
+        data_init.nat_hbd=nat_hpi_by_duration;
+        data_init.nat_ibd=nat_i_by_duration;
+        data_init.facility_numbers=$scope.facility_numbers;
+        data_init.district_numbers=$scope.district_numbers;
+        data_init.pcr_one=$scope.pcr_one;
+        data_init.pcr_two=$scope.pcr_two;
+        data_init.first_pcr_median_age=$scope.first_pcr_median_age;
+        data_init.sec_pcr_median_age=$scope.sec_pcr_median_age;
+    }
+
+
+    var getInits=function(){
+        $scope.samples_received=data_init.sr;
+        $scope.hiv_positive_infants=data_init.hpi;
+        $scope.initiated=data_init.i;
+        $scope.sr_by_duration=data_init.sr_bd;
+        $scope.hpi_by_duration=data_init.hpi_bd;
+        $scope.i_by_duration=data_init.i_bd;
+        nat_sr_by_duration=data_init.nat_srd;
+        nat_hpi_by_duration=data_init.nat_hbd;
+        nat_i_by_duration=data_init.nat_ibd;
+        $scope.facility_numbers=data_init.facility_numbers;
+        $scope.district_numbers=data_init.district_numbers;
+        $scope.pcr_one=data_init.pcr_one;
+        $scope.pcr_two=data_init.pcr_two;
+        $scope.first_pcr_median_age=data_init.first_pcr_median_age;
+        $scope.sec_pcr_median_age=data_init.sec_pcr_median_age;
+
+        $scope.displaySamplesRecieved();
+        $scope.displayHIVPositiveInfants();
+        $scope.displayPositivityRate();
+        $scope.displayInitiationRate();
+    }
 
 
     $scope.displaySamplesRecieved=function(){     
@@ -427,8 +475,8 @@ ctrllers.DashController=function($scope,$http){
      $scope.displayPositivityRate=function(){ 
         var srd=$scope.sr_by_duration; 
         var hbd=$scope.hpi_by_duration;
-        var nat_srd=$scope.nat_sr_by_duration; 
-        var nat_hbd=$scope.nat_hpi_by_duration;
+        var nat_srd=nat_sr_by_duration; 
+        var nat_hbd=nat_hpi_by_duration;
 
         var data=[{"key":"National","values":[],"color":"#6D6D6D" }];
 
@@ -467,8 +515,8 @@ ctrllers.DashController=function($scope,$http){
      $scope.displayInitiationRate=function(){  
         var hbd=$scope.hpi_by_duration;
         var ibd=$scope.i_by_duration; 
-        var nat_hbd=$scope.nat_hpi_by_duration;
-        var nat_ibd=$scope.nat_i_by_duration; 
+        var nat_hbd=nat_hpi_by_duration;
+        var nat_ibd=nat_i_by_duration; 
 
         var data=[{"key":"National","values":[],"color":"#6D6D6D" }];
 
@@ -521,12 +569,16 @@ ctrllers.DashController=function($scope,$http){
         $scope.filter_regions={};
         $scope.filter_districts={};        
         $scope.filter_care_levels={};
+
         $scope.filter_duration=$scope.init_duration;
         $scope.filtered=false;
         $scope.date_filtered=false;
         $scope.fro_date="all";
         $scope.to_date="all";
-        generalFilter(1);
+
+        getInits();
+        $scope.loading=false;
+        //generalFilter(1);
     }
 
     $scope.compare = function(prop,comparator, val){

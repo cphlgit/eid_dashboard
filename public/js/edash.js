@@ -113,7 +113,7 @@ ctrllers.DashController=function($scope,$http){
 
             //loaded_years.push(year);
             //if(!$scope.date_filtered){ generalFilter(); }//call the filter for the first time
-            generalFilter();
+            generalFilter(1);
         });
     }
 
@@ -192,7 +192,7 @@ ctrllers.DashController=function($scope,$http){
         delete $scope.filter_districts["all"];        
         delete $scope.filter_care_levels["all"];
 
-        generalFilter(); //filter the results for each required event
+        generalFilter(0); //filter the results for each required event
     }
 
 
@@ -309,7 +309,7 @@ ctrllers.DashController=function($scope,$http){
         }
     }
 
-    var generalFilter=function(){
+    var generalFilter=function(init){
         //console.log("entered the general filter");
         //reduceDistsByReg();
         $scope.loading=true;
@@ -317,7 +317,8 @@ ctrllers.DashController=function($scope,$http){
 
         //this is data to be used in the graphs
         $scope.sr_by_duration={};$scope.hpi_by_duration={};$scope.i_by_duration={};
-        $scope.nat_sr_by_duration={};$scope.nat_hpi_by_duration={};$scope.nat_i_by_duration={};
+        var do_nat=$scope.date_filtered||init==1;
+        if(do_nat){ $scope.nat_sr_by_duration={};$scope.nat_hpi_by_duration={};$scope.nat_i_by_duration={}; }
 
         $scope.facility_numbers={};//data to be used in the facility lists for each key indicator
         $scope.district_numbers={};//data to be used in the district lists for each key indicator
@@ -328,7 +329,7 @@ ctrllers.DashController=function($scope,$http){
 
         for(var i in results_json){
             var that = results_json[i];
-            if(inArray(that.year_month,$scope.filter_duration)){
+            if(inArray(that.year_month,$scope.filter_duration) && do_nat){
                 setNationalDataByDuration(that);
             }  
             if(evaluator(that)){
@@ -525,7 +526,7 @@ ctrllers.DashController=function($scope,$http){
         $scope.date_filtered=false;
         $scope.fro_date="all";
         $scope.to_date="all";
-        generalFilter();
+        generalFilter(1);
     }
 
     $scope.compare = function(prop,comparator, val){

@@ -105,7 +105,7 @@ function getAges($year,$pcr){
 		  LEFT JOIN batches AS b ON s.batch_id=b.id
 		  LEFT JOIN facilities AS f ON b.facility_id=f.id
 		  WHERE YEAR(s.date_results_entered)=$year AND s.PCR_test_requested='YES' AND pcr='$pcr'
-		  GROUP BY facility_id,mth";
+		  GROUP BY facility_id,mth,infant_age";
 	$res=mysql_query($sql);
 	while($row=mysql_fetch_array($res)){ 
 		extract($row);
@@ -265,7 +265,7 @@ function getAges2($year,$pcr){
 		  LEFT JOIN batches AS b ON s.batch_id=b.id
 		  LEFT JOIN facilities AS f ON b.facility_id=f.id
 		  WHERE YEAR(s.date_results_entered)=$year AND s.PCR_test_requested='YES' AND pcr='$pcr'
-		  GROUP BY facility_id,mth";
+		  GROUP BY facility_id,mth,infant_age";
 	$res=mysql_query($sql);
 	while($row=mysql_fetch_array($res)){ 
 		extract($row);

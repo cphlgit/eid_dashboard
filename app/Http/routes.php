@@ -15,4 +15,11 @@
 
 //Route::get('/{time?}',"DashboardController@show");
 
-Route::get('/',function(){ return view('dash'); });
+Route::get('/',function(){
+	$time_now=date("Y-m-d H:i:s");
+	$prev_logs=(file_exists("json/access.logs.json"))?file_get_contents("json/access.logs.json"):"";
+	$logs=$prev_logs.",{'accessed_at':'$time_now'}";
+	$msge="accessed at:".date("Y-m-d H:i:s");
+	file_put_contents("json/access.logs.json",$logs);
+	return view('dash'); 
+});

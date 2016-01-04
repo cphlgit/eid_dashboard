@@ -75,6 +75,20 @@
     <?php //if(!isset($filter_val)) $filter_val="National Metrics, ".$time." thus far" ?>
       
      <?php
+     function latestNMonths($n=12){
+        $ret=[];
+        $m=date('n');
+        $y=date('Y');
+        for($i=1;$i<=$n;$i++){
+            if($m==0){
+                $m=12;
+                $y--;
+            }
+            array_unshift($ret, "$y-$m");
+            $m--;
+        }
+        return $ret;
+    }
 
     function yearByMonths($from_year=1900,$from_month=1,$to_year="",$to_month=""){
         if(empty($to_year)) $to_year=date("Y");
@@ -96,14 +110,13 @@
         return $ret;
     }
 
+
+
      //$start_year=2011,$start_month=1;
-     $current_year=date('Y');$current_month=date('m');
-     $init_duration=[];
-     $m=1;
-     while($m<=$current_month){
-        $init_duration[]="$current_year-$m";
-        $m++;
-     }
+    $init_duration=latestNMonths(12);
+    //echo json_encode($init_duration);
+    //echo json_encode($init_duration);
+    //print_r($init_duration);
      $months_by_years=yearByMonths(2014,1); 
      //krsort($months_by_years);
      $filtering_info="Filters allow you to see aggregate data. So if you select Region: Central 1 and District: Gulu, you will see statistics for all facilties in Central 1 and Gulu. If you then select HCIII, it will filter the data to only show HCIII numbers for Central 1 and Gulu facilities.";

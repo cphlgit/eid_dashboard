@@ -23,3 +23,7 @@ Route::get('/',function(){
 	file_put_contents("json/access.logs.json",$logs);
 	return view('dash'); 
 });
+
+Route::get('/reports',function(){
+	return view('reports'); 
+});

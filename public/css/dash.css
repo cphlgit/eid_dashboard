@@ -147,7 +147,7 @@ background-color: #000;
 
 
   .navbar-custom .navbar-nav > li > a {
-   color: white; /*Change active text color here*/
+   color: #BDBDBD; /*Change active text color here*/
    font-size: 15px;
     }
 

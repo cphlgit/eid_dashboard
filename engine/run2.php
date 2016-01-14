@@ -175,7 +175,7 @@ global $kitutu_results;
 
 $all_results=[];
 $current_yr=date("Y");
-$year=2014;
+$year=2015;
 $x=1;
 while ($year<=$current_yr) {
 	$month=1;
@@ -226,8 +226,10 @@ while ($year<=$current_yr) {
 			$all_results[]=$rw;
 			$kitutu_results[]=$rw;
 		echo "record :: $x\n";
-		$x++;			
+		if($x==400) break;
+		$x++;		
 		}
+
 	}
 	//file_put_contents("public/json/data.$year.json", json_encode($results));
 	$year++;

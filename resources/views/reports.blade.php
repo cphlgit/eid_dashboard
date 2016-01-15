@@ -265,6 +265,7 @@
                 <div class="row">
                                      
                     <div class="facilties-sect facilties-sect-list1" >
+                        <br>
                         <span class='dist_faclty_toggle sect1' ng-model="show_fclties1" ng-init="show_fclties1=false" ng-click="showF(1)">
                             <span class='active' id='d_shw1'>&nbsp;&nbsp;DISTRICTS&nbsp;&nbsp;</span>
                             <span id='f_shw1'>&nbsp;&nbsp;FACILITIES &nbsp;&nbsp;</span>
@@ -310,7 +311,7 @@
                 <div class="row">
                    
                     <div class=" facilties-sect facilties-sect-list2" >
-
+                        <br>
                         <span class='dist_faclty_toggle sect2' ng-model="show_fclties2" ng-init="show_fclties2=false" ng-click="showF(2)">
                             <span class='active' id='d_shw2'>&nbsp;&nbsp;DISTRICTS&nbsp;&nbsp;</span>
                             <span id='f_shw2'>&nbsp;&nbsp;FACILITIES &nbsp;&nbsp;</span>
@@ -355,6 +356,7 @@
                 <div class="row">
                                       
                     <div class="facilties-sect facilties-sect-list3" >
+                        <br>
                         <span class='dist_faclty_toggle sect3' ng-model="show_fclties3" ng-init="show_fclties3=false" ng-click="showF(3)">
                             <span class='active' id='d_shw3'>&nbsp;&nbsp;DISTRICTS&nbsp;&nbsp;</span>
                             <span id='f_shw3'>&nbsp;&nbsp;FACILITIES &nbsp;&nbsp;</span>
@@ -399,6 +401,7 @@
                 <div class="row">
                                     
                     <div class="facilties-sect facilties-sect-list4" >
+                        <br>
                         <span class='dist_faclty_toggle sect4' ng-model="show_fclties4" ng-init="show_fclties4=false" ng-click="showF(4)">
                             <span class='active' id='d_shw4'>&nbsp;&nbsp;DISTRICTS&nbsp;&nbsp;</span>
                             <span id='f_shw4'>&nbsp;&nbsp;FACILITIES &nbsp;&nbsp;</span>

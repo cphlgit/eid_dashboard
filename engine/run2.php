@@ -103,9 +103,12 @@ function getData($year,$cond=1){
 		  WHERE YEAR(s.datetested)=$year AND s.repeatt!=1  AND $cond
 		  GROUP BY facility_id,mth";
 	$res=mysql_query($sql) or die(mysql_error());
+	$x=0;
 	while($row=mysql_fetch_array($res)){ 
 		extract($row);
 		$ret[$mth][$facility_id]=$num;
+		if($x==250) break;
+		$x++;
 	}
 	return $ret;
 }
@@ -175,7 +178,7 @@ global $kitutu_results;
 
 $all_results=[];
 $current_yr=date("Y");
-$year=2015;
+$year=2014;
 $x=1;
 while ($year<=$current_yr) {
 	$month=1;
@@ -226,7 +229,6 @@ while ($year<=$current_yr) {
 			$all_results[]=$rw;
 			$kitutu_results[]=$rw;
 		echo "record :: $x\n";
-		if($x==400) break;
 		$x++;		
 		}
 
@@ -250,9 +252,12 @@ function getData2($year,$cond=1){
 		  WHERE YEAR(s.date_results_entered)=$year AND s.PCR_test_requested='YES'  AND $cond
 		  GROUP BY facility_id,mth";
 	$res=mysql_query($sql);
+	$x=0;
 	while($row=mysql_fetch_array($res)){ 
 		extract($row);
 		$ret[$mth][$facility_id]=$num;
+		if($x==250) break;
+		$x++;
 	}
 	return $ret;
 }

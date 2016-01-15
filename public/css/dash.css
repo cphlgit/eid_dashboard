@@ -408,6 +408,8 @@ div.addition-metrics{
 .facilties-sect{
 	font-size: 11px;
 	padding-left: 50px;
+	padding-right: 5px;
+	overflow-y:auto;
 }
 
 .facilties-sect table tr th,

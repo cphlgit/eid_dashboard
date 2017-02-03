@@ -107,7 +107,6 @@ function getData($year,$cond=1){
 	while($row=mysql_fetch_array($res)){ 
 		extract($row);
 		$ret[$mth][$facility_id]=$num;
-		if($x==250) break;
 		$x++;
 	}
 	return $ret;
@@ -256,7 +255,6 @@ function getData2($year,$cond=1){
 	while($row=mysql_fetch_array($res)){ 
 		extract($row);
 		$ret[$mth][$facility_id]=$num;
-		if($x==250) break;
 		$x++;
 	}
 	return $ret;

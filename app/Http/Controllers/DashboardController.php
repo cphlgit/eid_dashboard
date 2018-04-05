@@ -321,13 +321,30 @@ class DashboardController extends Controller {
 
 	public function live(){
 
-		
+		$whole_numbers=$this->_wholeNumbers();
 		$dist_numbers=$this->_districtNumbers();
 		$facility_numbers=$this->_facilityNumbers();
 		
-		return compact("dist_numbers","facility_numbers");
+		return compact("whole_numbers","dist_numbers","facility_numbers");
 	}
 	
+	private function _wholeNumbers(){
+		$match_stage['$match']=$this->conditions;
+		$project_stage = array(
+
+			'$group' => array(
+				 '_id'=>null,
+				'total_tests' => array('$sum' => 1 ),
+				'pcr_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
+				'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
+				'hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$accepted_result','POSITIVE')),1,0))),
+				'art_initiated' => array('$sum' => array('$cond'=>array(array('$eq' => array('$art_initiation_status','YES')),1,0))),
+			 ));
+		$res=$this->mongo->eid_dashboard->aggregate($match_stage,$project_stage);
+		
+		
+		return isset($res['result'])?$res['result']:[];
+	}
 	private function _facilityNumbers(){
 	
 		$match_stage['$match']=$this->conditions;

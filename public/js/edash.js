@@ -61,6 +61,7 @@ ctrllers.DashController=function($scope,$http){
     $scope.facilities_slct=[];
     $scope.facilities_lables=[];
 
+
     $scope.params = {
         'districts':[],'hubs':[],'regions':[],'care_levels':[],'age_ranges':[],'genders':[],'pcrs':[]};
 
@@ -199,6 +200,7 @@ ctrllers.DashController=function($scope,$http){
         return age_ids_array;
     };
 
+    
     var getData=function(){
         $scope.loading = true;
             var prms = {};
@@ -218,10 +220,18 @@ ctrllers.DashController=function($scope,$http){
                 //console.log("we rrrr"+JSON.stringify($scope.params));
 
                 
-               
+                
                 $scope.district_numbers = data.dist_numbers||{};
                 $scope.facility_numbers = data.facility_numbers||{};
+
                 
+                var whole_numbers=data.whole_numbers[0]||{};
+                $scope.samples_received=whole_numbers.total_tests||0;
+                $scope.hiv_positive_infants=whole_numbers.hiv_positive_infants||0;
+                $scope.initiated=whole_numbers.art_initiated||0;
+                $scope.pcr_one =whole_numbers.pcr_one||0;
+                $scope.pcr_two =whole_numbers.pcr_two||0;
+      
 
                 $scope.filtered = count($scope.filter_districts)>0||count($scope.filter_hubs)>0||count($scope.filtered_age_range)>0||$scope.date_filtered;    
                 $scope.loading = false;
@@ -571,7 +581,6 @@ ctrllers.DashController=function($scope,$http){
         }
     }
 
-
     var setDataByDistrict=function(that){
         if(that.district_name!=null){
             $scope.district_numbers[that.district_id]=$scope.district_numbers[that.district_id]||{};
@@ -651,11 +660,13 @@ ctrllers.DashController=function($scope,$http){
         data_init.sec_pcr_median_age=$scope.sec_pcr_median_age;
     }
 
-
+    
     var getInits=function(){
+        /*
         $scope.samples_received=data_init.sr;
         $scope.hiv_positive_infants=data_init.hpi;
         $scope.initiated=data_init.i;
+        */
         $scope.sr_by_duration=data_init.sr_bd;
         $scope.hpi_by_duration=data_init.hpi_bd;
         $scope.i_by_duration=data_init.i_bd;
@@ -664,8 +675,8 @@ ctrllers.DashController=function($scope,$http){
         nat_i_by_duration=data_init.nat_ibd;
         $scope.facility_numbers=data_init.facility_numbers;
         $scope.district_numbers=data_init.district_numbers;
-        $scope.pcr_one=data_init.pcr_one;
-        $scope.pcr_two=data_init.pcr_two;
+        //$scope.pcr_one=data_init.pcr_one;
+        //$scope.pcr_two=data_init.pcr_two;
         $scope.first_pcr_median_age=data_init.first_pcr_median_age;
         $scope.sec_pcr_median_age=data_init.sec_pcr_median_age;
 
@@ -674,6 +685,8 @@ ctrllers.DashController=function($scope,$http){
         $scope.displayPositivityRate();
         $scope.displayInitiationRate();
     }
+
+    
 
 
     $scope.displaySamplesRecieved=function(){     

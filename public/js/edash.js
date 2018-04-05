@@ -685,7 +685,6 @@ ctrllers.DashController=function($scope,$http){
         $scope.displayPositivityRate();
         $scope.displayInitiationRate();
     }
-
     $scope.displaySamplesRecieved=function(){     
         var srd=$scope.sr_by_duration; 
         var data=[{"key":"Selection","values":[],"color":"#000" }];

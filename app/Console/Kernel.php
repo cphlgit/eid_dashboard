@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \EID\Console\Commands\Inspire::class,
+        \EID\Console\Commands\EidEngine::class,
     ];
 
     /**

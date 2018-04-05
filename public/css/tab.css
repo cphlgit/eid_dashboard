@@ -40,18 +40,3 @@ div.tabContent {
 }
 
 div.tabContent.hide { display: none; }
-
-.tab-labels{
-    margin: 10px;
-    margin-bottom: 0px;
-    cursor: pointer;
-}
-
-.tab-sm-ttl{
-    font-size: 11px;
-}
-
-.db-charts{
-    width: 600px;
-    height: 300px;
-}

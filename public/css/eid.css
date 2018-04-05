@@ -37,10 +37,10 @@
     color: orange !important;
 }
 
-table tr th,table thead tr{
+/*table tr th,table thead tr{
 	background-color: #337ab7;
 	color: white;
-}
+}*/
 
 .td_label label,.td_label{
 	text-align: left;
@@ -129,6 +129,7 @@ background-color: #346290;
 
   .navbar-custom .navbar-nav > li > a {
    color: white; /*Change active text color here*/
+   font-size: 15px;
     }
 
 .nice_red{
@@ -258,19 +259,139 @@ dsktp img{
 	font-size:50px;
 }
 
-.filter-tb{
-	border:1px solid #C0C0C0;
-	color: #C0C0C0;
-	text-align: center;
-	width: 100%;
+/*nnnn*/
+
+.tab-labels{
+    margin: 10px;
+    margin-bottom: 0px;
+    cursor: pointer;
+}
+
+.tab-sm-ttl{
+    font-size: 11px;
+}
+
+.db-charts{
+    width: 550px;
+    height: 350px;
+}
+
+div.addition-metrics{ 
+    padding: 10px; 
+    min-height: 80px;
+    border:1px solid #C0C0C0;
+    text-align: center;
+}
+
+.addition-metrics.figure,.addition-metrics.desc{
+    color: #74777b;
+    font-family: helvetica neue regular;
+    text-transform: uppercase;
+	line-height: 25px;
+}
+
+.addition-metrics.figure{
+    font-size: 25px;
+}
+
+.addition-metrics.desc{
+    font-size: 13px;
+}
+
+.filter-tb {
+    border:1px solid #C0C0C0;;
+    color: #74777b;
+    text-align: center;
+    width: 100%;
+    font-size: 15px;
 }
 
 .filter-tb select{
-	border:0px;
-	width: 100%;
-	background-color: white;
+    border:0px;
+    width: 100%;
+    background-color: white;
 }
 
 .filter-tb select option{
-	border-bottom:1px solid #C0C0C0;
+    border-bottom:1px solid #C0C0C0;
 }
+
+.filter-tb select option:hover,
+.filter-tb select option:focus{
+	background-color: #90B4FF; /*blue for filters*/
+}
+
+.sm_box{
+    width:18px;
+    height: 18px;
+    border:0px
+}
+
+.sm_box.national{   
+    background-color:#6D6D6D;
+}
+
+.sm_box.hiv-positive-numbers{
+    background-color:#357BB8;
+}
+
+.sm_box.uptake{
+    background-color:#5EA361;
+}
+
+.sm_box.init-rate{
+    background-color:#F5A623;
+}
+
+.sm_box.hiv-positive-average{
+    background-color:#9F82D1;
+}
+
+.table.facilities{
+    font-size:12px;
+}
+
+.table.facilities tr,.table.facilities th{
+    height: 10px;    
+}
+
+.table.facilities thead tr{
+    background-color: #C0C0C0;
+    color: black;
+}
+
+.filter-val{
+	color: #fff;
+	background-color: #337ab7;
+	padding: 10px;
+	border-radius: 20px;
+}
+
+.facilties-sect{
+	font-size: 11px;
+	padding-left: 50px;
+}
+
+.facilties-sect table tr th,
+.facilties-sect table thead tr,
+.facilties-sect table tbody tr{
+	height: 12px;
+}
+
+.facilities-sect-hiv-pstv table tbody tr{
+	color: #357BB8;
+}
+
+.facilities-sect-uptake table tbody tr{
+	color: #5EA361;
+}
+
+.facilities-sect-init-rates table tbody tr{
+	color: #F5A623;
+}
+
+.facilities-sect-pstv-rates table tbody tr{
+	color: #9F82D1;
+}
+
+

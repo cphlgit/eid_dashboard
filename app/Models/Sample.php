@@ -72,68 +72,198 @@ class Sample extends Model {
 		}
 		$res=$level=='batches'?$res->groupby('batch_id'):$res;
 		return $res->get()->count();
-	}	
+	}
+	
 
-	public static function countPositives($year=""){
+	public static function getNumberTotals($year,$pcr="",$ttl_inited=""){
 		if(empty($year)) $year=date("Y");
-		/*$res=\DB::select("SELECT count(s.id) AS number_positive FROM dbs_samples AS s 
-					   WHERE year(date_results_entered)=$year AND accepted_result='POSITIVE'");*/
-		$res=Sample::select(\DB::raw(" count(s.id) AS number_positive"))
-				->from("dbs_samples AS s")
-				->whereYear('s.date_results_entered','=',$year)
-				->where('s.accepted_result','=','POSITIVE')
-				->get()
-				->first();
+		$res=$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
+				  ->leftjoin("facilities AS f","f.id","=","b.facility_id")
+				  ->leftjoin("districts AS d","d.id","=","f.districtID")
+				  ->select(\DB::raw("facilityLevelID ,regionID,districtID,count(s.id) AS num"))
+			 	  ->from("dbs_samples AS s")
+			 	  ->whereYear('s.date_results_entered','=',$year);
+		$res=!empty($pcr)?$res->where('s.pcr','=',$pcr):$res;
+		$res=$ttl_inited==1?$res->where("f_ART_initiated",'=','YES'):$res;
+		$res=$res->groupby('facilityLevelID','regionID','districtID')->get();
+
+		$levels=FacilityLevel::facilityLevelsArr();
+		$regs=Location\District::districtsByRegions();
+
+		$ret=[];
 		
-		return $res->number_positive;
-	}
-
-	public static function countPositives2($year=""){
-		if(empty($year)) $year=date("Y");
-		/*$res=\DB::select("SELECT count(s.id) AS number_positive FROM dbs_samples AS s 
-					   WHERE year(date_results_entered)=$year AND accepted_result='POSITIVE'");*/
-		$res=Sample::select(\DB::raw("month(date_results_entered) AS mth, count(s.id) AS number_positive"))
-				->from("dbs_samples AS s")
-				->whereYear('s.date_results_entered','=',$year)
-				->where('s.accepted_result','=','POSITIVE')
-				->groupby('mth')
-				->get();
-		$months=\MyHTML::initMonths();
-		foreach ($res as $k) {
-			$months[$k->mth]=$k->number_positive;
+		foreach ($levels as $lvl_id => $level) {
+			foreach ($regs as $reg_id => $dists) {
+				foreach ($dists as $dist_id => $dist) $ret[$lvl_id][$reg_id][$dist_id]=0;
+			}			
 		}
-
-		//echo json_encode($res);
-		return $months;
-	}
-
-	public static function avPositivity($year=""){
-		if(empty($year)) $year=date("Y");
-		$res_all=Sample::select(\DB::raw("count(s.id) AS num"))
-				->from("dbs_samples AS s")
-				->whereYear('s.date_results_entered','=',$year)
-				->get()->first();
-		$ttl_num=$res_all->num;
-		$ttl_pos=Sample::countPositives($year);
-		$ttl_av=$ttl_num>0?($ttl_pos/$ttl_num)*100:0;
-		return round($ttl_av,1);
-	}
-
-	public static function avPositivity2($year=""){
-		if(empty($year)) $year=date("Y");
-		$res=Sample::select(\DB::raw("month(date_results_entered) AS mth,count(s.id) AS num"))
-				->from("dbs_samples AS s")
-				->whereYear('s.date_results_entered','=',$year)
-				->groupby('mth')
-				->get();
-		$mths_with_p_nrs=Sample::countPositives2($year);
-		$months=\MyHTML::initMonths();
-		foreach ($res as $k) {
-			$ttl_num=$k->num;
-			$ttl_pos=$mths_with_p_nrs[$k->mth];
-			$av=$ttl_num>0?($ttl_pos/$ttl_num)*100:0;
-			$months[$k->mth]=round($av,1);
+		
+		foreach ($res as $rw) {
+			$ret[$rw->facilityLevelID][$rw->regionID][$rw->districtID]=$rw->num;
 		}
-		return $months;
+		unset($ret[""]);
+		unset($ret[0]);
+		return $ret;
 	}
+
+	public static function counts($year="",$postives="",$art_inits=""){
+		if(empty($year)) $year=date("Y");
+		$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
+				->leftjoin("facilities AS f","f.id","=","b.facility_id")
+				->leftjoin("districts AS d","d.id","=","f.districtID")
+				->select(\DB::raw("d.regionID,f.facilityLevelID,f.facility,f.districtID,b.facility_id,month(date_results_entered) AS mth, count(s.id) AS number"))
+				->from("dbs_samples AS s")
+				->whereYear('s.date_results_entered','=',$year);
+		$res=$postives==1?$res->where('s.accepted_result','=','POSITIVE'):$res;
+		$res=$art_inits==1?$res->where('s.f_ART_initiated','=','YES'):$res;
+		$res=$res->groupby("facility_id","mth")->get();
+
+
+		$ret=[];
+		foreach ($res as $row) {
+			$ret[$row->facility_id."_".$row->mth]=[
+					"facility_id"=>$row->facility_id,
+					"month"=>$row->mth,
+					"facility_name"=>$row->facility,
+					"district_id"=>$row->districtID,
+					"region_id"=>$row->regionID,
+					"level_id"=>$row->facilityLevelID,
+					"value"=>$row->number
+					];
+		}
+		return $ret;
+	}
+
+	public static function niceCounts($year="",$postives="",$art_inits="",$grpby_fclts=""){
+		if(empty($year)) $year=date("Y");
+		$res=Sample::leftjoin("batches AS b","b.id","=","s.batch_id")
+				->leftjoin("facilities AS f","f.id","=","b.facility_id")
+				->leftjoin("districts AS d","d.id","=","f.districtID")
+				->select(\DB::raw("d.regionID,f.facilityLevelID,f.facility,f.districtID,b.facility_id,month(date_results_entered) AS mth, count(s.id) AS number"))
+				->from("dbs_samples AS s")
+				->whereYear('s.date_results_entered','=',$year);
+		$res=$postives==1?$res->where('s.accepted_result','=','POSITIVE'):$res;
+		$res=$art_inits==1?$res->where('s.f_ART_initiated','=','YES'):$res;
+		$res=$grpby_fclts==1?$res->groupby("facility_id"):$res->groupby('facilityLevelID','regionID','districtID','mth');
+		$res=$res->get();
+
+		$levels=FacilityLevel::facilityLevelsArr();
+		$months=\MyHTML::initMonths();
+		$regs=Location\District::districtsByRegions();
+
+		$ret=[];
+
+		if($grpby_fclts==1){
+			foreach ($res as $row) {
+				$ret[$row->facility_id]=[
+						"facility_id"=>$row->facility_id,
+						"facility_name"=>$row->facility,
+						"district_id"=>$row->districtID,
+						"region_id"=>$row->regionID,
+						"level_id"=>$row->facilityLevelID,
+						"value"=>$row->number
+						];
+			}
+
+		}else{
+
+			foreach ($levels as $lvl_id => $level) {
+				foreach ($regs as $reg_id => $dists) {
+					foreach ($dists as $dist_id => $dist) $ret[$lvl_id][$reg_id][$dist_id]=$months;
+				}		
+			}
+
+			foreach ($res as $rw) {
+				$ret[$rw->facilityLevelID][$rw->regionID][$rw->districtID][$rw->mth]=$rw->number;
+			}
+			unset($ret[""]);
+			unset($ret[0]);
+		}
+		return $ret;
+	}
+
+	public static function PCRAges($year,$pcr=""){
+		$res=Sample::select("s.infant_age")
+			 ->from("dbs_samples AS s")
+			 ->whereYear('s.date_results_entered','=',$year);
+		$res=!empty($pcr)?$res->where('s.pcr','=',$pcr):$res;
+		$res=$res->get();
+		$ret=[];
+		foreach ($res as $rw) {
+			$ret[]=Sample::cleanAge($rw->infant_age);	
+		}
+		//if($pcr=="SECOND") print_r($ret);
+		return $ret;
+	}
+
+
+	private static function cleanAge($age=0){
+		$ret=0;
+		$age_arr=explode(" ", $age);
+		$years=0;$months=0;$weeks=0;$days=0;
+
+		foreach ($age_arr as $k => $val) {
+			if($val=='year'||$val=='years'){
+				$years=str_replace(" ", "",$age_arr[($k-1)]);
+			}elseif($val=='months'||$val=='month'){
+				$months=str_replace(" ", "",$age_arr[($k-1)]);
+			}elseif($val=='weeks'||$val=='week'){
+				$weeks=str_replace(" ", "",$age_arr[($k-1)]);
+			}elseif($val=='days'||$val=='day'){
+				$days=str_replace(" ", "",$age_arr[($k-1)]);
+			}else{
+				$months=$val;
+			}
+		}
+		$ret= ($years*12)+$months+($weeks/4)+($days/30);
+		return round($ret,2);
+	}
+
+	private static function regionMonthsInit(){
+		$regions=Location\Region::regionsArr();
+		$months=\MyHTML::initMonths();
+		$ret=[];
+		foreach ($regions as $regID => $reg)  $ret[$regID]=$months;
+		return $ret;
+	}
+
+	private static function districtMonthsInit(){
+		$districts=Location\District::districtsArr();
+		$months=\MyHTML::initMonths();
+		$ret=[];
+		foreach ($districts as $dID => $d)  $ret[$dID]=$months;
+		return $ret;
+	}
+
+
+
 }
+
+
+/*Array ( 
+	[Central 1] => Array ( [9] => 7 [10] => 10 ) 
+	[Central 2] => Array ( [9] => 3 [10] => 3 ) 
+	[East Central] => Array ( [9] => 1 [10] => 4 ) 
+	[Kampala] => Array ( [9] => 8 [10] => 9 ) 
+	[Mid Eastern] => Array ( [9] => 1 [10] => 4 ) 
+	[Mid Northern] => Array ( [9] => 4 [10] => 9 ) 
+	[Mid Western] => Array ( [9] => 5 [10] => 5 ) http://www.azlyrics.com/lyrics/hoobastank/incomplete.html
+	[North East] => Array ( [9] => 1 [10] => 1 ) 
+	[South Western] => Array ( [9] => 5 [10] => 9 ) 
+	[West Nile] => Array ( [9] => 1 ) )*/
+
+
+/*
+Your lim
+
+ $scope.filteredfcltys=function(option,val){
+        var ret=[];
+        for (var i $scope.facility_numbers_init){
+            var arr=$scope.facility_numbers_init[i];
+            if(val==arr[option]){
+                ret[i]=arr;
+            }
+        }
+        return ret;
+    }
+*/

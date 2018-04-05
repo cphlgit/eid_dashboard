@@ -83,3 +83,22 @@ function formatPhoneNumber(phone){
   return "";
 
 }
+
+function dropDown(name,items,options){
+  var ret= "<select name='"+name+"' "+options+">";
+  ret+="<option value=' '>DISTRICT</option>";
+  for(var i in items){
+    ret+="<option value='"+i+"'>"+items[i]+"</option>";
+  }
+  ret+="</select>";
+  return ret;
+}
+
+function arraySum(arr){
+  var ret=0;
+  for(var i in items){
+    var val=Number(items[i]);
+    ret+=val;
+  }
+  return ret;
+}

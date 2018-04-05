@@ -27,3 +27,5 @@ Route::get('/',function(){
 Route::get('/reports',function(){
 	return view('reports'); 
 });
+Route::get("/live","DashboardController@live");
+Route::get("/other_data/","DashboardController@other_data");

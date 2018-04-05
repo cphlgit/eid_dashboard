@@ -127,7 +127,7 @@
      <span ng-model="filtered" ng-init='filtered=false'></span>
      <span class="hdr hdr-grey" style="float:right;font-size:11px"><% data_date %></span><br>
 
-     <div class='row'>
+    <div class='row'>
         <div class='col-md-1' style="padding-top:17px; font-size:bolder">
             <span class='hdr hdr-grey'>FILTERS:</span> 
         </div>
@@ -142,7 +142,14 @@
 
         <span style="font-size:15px;cursor:pointer;color:#000" onclick="alert('{!! $filtering_info !!}')" class='glyphicon glyphicon-info-sign' title="{!! $filtering_info !!}"></span>
 
-
+        <span ng-model='filtered_age_range' ng-init='filtered_age_range=[]'>
+            <span ng-repeat="filtered_age_range_instance in filtered_age_range" ng-init="age_range_index = ageRangesCount()">
+                <span class="filter-val ng-cloak"> <% filtered_age_range_instance.from_age %> 
+                    - <% filtered_age_range_instance.to_age %>
+                    (months) <x ng-click='filtered_age_range.splice($index, 1)'>&#120;</x>
+                </span> 
+            </span>
+        </span>
         <span ng-model='filter_regions' ng-init='filter_regions={}'>
             <span ng-repeat="(r_nr,r_name) in filter_regions">
                 <span class="filter-val ng-cloak"> <% r_name %> (r) <x class='glyphicon glyphicon-remove' ng-click='removeTag("region",r_nr)'></x></span> 
@@ -163,13 +170,29 @@
             </span>
         </span>
 
+        <span ng-model='filter_gender' ng-init='filter_gender={}'>
+            <span ng-repeat="(g_nr,g_name) in filter_gender">
+                <span class="filter-val ng-cloak"> <% g_name %> (g) <x class='glyphicon glyphicon-remove' ng-click='removeTag("gender",g_nr)'></x></span> 
+            </span>
+        </span>
+        <span ng-model='filter_pcrs' ng-init='filter_pcrs={}'>
+            <span ng-repeat="(pcr_id,pcr_name) in filter_pcrs">
+                <span class="filter-val ng-cloak"> <% pcr_name %> (p) <x class='glyphicon glyphicon-remove' ng-click='removeTag("pcr",pcr_id)'></x></span> 
+            </span>
+        </span>
+        <span ng-model='filter_hubs' ng-init='filter_hubs={}'>
+            <span ng-repeat="(hub_id,hub_name) in filter_hubs">
+                <span class="filter-val ng-cloak"> <% hub_name %> (h) <x class='glyphicon glyphicon-remove' ng-click='removeTag("hub",hub_id)'></x></span> 
+            </span>
+        </span>
+
         <span ng-show="filtered" class="filter_clear" ng-click="clearAllFilters()">reset all</span>
         </div>
      </div>
 
      <table border='1' cellpadding='0' cellspacing='0' class='filter-tb'>
         <tr>
-            <td width='20%' >
+            <td width='10%' >
                 <span ng-model='fro_date_slct' ng-init='fro_date_slct={!! json_encode($months_by_years) !!}'></span>
                 <select ng-model="fro_date" ng-init="fro_date='all'">
                     <option value='all'>FROM DATE</option>
@@ -180,7 +203,7 @@
                     </optgroup>
                 </select>
             </td>
-            <td width='20%' >
+            <td width='10%' >
                 <span ng-model='to_date_slct' ng-init='to_date_slct={!! json_encode($months_by_years) !!}'></span>
                 <select ng-model="to_date" ng-init="to_date='all'" ng-change="dateFilter('to')">
                     <option value='all'>TO DATE</option>
@@ -191,7 +214,24 @@
                     </optgroup>
                 </select>
             </td>
-             <td width='20%'>
+            <td width='10%'>
+                <select ng-model="from_age" ng-init="from_age='all'">
+                    <option value='all'>From Age</option>
+                    <option class="ng-cloak" ng-repeat="fro_age in from_age_slct|orderBy:'name' " value="<% fro_age %>">
+                        <% fro_age.name %>
+                    </option>
+                </select>
+
+            </td>
+            <td width='10%'>
+                <select ng-model="to_age" ng-init="to_age='all'" ng-change="filter('age_range')">
+                    <option value='all'>To Age</option>
+                    <option class="ng-cloak" ng-repeat="to_age in to_age_slct|orderBy:'name' " value="<% to_age %>">
+                        <% to_age.name %>
+                    </option>
+                </select>
+            </td>
+            <td width='10%'>
                 <select ng-model="region" ng-init="region='all'" ng-change="filter('region')">
                     <option value='all'>REGIONS</option>
                     <option class="ng-cloak" ng-repeat="rg in regions_slct|orderBy:'name'" value="<% rg.id %>">
@@ -199,7 +239,7 @@
                     </option>
                 </select>
             </td>
-            <td width='20%'>
+            <td width='10%'>
                 <select ng-model="district" ng-init="district='all'" ng-change="filter('district')">
                     <option value='all'>DISTRICTS</option>
                     <option class="ng-cloak" ng-repeat="dist in districts_slct | orderBy:'name'" value="<% dist.id %>">
@@ -207,7 +247,7 @@
                     </option>
                 </select>
             </td>           
-            <td width='20%'>
+            <td width='10%'>
                 <select ng-model="care_level" ng-init="care_level='all'" ng-change="filter('care_level')">
                     <option value='all'>CARE LEVELS</option>
                     <option class="ng-cloak" ng-repeat="cl in care_levels_slct | orderBy:'name'" value="<% cl.id %>">
@@ -215,7 +255,31 @@
                     </option>
                 </select>
             </td> 
-
+            <!-- new filters-->
+            <td width='10%'>
+                <select ng-model="gender" ng-init="gender='all'" ng-change="filter('gender')">
+                    <option value='all'>SEX</option>
+                    <option class="ng-cloak" ng-repeat="gl in gender_slct | orderBy:'name'" value="<% gl.id %>">
+                        <% gl.name %>
+                    </option>
+                </select>
+            </td>
+            <td width='10%'>
+                <select ng-model="pcrs" ng-init="pcrs='all'" ng-change="filter('pcr')">
+                    <option value='all'>PCR</option>
+                    <option class="ng-cloak" ng-repeat="pcr_instance in pcrs_slct | orderBy:'name'" value="<% pcr_instance.id %>">
+                        <% pcr_instance.name %>
+                    </option>
+                </select>
+            </td>
+             <td width='10%'>
+                <select ng-model="hubs" ng-init="hubs='all'" ng-change="filter('hub')">
+                    <option value='all'>HUBS</option>
+                    <option class="ng-cloak" ng-repeat="hub_instance in hubs_slct | orderBy:'name'" value="<% hub_instance.id %>">
+                        <% hub_instance.name %>
+                    </option>
+                </select>
+            </td>
              
         </tr>
      </table>
@@ -281,17 +345,21 @@
                                 <tr>
                                     <th width='70%'>District</th>
                                     <th width='10%'>Total Tests</th>
-                                    <th width='20%'>Total 1st PCR</th>
+                                    <th width='10%'>Total 1<sup>st</sup> PCR</th>
+                                    <th width='10%'>Total 2<sup>nd</sup> PCR</th>
                                 </tr>
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="d in district_numbers" >
-                                    <td class="ng-cloak"><% d.name %></td>
-                                    <td class="ng-cloak"><% d.samples_received|number %></td>
+                                    <td class="ng-cloak"><% districts_lables[d._id] %></td>
+                                    <td class="ng-cloak"><% d.total_tests|number %></td>
                                     <td class="ng-cloak"><% d.pcr_one|number %></td>
+                                    <td class="ng-cloak"><% d.pcr_two|number %></td>
                                 </tr>                        
                              </tbody>
                            </table>
+                            <button ng-hide="show_fclties1" id="exportDistricts" type="button" class="btn btn-success" >Csv Download -District 1st PCRs</button>
+
                         </div>
 
                         <div ng-show="show_fclties1">
@@ -300,17 +368,21 @@
                                 <tr>
                                     <th width='70%'>Facility</th>
                                     <th width='10%'>Total Tests</th>
-                                    <th width='20%'>Total 1st PCR</th>
+                                    <th width='10%'>Total 1<sup>st</sup> PCR</th>
+                                    <th width='10%'>Total 2<sup>nd</sup> PCR</th>
                                 </tr>
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="f in facility_numbers" >
-                                    <td class="ng-cloak"><% f.name %></td>
-                                    <td class="ng-cloak"><% f.samples_received|number %></td>
+                                    <td class="ng-cloak"><% facilities_lables[f._id] %></td>
+                                    <td class="ng-cloak"><% f.total_tests|number %></td>
                                     <td class="ng-cloak"><% f.pcr_one|number %></td>
+                                    <td class="ng-cloak"><% f.pcr_two|number %></td>
                                 </tr>                        
                              </tbody>
                          </table>
+                         <button id="exportFacilities" type="button" class="btn btn-success" >Csv Download -Facility 1st PCRs</button>
+
                         </div>
                     </div>
                 </div>
@@ -342,9 +414,9 @@
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="d in district_numbers" >
-                                    <td class="ng-cloak"><% d.name %></td>
+                                    <td class="ng-cloak"><% districts_lables[d._id] %></td>
                                     <td class="ng-cloak"><% d.hiv_positive_infants|number %></td>
-                                    <td class="ng-cloak"><% d.samples_received|number %></td>
+                                    <td class="ng-cloak"><% d.total_tests|number %></td>
                                 </tr>                        
                              </tbody>
                            </table>
@@ -361,9 +433,9 @@
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="f in facility_numbers" >
-                                    <td class="ng-cloak"><% f.name %></td>
+                                    <td class="ng-cloak"><% facilities_lables[f._id]%></td>
                                     <td class="ng-cloak"><% f.hiv_positive_infants|number %></td>
-                                    <td class="ng-cloak"><% f.samples_received|number %></td>
+                                    <td class="ng-cloak"><% f.total_tests|number %></td>
                                 </tr>                        
                              </tbody>
                          </table>
@@ -397,10 +469,10 @@
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="d in district_numbers" >
-                                    <td class="ng-cloak"><% d.name %></td>
-                                    <td class="ng-cloak"><% ((d.hiv_positive_infants/d.samples_received)*100)|number:1 %>%</td>
+                                    <td class="ng-cloak"><% districts_lables[d._id] %></td>
+                                    <td class="ng-cloak"><% ((d.hiv_positive_infants/d.total_tests)*100)|number:1 %>%</td>
                                     <td class="ng-cloak"><% d.hiv_positive_infants|number %></td>
-                                    <td class="ng-cloak"><% d.samples_received|number %></td>
+                                    <td class="ng-cloak"><% d.total_tests|number %></td>
                                 </tr>                        
                              </tbody>
                            </table>
@@ -418,10 +490,10 @@
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="f in facility_numbers" >
-                                    <td class="ng-cloak"><% f.name %></td>
-                                    <td class="ng-cloak"><% ((f.hiv_positive_infants/f.samples_received)*100)|number:1 %>%</td>
+                                    <td class="ng-cloak"><% facilities_lables[f._id] %></td>
+                                    <td class="ng-cloak"><% ((f.hiv_positive_infants/f.total_tests)*100)|number:1 %>%</td>
                                     <td class="ng-cloak"><% f.hiv_positive_infants|number %></td>
-                                    <td class="ng-cloak"><% f.samples_received|number %></td>
+                                    <td class="ng-cloak"><% f.total_tests|number %></td>
                                 </tr>                        
                              </tbody>
                          </table>
@@ -453,8 +525,8 @@
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="d in district_numbers" >
-                                    <td class="ng-cloak"><% d.name %></td>
-                                    <td class="ng-cloak"><% ((d.initiated/d.hiv_positive_infants)*100)|number:1 %>%</td>
+                                    <td class="ng-cloak"><% districts_lables[d._id] %></td>
+                                    <td class="ng-cloak"><% ((d.art_initiated/d.hiv_positive_infants)*100)|number:1 %>%</td>
                                     <td class="ng-cloak"><% d.hiv_positive_infants %></td>   
                                 </tr>                        
                              </tbody>
@@ -471,8 +543,8 @@
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="f in facility_numbers" >
-                                    <td class="ng-cloak"><% f.name %></td>
-                                    <td class="ng-cloak"><% ((f.initiated/f.hiv_positive_infants)*100)|number:1 %>%</td>
+                                    <td class="ng-cloak"><% facilities_lables[f._id] %></td>
+                                    <td class="ng-cloak"><% ((f.art_initiated/f.hiv_positive_infants)*100)|number:1 %>%</td>
                                     <td class="ng-cloak"><% f.hiv_positive_infants %></td>                    
                                 </tr>                        
                              </tbody>

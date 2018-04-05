@@ -63,6 +63,18 @@ return [
             'prefix'    => '',
             'strict'    => false,
         ],
+        'live_db' => [
+            'driver'    => 'mysql',
+            'host'      => env('LIVE_HOST2'),
+            'database'  => env('LIVE_DATABASE2'),
+            'username'  => env('LIVE_USERNAME2'),
+            'password'  => env('LIVE_PASSWORD2'),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
+            
+        ],
 
         'pgsql' => [
             'driver'   => 'pgsql',

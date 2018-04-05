@@ -10,17 +10,20 @@ use EID\Models\Location\Region;
 use EID\Models\Location\District;
 use EID\Models\FacilityLevel;
 use EID\Models\Sample;
-
+use EID\Mongo;
 use Validator;
 use Lang;
 use Redirect;
 use Request;
 use Session;
+use Log;
 
 class DashboardController extends Controller {
 
 	public function __construct(){
 		$this->months=\MyHTML::initMonths();
+		$this->mongo=Mongo::connect();
+		$this->conditions=$this->_setConditions();
 		//$this->middleware('auth');
 	}
 
@@ -111,7 +114,6 @@ class DashboardController extends Controller {
 			));
 	}
 
-
 	private function median($arr){
 		sort($arr);
 		$quantity=count($arr);
@@ -125,6 +127,65 @@ class DashboardController extends Controller {
 		return $ret;
 	}
 
+	private function _dateNMonthsBack(){
+    	$ret;
+    	$n=env('INIT_MONTHS');
+        $m=date('m');
+        $y=date('Y');
+        for($i=1;$i<=$n;$i++){
+        	
+            if($m==0){
+                $m=12;
+                $y--;
+            }
+            if($i==$n){
+        		$ret=$y.str_pad($m, 2,0, STR_PAD_LEFT);
+        	} 
+            $m--;
+        }
+        return $ret;
+    }
+	private function _setConditions(){
+		extract(\Request::all());
+	
+		if((empty($fro_date) && empty($to_date))||$fro_date=='all' && $to_date=='all'){
+			$to_date=date("Ym");
+			$fro_date=$this->_dateNMonthsBack();
+		}
+
+		$conds=[];
+		$conds['$and'][]=['year_month'=>  ['$gte'=> (int)$fro_date] ];
+		$conds['$and'][]=[ 'year_month'=>  ['$lte'=> (int)$to_date] ];
+
+		if(!empty($age_ids)&&$age_ids!='[]') {
+			
+			$age_bands=json_decode($age_ids);
+			$number_of_age_bands=sizeof($age_bands);
+
+			$lower_age_band=0;
+			$upper_age_band=0;
+			if($number_of_age_bands > 0){
+				$lower_age_band=$age_bands[0];
+				$last_index = $number_of_age_bands - 1;
+				$upper_age_band=$age_bands[$last_index];
+			}
+
+			
+			$conds['$and'][]=[ 'age_in_months'=>  ['$gte'=> (int)$lower_age_band] ];
+			$conds['$and'][]=[ 'age_in_months'=>  ['$lte'=> (int)$upper_age_band] ];
+			
+		}
+		if(!empty($districts)&&$districts!='[]') $conds['$and'][]=[ 'district_id'=>  ['$in'=> json_decode($districts)] ];
+		if(!empty($regions)&&$regions!='[]') $conds['$and'][]=[ 'region_id'=>  ['$in'=> json_decode($regions)] ];
+
+		if(!empty($hubs)&&$hubs!='[]') $conds['$and'][]=[ 'hub_id'=>  ['$in'=> json_decode($hubs)] ];
+		if(!empty($care_levels)&&$care_levels!='[]') $conds['$and'][]=[ 'care_level_id'=>  ['$in'=> json_decode($care_levels)] ];
+
+		if(!empty($genders)&&$genders!='[]') $conds['$and'][]=[ 'sex'=>  ['$in'=> json_decode($genders)] ];
+		if(!empty($pcrs)&&$pcrs!='[]') $conds['$and'][]=[ 'pcr'=>  ['$in'=> json_decode($pcrs)] ];
+			
+		return $conds;
+	}
 
 	private function totalSums($totals){
 		$ret=0;
@@ -246,6 +307,69 @@ class DashboardController extends Controller {
 		}
 		return $ret;
 	}
+
+	public function other_data(){
+		$hubs=iterator_to_array($this->mongo->hubs->find());
+		$regions=iterator_to_array($this->mongo->regions->find());
+		$districts=iterator_to_array($this->mongo->districts->find());
+		$facilities=iterator_to_array($this->mongo->facilities->find());
+		$care_levels=iterator_to_array($this->mongo->care_levels->find());
+
+	
+		return compact("hubs","regions","districts","facilities","care_levels");
+	}
+
+	public function live(){
+
+		
+		$dist_numbers=$this->_districtNumbers();
+		$facility_numbers=$this->_facilityNumbers();
+		
+		return compact("dist_numbers","facility_numbers");
+	}
+	
+	private function _facilityNumbers(){
+	
+		$match_stage['$match']=$this->conditions;
+		$group_stage = array(
+
+			'$group' => array(
+				'_id' => '$facility_id', 
+				'total_tests' => array('$sum' => 1 ),
+				'pcr_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
+				'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
+				'hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$accepted_result','POSITIVE')),1,0))),
+				'art_initiated' => array('$sum' => array('$cond'=>array(array('$eq' => array('$art_initiation_status','YES')),1,0))),
+			 ));
+		
+		
+		$res=$this->mongo->eid_dashboard->aggregate($match_stage,$group_stage );
+		
+		
+		return isset($res['result'])?$res['result']:[];
+	}
+	private function _districtNumbers(){
+	
+		$match_stage['$match']=$this->conditions;
+		$group_stage = array(
+			
+			'$group' => array(
+				'_id' => '$district_id', 
+				'total_tests' => array('$sum' => 1 ),
+				'pcr_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
+				'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
+				'hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$accepted_result','POSITIVE')),1,0))),
+				'art_initiated' => array('$sum' => array('$cond'=>array(array('$eq' => array('$art_initiation_status','YES')),1,0))),
+			 ));
+		
+		
+		$res=$this->mongo->eid_dashboard->aggregate($match_stage,$group_stage );
+		
+		
+		return isset($res['result'])?$res['result']:[];
+		
+	}
+
 
 	/*
 

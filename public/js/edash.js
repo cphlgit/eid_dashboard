@@ -231,7 +231,10 @@ ctrllers.DashController=function($scope,$http){
                 $scope.initiated=whole_numbers.art_initiated||0;
                 $scope.pcr_one =whole_numbers.pcr_one||0;
                 $scope.pcr_two =whole_numbers.pcr_two||0;
-      
+                
+                
+                $scope.duration_numbers = data.duration_numbers||0;
+                $scope.displaySamplesRecieved();
 
                 $scope.filtered = count($scope.filter_districts)>0||count($scope.filter_hubs)>0||count($scope.filtered_age_range)>0||$scope.date_filtered;    
                 $scope.loading = false;
@@ -685,7 +688,8 @@ ctrllers.DashController=function($scope,$http){
         $scope.displayPositivityRate();
         $scope.displayInitiationRate();
     }
-    $scope.displaySamplesRecieved=function(){     
+    
+    $scope.displaySamplesRecieved_=function(){     
         var srd=$scope.sr_by_duration; 
         var data=[{"key":"Selection","values":[],"color":"#000" }];
 
@@ -719,7 +723,57 @@ ctrllers.DashController=function($scope,$http){
             return chart;
         });
     };
+    
 
+    $scope.displaySamplesRecieved=function(){   
+
+        var data=[
+            { 
+                "key" : "Tests" , 
+                "bar": true,
+                "color": "#ccf",
+                "values" : []
+            },
+            { 
+                "key" : "Positivity Rate" ,
+                "color" : "#333",
+                "values" : []
+            }
+        ];
+
+        for(var i in $scope.duration_numbers){
+            var obj=$scope.duration_numbers[i];
+            var positivity_rate = ((obj.hiv_positive_infants/obj.total_tests)*100);
+            //data[0].values.push({"x":dateFormat(obj._id),"y":Math.round(obj.total_tests||0)});
+            //data[1].values.push({"x":dateFormat(obj._id),"y":Math.round(positivity_rate||0)}); 
+            data[0].values.push([dateFormatYearMonth(obj._id),obj.total_tests]);
+            
+            data[1].values.push([dateFormatYearMonth(obj._id),Math.round(positivity_rate)]);            
+        }
+
+       nv.addGraph( function() {
+            var chart = nv.models.linePlusBarChart()
+                        .margin({right: 60,})
+                        .x(function(d,i) { return i })
+                        .y(function(d,i) {return d[1] }).focusEnable(false);
+
+            chart.xAxis.tickFormat(function(d) {
+                return data[0].values[d] && data[0].values[d][0] || " ";
+            });
+            //chart.reduceXTicks(false);
+            //chart.bars.forceY([0]);
+             chart.y2Axis.tickFormat(function(d) { return '%' + d3.format(',f')(d) });
+            chart.lines.forceY([0,100]);
+            chart.legendRightAxisHint("(Right Axis)").legendLeftAxisHint("(Left Axis)");
+
+            $('#visual1 svg').html(" ");
+           d3.select('#visual1 svg').datum(data).transition().duration(0).call(chart);
+
+      nv.utils.windowResize(chart.update);
+
+      return chart;
+        });
+    };
     $scope.displayHIVPositiveInfants=function(){  
         var hbd=$scope.hpi_by_duration; 
         var data=[{"key":"Selection","values":[],"color":"#5EA361" }];
@@ -974,12 +1028,21 @@ ctrllers.DashController=function($scope,$http){
         return ret;
     }
 
+    
     var dateFormat=function(y_m){
         var arr=y_m.split('-');
         var yr=arr[0];
         var mth=arr[1];
         return $scope.month_labels[mth]+" '"+yr.slice(-2);
     }
+    var dateFormatYearMonth=function(x){
+        var year_month_string = x+"";
+        var year_key=parseInt(year_month_string.substring(2,4));
+        var month_key= parseInt(year_month_string.substring(4));
+
+        var desired_date = $scope.month_labels[month_key]+" '"+year_key;
+        return desired_date;
+    };
 
     var count=function(json_obj){
         return Object.keys(json_obj).length;

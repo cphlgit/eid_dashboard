@@ -9,7 +9,7 @@ Kitutu Paul                 CHAI    2015(v1)    System development
 
 Credit to CHAI Uganda, CPHL and stakholders
 */
-var app=angular.module('dashboard', ['datatables'], function($interpolateProvider) {
+var app=angular.module('dashboard', ['datatables','ngSanitize', 'ngCsv'], function($interpolateProvider) {
         $interpolateProvider.startSymbol('<%');
         $interpolateProvider.endSymbol('%>');
     });
@@ -236,6 +236,11 @@ ctrllers.DashController=function($scope,$http){
                 $scope.duration_numbers = data.duration_numbers||0;
                 $scope.displaySamplesRecieved();
 
+                //csv downloads
+                $scope.export_facility_numbers = exportFacilityNumbers($scope);
+                $scope.export_district_numbers = exportDistrictNumbers($scope);
+                $scope.current_timestamp = getCurrentTimeStamp();
+
                 $scope.filtered = count($scope.filter_districts)>0||count($scope.filter_hubs)>0||count($scope.filtered_age_range)>0||$scope.date_filtered;    
                 $scope.loading = false;
                 
@@ -277,6 +282,75 @@ ctrllers.DashController=function($scope,$http){
             //if(!$scope.date_filtered){ generalFilter(); }//call the filter for the first time
             generalFilter(1);
         });
+    }
+    function exportDistrictNumbers(scopeInstance){
+       
+        var export_district_numbers = [];
+        var district_labels = scopeInstance.districts_lables;
+        var district_numbers_from_scope = scopeInstance.district_numbers;
+
+        for( var index = 0; index < district_numbers_from_scope.length; index++){
+            var districtRecord = district_numbers_from_scope[index];
+
+            var district_instance = {
+                district_name : district_labels[districtRecord._id],
+                total_tests : districtRecord.total_tests,
+                total_first_pcr : districtRecord.pcr_one,
+                total_second_pcr : districtRecord.pcr_two,
+            }
+
+            export_district_numbers.push(district_instance);
+        }
+
+        return export_district_numbers;
+    }
+        function exportFacilityNumbers(scopeInstance){
+       
+        var export_facility_numbers = [];
+      
+        var facility_details_labels = scopeInstance.facilities_lables;
+
+        var facility_numbers_from_scope = scopeInstance.facility_numbers;
+
+        for( var index = 0; index < facility_numbers_from_scope.length; index++){
+            var facilityRecord = facility_numbers_from_scope[index];
+
+            var facility_instance = {                
+                facility_name : facility_details_labels[facilityRecord._id],
+                total_tests : facilityRecord.total_tests,
+                total_first_pcr : facilityRecord.pcr_one,
+                total_second_pcr : facilityRecord.pcr_two    
+            }
+
+            export_facility_numbers.push(facility_instance);
+        }
+
+        return export_facility_numbers;
+    }
+
+    function getCurrentTimeStamp(){
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        var hr = today.getHours();
+        var min = today.getMinutes();
+
+
+        if(dd<10) {
+            dd='0'+dd
+        } 
+
+        if(mm<10) {
+            mm='0'+mm
+        } 
+
+        if (min < 10) {
+            min = "0" + min;
+        }
+
+        today = yyyy+''+mm+''+dd+''+hr+''+min;
+        return today;
     }
 
     $scope.dateFilter=function(mode){
@@ -689,41 +763,7 @@ ctrllers.DashController=function($scope,$http){
         $scope.displayInitiationRate();
     }
     
-    $scope.displaySamplesRecieved_=function(){     
-        var srd=$scope.sr_by_duration; 
-        var data=[{"key":"Selection","values":[],"color":"#000" }];
 
-        var labels=[];
-        var x=0;
-        var y_vals=[];
-
-        for(var i in srd){
-            var y_val=Math.round(srd[i]);
-            y_vals.push(y_val);
-            data[0].values.push({"x":x,"y":y_val});
-            labels.push(dateFormat(i));
-            x++;
-        }
-
-        nv.addGraph(function() {
-            var chart = nv.models.lineChart()
-                        .margin({right: 50})
-                        .useInteractiveGuideline(true)
-                        .x(function(d) { return d.x })
-                        .y(function(d) { return d.y })
-                        .forceY(y_terminals(y_vals));
-            
-            chart.xAxis.tickFormat(function(d) {
-                return labels[d];
-            });
-
-            chart.yAxis.tickFormat(d3.format(',.0d'));
-
-            d3.select('#visual1 svg').datum(data).transition().duration(500).call(chart);
-            return chart;
-        });
-    };
-    
 
     $scope.displaySamplesRecieved=function(){   
 

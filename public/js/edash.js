@@ -235,6 +235,7 @@ ctrllers.DashController=function($scope,$http){
                 
                 $scope.duration_numbers = data.duration_numbers||0;
                 $scope.displaySamplesRecieved();
+                $scope.displayHIVPositiveInfants();
 
                 //csv downloads
                 $scope.export_facility_numbers = exportFacilityNumbers($scope);

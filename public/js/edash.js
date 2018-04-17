@@ -9,7 +9,7 @@ Kitutu Paul                 CHAI    2015(v1)    System development
 
 Credit to CHAI Uganda, CPHL and stakholders
 */
-var app=angular.module('dashboard', ['datatables'], function($interpolateProvider) {
+var app=angular.module('dashboard', ['datatables','ngSanitize', 'ngCsv'], function($interpolateProvider) {
         $interpolateProvider.startSymbol('<%');
         $interpolateProvider.endSymbol('%>');
     });
@@ -231,7 +231,16 @@ ctrllers.DashController=function($scope,$http){
                 $scope.initiated=whole_numbers.art_initiated||0;
                 $scope.pcr_one =whole_numbers.pcr_one||0;
                 $scope.pcr_two =whole_numbers.pcr_two||0;
-      
+                
+                
+                $scope.duration_numbers = data.duration_numbers||0;
+                $scope.displaySamplesRecieved();
+                $scope.displayHIVPositiveInfants();
+
+                //csv downloads
+                $scope.export_facility_numbers = exportFacilityNumbers($scope);
+                $scope.export_district_numbers = exportDistrictNumbers($scope);
+                $scope.current_timestamp = getCurrentTimeStamp();
 
                 $scope.filtered = count($scope.filter_districts)>0||count($scope.filter_hubs)>0||count($scope.filtered_age_range)>0||$scope.date_filtered;    
                 $scope.loading = false;
@@ -274,6 +283,75 @@ ctrllers.DashController=function($scope,$http){
             //if(!$scope.date_filtered){ generalFilter(); }//call the filter for the first time
             generalFilter(1);
         });
+    }
+    function exportDistrictNumbers(scopeInstance){
+       
+        var export_district_numbers = [];
+        var district_labels = scopeInstance.districts_lables;
+        var district_numbers_from_scope = scopeInstance.district_numbers;
+
+        for( var index = 0; index < district_numbers_from_scope.length; index++){
+            var districtRecord = district_numbers_from_scope[index];
+
+            var district_instance = {
+                district_name : district_labels[districtRecord._id],
+                total_tests : districtRecord.total_tests,
+                total_first_pcr : districtRecord.pcr_one,
+                total_second_pcr : districtRecord.pcr_two,
+            }
+
+            export_district_numbers.push(district_instance);
+        }
+
+        return export_district_numbers;
+    }
+        function exportFacilityNumbers(scopeInstance){
+       
+        var export_facility_numbers = [];
+      
+        var facility_details_labels = scopeInstance.facilities_lables;
+
+        var facility_numbers_from_scope = scopeInstance.facility_numbers;
+
+        for( var index = 0; index < facility_numbers_from_scope.length; index++){
+            var facilityRecord = facility_numbers_from_scope[index];
+
+            var facility_instance = {                
+                facility_name : facility_details_labels[facilityRecord._id],
+                total_tests : facilityRecord.total_tests,
+                total_first_pcr : facilityRecord.pcr_one,
+                total_second_pcr : facilityRecord.pcr_two    
+            }
+
+            export_facility_numbers.push(facility_instance);
+        }
+
+        return export_facility_numbers;
+    }
+
+    function getCurrentTimeStamp(){
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        var hr = today.getHours();
+        var min = today.getMinutes();
+
+
+        if(dd<10) {
+            dd='0'+dd
+        } 
+
+        if(mm<10) {
+            mm='0'+mm
+        } 
+
+        if (min < 10) {
+            min = "0" + min;
+        }
+
+        today = yyyy+''+mm+''+dd+''+hr+''+min;
+        return today;
     }
 
     $scope.dateFilter=function(mode){
@@ -685,41 +763,58 @@ ctrllers.DashController=function($scope,$http){
         $scope.displayPositivityRate();
         $scope.displayInitiationRate();
     }
-    $scope.displaySamplesRecieved=function(){     
-        var srd=$scope.sr_by_duration; 
-        var data=[{"key":"Selection","values":[],"color":"#000" }];
+    
 
-        var labels=[];
-        var x=0;
-        var y_vals=[];
 
-        for(var i in srd){
-            var y_val=Math.round(srd[i]);
-            y_vals.push(y_val);
-            data[0].values.push({"x":x,"y":y_val});
-            labels.push(dateFormat(i));
-            x++;
+    $scope.displaySamplesRecieved=function(){   
+
+        var data=[
+            { 
+                "key" : "Tests" , 
+                "bar": true,
+                "color": "#ccf",
+                "values" : []
+            },
+            { 
+                "key" : "Positivity Rate" ,
+                "color" : "#333",
+                "values" : []
+            }
+        ];
+
+        for(var i in $scope.duration_numbers){
+            var obj=$scope.duration_numbers[i];
+            var positivity_rate = ((obj.hiv_positive_infants/obj.total_tests)*100);
+            //data[0].values.push({"x":dateFormat(obj._id),"y":Math.round(obj.total_tests||0)});
+            //data[1].values.push({"x":dateFormat(obj._id),"y":Math.round(positivity_rate||0)}); 
+            data[0].values.push([dateFormatYearMonth(obj._id),obj.total_tests]);
+            
+            data[1].values.push([dateFormatYearMonth(obj._id),Math.round(positivity_rate)]);            
         }
 
-        nv.addGraph(function() {
-            var chart = nv.models.lineChart()
-                        .margin({right: 50})
-                        .useInteractiveGuideline(true)
-                        .x(function(d) { return d.x })
-                        .y(function(d) { return d.y })
-                        .forceY(y_terminals(y_vals));
-            
+       nv.addGraph( function() {
+            var chart = nv.models.linePlusBarChart()
+                        .margin({right: 60,})
+                        .x(function(d,i) { return i })
+                        .y(function(d,i) {return d[1] }).focusEnable(false);
+
             chart.xAxis.tickFormat(function(d) {
-                return labels[d];
+                return data[0].values[d] && data[0].values[d][0] || " ";
             });
+            //chart.reduceXTicks(false);
+            //chart.bars.forceY([0]);
+             chart.y2Axis.tickFormat(function(d) { return '%' + d3.format(',f')(d) });
+            chart.lines.forceY([0,100]);
+            chart.legendRightAxisHint("(Right Axis)").legendLeftAxisHint("(Left Axis)");
 
-            chart.yAxis.tickFormat(d3.format(',.0d'));
+            $('#visual1 svg').html(" ");
+           d3.select('#visual1 svg').datum(data).transition().duration(0).call(chart);
 
-            d3.select('#visual1 svg').datum(data).transition().duration(500).call(chart);
-            return chart;
+      nv.utils.windowResize(chart.update);
+
+      return chart;
         });
     };
-
     $scope.displayHIVPositiveInfants=function(){  
         var hbd=$scope.hpi_by_duration; 
         var data=[{"key":"Selection","values":[],"color":"#5EA361" }];
@@ -974,12 +1069,21 @@ ctrllers.DashController=function($scope,$http){
         return ret;
     }
 
+    
     var dateFormat=function(y_m){
         var arr=y_m.split('-');
         var yr=arr[0];
         var mth=arr[1];
         return $scope.month_labels[mth]+" '"+yr.slice(-2);
     }
+    var dateFormatYearMonth=function(x){
+        var year_month_string = x+"";
+        var year_key=parseInt(year_month_string.substring(2,4));
+        var month_key= parseInt(year_month_string.substring(4));
+
+        var desired_date = $scope.month_labels[month_key]+" '"+year_key;
+        return desired_date;
+    };
 
     var count=function(json_obj){
         return Object.keys(json_obj).length;

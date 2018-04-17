@@ -322,10 +322,11 @@ class DashboardController extends Controller {
 	public function live(){
 
 		$whole_numbers=$this->_wholeNumbers();
+		$duration_numbers=$this->_durationNumbers();
 		$dist_numbers=$this->_districtNumbers();
 		$facility_numbers=$this->_facilityNumbers();
 		
-		return compact("whole_numbers","dist_numbers","facility_numbers");
+		return compact("whole_numbers","duration_numbers","dist_numbers","facility_numbers");
 	}
 	
 	private function _wholeNumbers(){
@@ -341,6 +342,27 @@ class DashboardController extends Controller {
 				'art_initiated' => array('$sum' => array('$cond'=>array(array('$eq' => array('$art_initiation_status','YES')),1,0))),
 			 ));
 		$res=$this->mongo->eid_dashboard->aggregate($match_stage,$project_stage);
+		
+		
+		return isset($res['result'])?$res['result']:[];
+	}
+	private function _durationNumbers(){
+		$match_stage['$match']=$this->conditions;
+		
+		$project_stage = array(
+
+			'$group' => array(
+				 '_id'=>'$year_month',
+				'total_tests' => array('$sum' => 1 ),
+				'pcr_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
+				'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
+				'hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$accepted_result','POSITIVE')),1,0))),
+				'art_initiated' => array('$sum' => array('$cond'=>array(array('$eq' => array('$art_initiation_status','YES')),1,0))),
+			 ));
+		$sort_stage = array(
+			'$sort'=>array('_id'=>1)
+			);
+		$res=$this->mongo->eid_dashboard->aggregate($match_stage,$project_stage,$sort_stage);
 		
 		
 		return isset($res['result'])?$res['result']:[];

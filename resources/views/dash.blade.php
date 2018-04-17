@@ -358,10 +358,9 @@
                                 </tr>                        
                              </tbody>
                            </table>
-                            <button ng-hide="show_fclties1" id="exportDistricts" type="button" class="btn btn-success" >Csv Download -District 1st PCRs</button>
 
                         </div>
-
+                        
                         <div ng-show="show_fclties1">
                           <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                             <thead>
@@ -381,9 +380,17 @@
                                 </tr>                        
                              </tbody>
                          </table>
-                         <button id="exportFacilities" type="button" class="btn btn-success" >Csv Download -Facility 1st PCRs</button>
 
                         </div>
+                        
+                        <br>
+                        <br>
+                        <button ng-hide="show_fclties1" id="exportDistricts" type="button" ng-csv="export_district_numbers"  class="btn btn-success" filename="eid_district_samples_<%current_timestamp%>.csv" csv-header="['District', 'Total Tests', 'First PCR','Second PCR']">Download CSV</button>
+
+                        <br>
+                        <br>
+                        <button ng-show="show_fclties1" id="exportFacilities" type="button" ng-csv="export_facility_numbers" filename="eid_facility_samples_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Total Tests', 'First PCR','Second PCR']">Download CSV</button>
+
                     </div>
                 </div>
             </section>
@@ -593,6 +600,9 @@
     </div>
     <br>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-sanitize.min.js"></script>
+<script src="{{ asset('js/ng-csv.js') }}"></script>
+<script src="{{ asset('js/ng-csv.min.js') }}"></script>
 <script src=" {{ asset('js/cbpFWTabs.js') }} "></script>
 <script>
 (function() {

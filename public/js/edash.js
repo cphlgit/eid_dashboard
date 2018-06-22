@@ -242,6 +242,17 @@ ctrllers.DashController=function($scope,$http){
                 $scope.export_district_numbers = exportDistrictNumbers($scope);
                 $scope.current_timestamp = getCurrentTimeStamp();
 
+                $scope.export_district_hiv_positive_infants = exportDistrictHivPositiveInfants($scope);
+                $scope.export_facility_hiv_positive_infants = exportFacilityHivPositiveInfant($scope);
+
+                $scope.export_district_positivity_rate = exportDistrictPositivityRate($scope);
+                $scope.export_facility_positivity_rate = exportFacilityPositivityRate($scope);
+
+
+                $scope.export_district_initiation_rate = exportDistrictInitiationRate($scope);
+                $scope.export_facility_initiation_rate = exportFacilityInitiationRate($scope);
+
+
                 $scope.filtered = count($scope.filter_districts)>0||count($scope.filter_hubs)>0||count($scope.filtered_age_range)>0||$scope.date_filtered;    
                 $scope.loading = false;
                 
@@ -305,7 +316,7 @@ ctrllers.DashController=function($scope,$http){
 
         return export_district_numbers;
     }
-        function exportFacilityNumbers(scopeInstance){
+    function exportFacilityNumbers(scopeInstance){
        
         var export_facility_numbers = [];
       
@@ -352,6 +363,148 @@ ctrllers.DashController=function($scope,$http){
 
         today = yyyy+''+mm+''+dd+''+hr+''+min;
         return today;
+    }
+
+    function exportDistrictHivPositiveInfants(scopeInstance){
+       
+        var export_district_numbers = [];
+        var district_labels = scopeInstance.districts_lables;
+        var district_numbers_from_scope = scopeInstance.district_numbers;
+
+        for( var index = 0; index < district_numbers_from_scope.length; index++){
+            var districtRecord = district_numbers_from_scope[index];
+
+            var district_instance = {
+                district_name : district_labels[districtRecord._id],
+                hiv_positive_infants : districtRecord.hiv_positive_infants,
+                total_tests : districtRecord.total_tests,
+                
+            }
+
+            export_district_numbers.push(district_instance);
+        }
+
+        return export_district_numbers;
+    }
+    function exportFacilityHivPositiveInfant(scopeInstance){
+       
+        var export_facility_numbers = [];
+      
+        var facility_details_labels = scopeInstance.facilities_lables;
+
+        var facility_numbers_from_scope = scopeInstance.facility_numbers;
+
+        for( var index = 0; index < facility_numbers_from_scope.length; index++){
+            var facilityRecord = facility_numbers_from_scope[index];
+
+            var facility_instance = {                
+                facility_name : facility_details_labels[facilityRecord._id],
+                hiv_positive_infants : facilityRecord.hiv_positive_infants,
+                total_tests : facilityRecord.total_tests,
+            }
+
+            export_facility_numbers.push(facility_instance);
+        }
+
+        return export_facility_numbers;
+    }
+
+    function exportDistrictPositivityRate(scopeInstance){
+       
+        var export_district_numbers = [];
+        var district_labels = scopeInstance.districts_lables;
+        var district_numbers_from_scope = scopeInstance.district_numbers;
+
+        for( var index = 0; index < district_numbers_from_scope.length; index++){
+            var districtRecord = district_numbers_from_scope[index];
+   
+            var positivityRate = Math.round((districtRecord.hiv_positive_infants/districtRecord.total_tests)*100);
+            var district_instance = {
+                district_name : district_labels[districtRecord._id],
+                positivity_rate : positivityRate,
+                hiv_positive_infants : districtRecord.hiv_positive_infants,
+                total_tests : districtRecord.total_tests,
+            }
+
+            export_district_numbers.push(district_instance);
+        }
+
+        return export_district_numbers;
+    }
+
+    function exportFacilityPositivityRate(scopeInstance){
+       
+        var export_facility_numbers = [];
+      
+        var facility_details_labels = scopeInstance.facilities_lables;
+
+        var facility_numbers_from_scope = scopeInstance.facility_numbers;
+
+        for( var index = 0; index < facility_numbers_from_scope.length; index++){
+            var facilityRecord = facility_numbers_from_scope[index];
+
+            var positivityRate = Math.round((facilityRecord.hiv_positive_infants/facilityRecord.total_tests)*100);
+
+            var facility_instance = {                
+                facility_name : facility_details_labels[facilityRecord._id],
+                positivity_rate : positivityRate,
+                hiv_positive_infants : facilityRecord.hiv_positive_infants,
+                total_tests : facilityRecord.total_tests,
+            }
+
+            export_facility_numbers.push(facility_instance);
+        }
+
+        return export_facility_numbers;
+    }
+
+    function exportDistrictInitiationRate(scopeInstance){
+       
+        var export_district_numbers = [];
+        var district_labels = scopeInstance.districts_lables;
+        var district_numbers_from_scope = scopeInstance.district_numbers;
+
+        for( var index = 0; index < district_numbers_from_scope.length; index++){
+            var districtRecord = district_numbers_from_scope[index];
+   
+            var initiationRate = Math.round((districtRecord.art_initiated/districtRecord.hiv_positive_infants)*100);
+            var district_instance = {
+                district_name : district_labels[districtRecord._id],
+                initiation_rate : initiationRate,
+                hiv_positive_infants : districtRecord.hiv_positive_infants,
+                
+            }
+
+            export_district_numbers.push(district_instance);
+        }
+
+        return export_district_numbers;
+    }
+
+    function exportFacilityInitiationRate(scopeInstance){
+       
+        var export_facility_numbers = [];
+      
+        var facility_details_labels = scopeInstance.facilities_lables;
+
+        var facility_numbers_from_scope = scopeInstance.facility_numbers;
+
+        for( var index = 0; index < facility_numbers_from_scope.length; index++){
+            var facilityRecord = facility_numbers_from_scope[index];
+
+            var initiationRate = Math.round((facilityRecord.art_initiated/facilityRecord.hiv_positive_infants)*100);
+
+            var facility_instance = {                
+                facility_name : facility_details_labels[facilityRecord._id],
+                initiation_rate : initiationRate,
+                hiv_positive_infants : facilityRecord.hiv_positive_infants,
+                
+            }
+
+            export_facility_numbers.push(facility_instance);
+        }
+
+        return export_facility_numbers;
     }
 
     $scope.dateFilter=function(mode){
@@ -804,7 +957,7 @@ ctrllers.DashController=function($scope,$http){
             //chart.reduceXTicks(false);
             //chart.bars.forceY([0]);
              chart.y2Axis.tickFormat(function(d) { return '%' + d3.format(',f')(d) });
-            chart.lines.forceY([0,100]);
+            chart.lines.forceY([0,10]);
             chart.legendRightAxisHint("(Right Axis)").legendLeftAxisHint("(Left Axis)");
 
             $('#visual1 svg').html(" ");
@@ -816,7 +969,7 @@ ctrllers.DashController=function($scope,$http){
         });
     };
     $scope.displayHIVPositiveInfants=function(){  
-        var hbd=$scope.hpi_by_duration; 
+        var hbd=$scope.duration_numbers; 
         var data=[{"key":"Selection","values":[],"color":"#5EA361" }];
 
         var labels=[];
@@ -824,10 +977,10 @@ ctrllers.DashController=function($scope,$http){
         var y_vals=[];
 
         for(var i in hbd){
-            var y_val=Math.round(hbd[i]);
+            var y_val=Math.round(hbd[i].hiv_positive_infants);
             y_vals.push(y_val);
             data[0].values.push({"x":x,"y":y_val});
-            labels.push(dateFormat(i));
+            labels.push(dateFormatYearMonth(hbd[i]._id));
             x++;
         }
 
@@ -852,10 +1005,7 @@ ctrllers.DashController=function($scope,$http){
 
 
     $scope.displayPositivityRate=function(){ 
-        var srd=$scope.sr_by_duration; 
-        var hbd=$scope.hpi_by_duration;
-        var nat_srd=nat_sr_by_duration; 
-        var nat_hbd=nat_hpi_by_duration;
+       
 
         var data=[{"key":"National","values":[],"color":"#6D6D6D" }];
 
@@ -864,10 +1014,13 @@ ctrllers.DashController=function($scope,$http){
         var labels=[];
         var x=0;
 
-        for(var i in nat_hbd){             
-            data[0].values.push({"x":x,"y":Math.round((nat_hbd[i]/nat_srd[i])*100)});
-            if(slct){ data[1].values.push({"x":x,"y":Math.round((hbd[i]/srd[i])*100)}); }
-            labels.push(dateFormat(i));
+
+        for(var i in $scope.duration_numbers){  
+            var obj=$scope.duration_numbers[i];           
+            data[0].values.push({"x":x,"y":Math.round((obj.hiv_positive_infants/obj.total_tests)*100)});
+
+            if(slct){ data[1].values.push({"x":x,"y":Math.round((obj.hiv_positive_infants/obj.total_tests)*100)}); }
+            labels.push(dateFormatYearMonth(obj._id));
             x++;
         }
 
@@ -892,10 +1045,7 @@ ctrllers.DashController=function($scope,$http){
 
 
     $scope.displayInitiationRate=function(){  
-        var hbd=$scope.hpi_by_duration;
-        var ibd=$scope.i_by_duration; 
-        var nat_hbd=nat_hpi_by_duration;
-        var nat_ibd=nat_i_by_duration; 
+        
 
         var data=[{"key":"National","values":[],"color":"#6D6D6D" }];
 
@@ -905,10 +1055,15 @@ ctrllers.DashController=function($scope,$http){
         var labels=[];
         var x=0;
 
-        for(var i in nat_ibd){
-            data[0].values.push({"x":x,"y":Math.round((nat_ibd[i]/nat_hbd[i])*100)});
-            if(slct){ data[1].values.push({"x":x,"y":Math.round((ibd[i]/hbd[i])*100)}); }
-            labels.push(dateFormat(i));
+        for(var i in $scope.duration_numbers){  
+            var obj=$scope.duration_numbers[i]; 
+            var intiation_rate=0;
+            if(obj.art_initiated > 0)
+                intiation_rate=(obj.art_initiated/obj.hiv_positive_infants)*100;
+
+            data[0].values.push({"x":x,"y":Math.round(intiation_rate)});
+            if(slct){ data[1].values.push({"x":x,"y":Math.round(intiation_rate)}); }
+            labels.push(dateFormatYearMonth(obj._id));
             x++;
         }
 
@@ -918,13 +1073,15 @@ ctrllers.DashController=function($scope,$http){
                         .useInteractiveGuideline(true)
                         .x(function(d) { return d.x })
                         .y(function(d) { return d.y })
-                        .forceY([0,100]);
+                        .forceY([0,10]);
             
             chart.xAxis.tickFormat(function(d) {
                 return labels[d];
             });
 
-            chart.yAxis.tickFormat(d3.format(',.0d'));
+            //chart.yAxis.tickFormat(d3.format(',.0d'));
+            chart.yAxis.tickFormat(function(d) { return '%' + d3.format(',.0d')(d) });
+
 
             d3.select('#visual4 svg').datum(data).transition().duration(500).call(chart);
             return chart;

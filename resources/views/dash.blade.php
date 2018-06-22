@@ -447,6 +447,15 @@
                              </tbody>
                          </table>
                         </div>
+
+                        <br>
+                        <br>
+                        <button ng-hide="show_fclties2" id="exportDistrictHivPositiveInfants" type="button" ng-csv="export_district_hiv_positive_infants"  class="btn btn-success" filename="eid_district_hiv_positives_<%current_timestamp%>.csv" csv-header="['District','Absolute Positives', 'Total Tests']">Download CSV</button>
+
+                        <br>
+                        <br>
+                        <button ng-show="show_fclties2" id="exportFacilitiesHivPositiveInfants" type="button" ng-csv="export_facility_hiv_positive_infants" filename="eid_facility_hiv_positives_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Absolute Positives','Total Tests']">Download CSV</button>
+
                     </div>
                 </div> 
             </section>
@@ -505,6 +514,15 @@
                              </tbody>
                          </table>
                         </div>
+
+                        <br>
+                        <br>
+                        <button ng-hide="show_fclties3" id="exportDistrictPositivityRate" type="button" ng-csv="export_district_positivity_rate"  class="btn btn-success" filename="eid_district_positivity_rate_<%current_timestamp%>.csv" csv-header="['District','Positivity Rate','Absolute Positives', 'Total Tests']">Download CSV</button>
+
+                        <br>
+                        <br>
+                        <button ng-show="show_fclties3" id="exportFacilitiesPositivityRate" type="button" ng-csv="export_facility_positivity_rate" filename="eid_facility_positivity_rate_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Positivity Rate','Absolute Positives','Total Tests']">Download CSV</button>
+
                     </div>
                 </div>                
             </section>
@@ -557,6 +575,15 @@
                              </tbody>
                          </table>
                         </div>
+
+                        <br>
+                        <br>
+                        <button ng-hide="show_fclties4" id="exportDistrictInitiationRate" type="button" ng-csv="export_district_initiation_rate"  class="btn btn-success" filename="eid_district_initiation_rate_<%current_timestamp%>.csv" csv-header="['District','Initiation Rate','Absolute Positives']">Download CSV</button>
+
+                        <br>
+                        <br>
+                        <button ng-show="show_fclties4" id="exportFacilitiesInitiationRate" type="button" ng-csv="export_facility_initiation_rate" filename="eid_facility_initiation_rate_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Initiation Rate','Absolute Positives']">Download CSV</button>
+
                     </div>
                 </div> 
                 <i style="font-size:12px;color:#9F82D1">* ART Initiation Rate is a preliminary estimate based on data collected at CPHL. CPHL is still revising the data collection mechanism</i>               
@@ -568,27 +595,19 @@
      <label class='hdr hdr-grey'> ADDITIONAL METRICS</label>
     <div class='addition-metrics'>
        <div class='row'>
+        
+        
         <div class='col-sm-1'></div>
         <div class='col-sm-2'>
             <font class='addition-metrics figure ng-cloak' ng-model='pcr_one' ng-init="pcr_one=0"><% pcr_one|number %></font><br>
             <font class='addition-metrics desc'>TOTAL 1ST PCR</font>            
         </div>
+        <div class='col-sm-1'></div>
         <div class='col-sm-2'>
             <font class='addition-metrics figure ng-cloak' ng-model='pcr_two' ng-init="pcr_two=0"><% pcr_two|number %></font><br>
             <font class='addition-metrics desc'>TOTAL 2ND PCR</font>            
         </div>       
-        <div class='col-sm-2'>
-            <font class='addition-metrics figure ng-cloak' ng-model="first_pcr_median_age" ng-init="first_pcr_median_age=0">
-                <% first_pcr_median_age|number:1 %>
-            </font><br>
-            <font class='addition-metrics desc'>MEDIAN MONTHS 1ST PCR</font>            
-        </div>
-        <div class='col-sm-2'>
-            <font class='addition-metrics figure ng-cloak' ng-model="sec_pcr_median_age" ng-init="sec_pcr_median_age=0">
-                <% sec_pcr_median_age|number:1 %>
-            </font><br>
-            <font class='addition-metrics desc'>MEDIAN MONTHS 2ND PCR</font>            
-        </div>
+        <div class='col-sm-1'></div>
         <div class='col-sm-2'>
             <font class='addition-metrics figure ng-cloak' ng-model="initiated" ng-init="initiated=0">
                 <% initiated|number %>

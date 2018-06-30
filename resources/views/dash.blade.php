@@ -16,7 +16,9 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/css/tabs.css') }} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('/css/tabstyles.css') }}" />
 
-    <link href="{{ asset('/css/dash.css') }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ asset('/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('/css/font-awesome.min.css') }}" />
+    <link href="{{ asset('/css/dash.css') }}" rel="stylesheet"/>
 
     <script src="{{ asset('/js/modernizr.custom.js') }}"></script>
 
@@ -34,9 +36,27 @@
 
 
    
-    <script src="{{ asset('/js/d3.min.js') }}" charset="utf-8"></script>
+    <!--script src="{{ asset('/js/d3.min.js') }}" charset="utf-8"></script>
     <script src="{{ asset('/js/nv.d3.min.js') }}"></script>
-    <script src="{{ asset('/js/stream_layers.js') }}"></script>
+    <script src="{{ asset('/js/stream_layers.js') }}"></script-->
+    <script src="http://code.highcharts.com/highcharts.src.js"></script>
+
+    <!--script src="https://code.highcharts.com/highcharts.js"></script-->
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="{{ asset('/js/highcharts-ng.js') }}"></script>
+    <!--script src="https://code.highcharts.com/modules/series-label.js"></script-->
+    
+    <!--script src="https://highcharts.github.io/export-csv/export-csv.js"></script-->
+
+    <script>
+    $(document).ready(function(){
+
+       $("#highchart1").addClass("hidden");
+        //$("#highchart1").remove();
+
+    });
+    </script>
 
     <style type="text/css">
     .nv-point {
@@ -62,7 +82,7 @@
             <ul class="nav navbar-nav">
                 <li id='l1' class='active'>{!! link_to("/","DASHBOARD",['class'=>'hdr']) !!}</li>  
                <!--  <li id='l2'>{!! link_to("/reports","REPORTS",['class'=>'hdr']) !!}</li>  -->  
-               <li id='l3'><a href='http://www.cphluganda.org/results'>RESULTS</a></li>         
+               <li id='l3'><a href='https://www.cphluganda.org/results'>RESULTS</a></li>         
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><span style="font-size: 30px;vertical-align: middle;margin-right:25px;"> <img src="{{ asset('/images/ug.png') }}" height="35" width="35"> </span></li>
@@ -188,9 +208,9 @@
 
         <span ng-show="filtered" class="filter_clear" ng-click="clearAllFilters()">reset all</span>
         </div>
-     </div>
+    </div>
 
-     <table border='1' cellpadding='0' cellspacing='0' class='filter-tb'>
+    <table border='1' cellpadding='0' cellspacing='0' class='filter-tb'>
         <tr>
             <td width='10%' >
                 <span ng-model='fro_date_slct' ng-init='fro_date_slct={!! json_encode($months_by_years) !!}'></span>
@@ -328,69 +348,23 @@
         <div class="content-wrap">
             <section id="tab1">
                 <div class="row">
-                    <div class="col-lg-6">                        
-                        <div id="visual1" class="db-charts">
-                            <svg></svg>
-                        </div>                        
+                    <div id="divchart1" class="col-lg-12">                        
+                      <highchart id="highchart1" config="chartConfig" class="span10"></highchart>
                     </div>
-                   
-                    <div class="col-lg-6 facilties-sect facilties-sect-list1" >
-                        <span class='dist_faclty_toggle sect1' ng-model="show_fclties1" ng-init="show_fclties1=false" ng-click="showF(1)">
-                            <span class='active' id='d_shw1'>&nbsp;&nbsp;DISTRICTS&nbsp;&nbsp;</span>
-                            <span id='f_shw1'>&nbsp;&nbsp;FACILITIES &nbsp;&nbsp;</span>
-                        </span>
-                        <div ng-hide="show_fclties1">
-                          <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
-                            <thead>
-                                <tr>
-                                    <th width='70%'>District</th>
-                                    <th width='10%'>Total Tests</th>
-                                    <th width='10%'>Total 1<sup>st</sup> PCR</th>
-                                    <th width='10%'>Total 2<sup>nd</sup> PCR</th>
-                                </tr>
-                            </thead>
-                            <tbody>                                
-                                <tr ng-repeat="d in district_numbers" >
-                                    <td class="ng-cloak"><% districts_lables[d._id] %></td>
-                                    <td class="ng-cloak"><% d.total_tests|number %></td>
-                                    <td class="ng-cloak"><% d.pcr_one|number %></td>
-                                    <td class="ng-cloak"><% d.pcr_two|number %></td>
-                                </tr>                        
-                             </tbody>
-                           </table>
 
+                </div>
+                <div class="row">
+                    <div class="panel panel-info">
+                      <div class="panel-heading collapsed" data-toggle="collapse" data-target="#bar">
+                        <i class="fa fa-fw fa-chevron-down text-nowrap"> See less ...</i>
+                        <i class="fa fa-fw fa-chevron-right text-nowrap"> See more ...</i>
+                      </div>
+                      <div class="panel-body">
+                        <!-- The inside div eliminates the 'jumping' animation. -->
+                        <div class="collapse" id="bar">
+                          Bar.
                         </div>
-                        
-                        <div ng-show="show_fclties1">
-                          <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
-                            <thead>
-                                <tr>
-                                    <th width='70%'>Facility</th>
-                                    <th width='10%'>Total Tests</th>
-                                    <th width='10%'>Total 1<sup>st</sup> PCR</th>
-                                    <th width='10%'>Total 2<sup>nd</sup> PCR</th>
-                                </tr>
-                            </thead>
-                            <tbody>                                
-                                <tr ng-repeat="f in facility_numbers" >
-                                    <td class="ng-cloak"><% facilities_lables[f._id] %></td>
-                                    <td class="ng-cloak"><% f.total_tests|number %></td>
-                                    <td class="ng-cloak"><% f.pcr_one|number %></td>
-                                    <td class="ng-cloak"><% f.pcr_two|number %></td>
-                                </tr>                        
-                             </tbody>
-                         </table>
-
-                        </div>
-                        
-                        <br>
-                        <br>
-                        <button ng-hide="show_fclties1" id="exportDistricts" type="button" ng-csv="export_district_numbers"  class="btn btn-success" filename="eid_district_samples_<%current_timestamp%>.csv" csv-header="['District', 'Total Tests', 'First PCR','Second PCR']">Download CSV</button>
-
-                        <br>
-                        <br>
-                        <button ng-show="show_fclties1" id="exportFacilities" type="button" ng-csv="export_facility_numbers" filename="eid_facility_samples_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Total Tests', 'First PCR','Second PCR']">Download CSV</button>
-
+                      </div>
                     </div>
                 </div>
             </section>

@@ -3,6 +3,7 @@
 namespace EID\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Log;
 
 class LiveData extends Model
 {
@@ -74,6 +75,44 @@ class LiveData extends Model
 		return $samples;
     }
 
+    public static function getAdhocResults($year,$month){
+        Log::info('...1...');
+        $sql = " SELECT DISTINCT d.id as specimen_id,
+                    d.infant_exp_id as exp_number,
+                    b.facility_id,
+                    b.facility_name as facility_sample_came_from,
+                    d.pcr as type_of_pcr,
+                    d.accepted_result,
+                    d.date_dbs_taken as date_of_sample_collection,
+                    b.date_dispatched_from_facility,
+                    b.date_rcvd_at_facility,
+                    d.date_dbs_tested,
+                    d.date_results_entered,
+                    fp.dispatch_at as date_printed,
+                    u.family_name AS printed_by,
+                    fp.dispatch_by 
+
+                    from dbs_samples d inner join batches b on d.batch_id = b.id 
+                    left join facility_printing fp on b.id = fp.batch_id 
+                    left join users u on u.id=fp.dispatch_by 
+                    
+
+                    where YEAR(d.date_dbs_taken)=$year and MONTH(d.date_dbs_taken)=$month ";
+                Log::info('...2...');
+             $samples = \DB::connection('live_db')->select($sql);
+                   
+
+        //
+    
+        return $samples;
+    }
+
+    public static function getUsers(){
+        $sql = "SELECT * FROM users";
+        $facilities =  \DB::connection('live_db')->select($sql);
+        
+        return $facilities;
+    }
 
 }
 

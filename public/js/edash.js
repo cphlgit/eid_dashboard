@@ -9,7 +9,7 @@ Kitutu Paul                 CHAI    2015(v1)    System development
 
 Credit to CHAI Uganda, CPHL and stakholders
 */
-var app=angular.module('dashboard', ['datatables','ngSanitize', 'ngCsv'], function($interpolateProvider) {
+var app=angular.module('dashboard', ['datatables','ngSanitize', 'ngCsv','highcharts-ng'], function($interpolateProvider) {
         $interpolateProvider.startSymbol('<%');
         $interpolateProvider.endSymbol('%>');
     });
@@ -39,13 +39,10 @@ app.filter('d_format', function() {
     });
 
 
-
-
 var ctrllers={};
 
 ctrllers.DashController=function($scope,$http){
-   
-
+  
     var regions_json={};
     var dists_by_region={};
     var districts_json={};    
@@ -82,6 +79,12 @@ ctrllers.DashController=function($scope,$http){
     var data_init={};
 
    
+    //charts
+    $scope.months_array=[]; 
+    $scope.first_pcr_array=[];
+    $scope.second_pcr_array=[];
+    $scope.positivity_array=[];
+    $scope.hiv_positive_infants_array=[];
 
     $http.get("../json/districts_by_region.json").success(function(data){
         dists_by_region=data||{};
@@ -199,8 +202,8 @@ ctrllers.DashController=function($scope,$http){
 
         return age_ids_array;
     };
+     
 
-    
     var getData=function(){
         $scope.loading = true;
             var prms = {};
@@ -220,7 +223,6 @@ ctrllers.DashController=function($scope,$http){
                 //console.log("we rrrr"+JSON.stringify($scope.params));
 
                 
-                
                 $scope.district_numbers = data.dist_numbers||{};
                 $scope.facility_numbers = data.facility_numbers||{};
 
@@ -234,16 +236,33 @@ ctrllers.DashController=function($scope,$http){
                 
                 
                 $scope.duration_numbers = data.duration_numbers||0;
+
                 $scope.displaySamplesRecieved();
                 $scope.displayHIVPositiveInfants();
+                $scope.displayPositivityRate();
+                $scope.displayInitiationRate();
+
 
                 //csv downloads
                 $scope.export_facility_numbers = exportFacilityNumbers($scope);
                 $scope.export_district_numbers = exportDistrictNumbers($scope);
                 $scope.current_timestamp = getCurrentTimeStamp();
 
+                $scope.export_district_hiv_positive_infants = exportDistrictHivPositiveInfants($scope);
+                $scope.export_facility_hiv_positive_infants = exportFacilityHivPositiveInfant($scope);
+
+                $scope.export_district_positivity_rate = exportDistrictPositivityRate($scope);
+                $scope.export_facility_positivity_rate = exportFacilityPositivityRate($scope);
+
+
+                $scope.export_district_initiation_rate = exportDistrictInitiationRate($scope);
+                $scope.export_facility_initiation_rate = exportFacilityInitiationRate($scope);
+
+
                 $scope.filtered = count($scope.filter_districts)>0||count($scope.filter_hubs)>0||count($scope.filtered_age_range)>0||$scope.date_filtered;    
                 $scope.loading = false;
+                
+
                 
 
                 //transposeDurationNumbers();
@@ -305,7 +324,7 @@ ctrllers.DashController=function($scope,$http){
 
         return export_district_numbers;
     }
-        function exportFacilityNumbers(scopeInstance){
+    function exportFacilityNumbers(scopeInstance){
        
         var export_facility_numbers = [];
       
@@ -352,6 +371,148 @@ ctrllers.DashController=function($scope,$http){
 
         today = yyyy+''+mm+''+dd+''+hr+''+min;
         return today;
+    }
+
+    function exportDistrictHivPositiveInfants(scopeInstance){
+       
+        var export_district_numbers = [];
+        var district_labels = scopeInstance.districts_lables;
+        var district_numbers_from_scope = scopeInstance.district_numbers;
+
+        for( var index = 0; index < district_numbers_from_scope.length; index++){
+            var districtRecord = district_numbers_from_scope[index];
+
+            var district_instance = {
+                district_name : district_labels[districtRecord._id],
+                hiv_positive_infants : districtRecord.hiv_positive_infants,
+                total_tests : districtRecord.total_tests,
+                
+            }
+
+            export_district_numbers.push(district_instance);
+        }
+
+        return export_district_numbers;
+    }
+    function exportFacilityHivPositiveInfant(scopeInstance){
+       
+        var export_facility_numbers = [];
+      
+        var facility_details_labels = scopeInstance.facilities_lables;
+
+        var facility_numbers_from_scope = scopeInstance.facility_numbers;
+
+        for( var index = 0; index < facility_numbers_from_scope.length; index++){
+            var facilityRecord = facility_numbers_from_scope[index];
+
+            var facility_instance = {                
+                facility_name : facility_details_labels[facilityRecord._id],
+                hiv_positive_infants : facilityRecord.hiv_positive_infants,
+                total_tests : facilityRecord.total_tests,
+            }
+
+            export_facility_numbers.push(facility_instance);
+        }
+
+        return export_facility_numbers;
+    }
+
+    function exportDistrictPositivityRate(scopeInstance){
+       
+        var export_district_numbers = [];
+        var district_labels = scopeInstance.districts_lables;
+        var district_numbers_from_scope = scopeInstance.district_numbers;
+
+        for( var index = 0; index < district_numbers_from_scope.length; index++){
+            var districtRecord = district_numbers_from_scope[index];
+   
+            var positivityRate = Math.round((districtRecord.hiv_positive_infants/districtRecord.total_tests)*100);
+            var district_instance = {
+                district_name : district_labels[districtRecord._id],
+                positivity_rate : positivityRate,
+                hiv_positive_infants : districtRecord.hiv_positive_infants,
+                total_tests : districtRecord.total_tests,
+            }
+
+            export_district_numbers.push(district_instance);
+        }
+
+        return export_district_numbers;
+    }
+
+    function exportFacilityPositivityRate(scopeInstance){
+       
+        var export_facility_numbers = [];
+      
+        var facility_details_labels = scopeInstance.facilities_lables;
+
+        var facility_numbers_from_scope = scopeInstance.facility_numbers;
+
+        for( var index = 0; index < facility_numbers_from_scope.length; index++){
+            var facilityRecord = facility_numbers_from_scope[index];
+
+            var positivityRate = Math.round((facilityRecord.hiv_positive_infants/facilityRecord.total_tests)*100);
+
+            var facility_instance = {                
+                facility_name : facility_details_labels[facilityRecord._id],
+                positivity_rate : positivityRate,
+                hiv_positive_infants : facilityRecord.hiv_positive_infants,
+                total_tests : facilityRecord.total_tests,
+            }
+
+            export_facility_numbers.push(facility_instance);
+        }
+
+        return export_facility_numbers;
+    }
+
+    function exportDistrictInitiationRate(scopeInstance){
+       
+        var export_district_numbers = [];
+        var district_labels = scopeInstance.districts_lables;
+        var district_numbers_from_scope = scopeInstance.district_numbers;
+
+        for( var index = 0; index < district_numbers_from_scope.length; index++){
+            var districtRecord = district_numbers_from_scope[index];
+   
+            var initiationRate = Math.round((districtRecord.art_initiated/districtRecord.hiv_positive_infants)*100);
+            var district_instance = {
+                district_name : district_labels[districtRecord._id],
+                initiation_rate : initiationRate,
+                hiv_positive_infants : districtRecord.hiv_positive_infants,
+                
+            }
+
+            export_district_numbers.push(district_instance);
+        }
+
+        return export_district_numbers;
+    }
+
+    function exportFacilityInitiationRate(scopeInstance){
+       
+        var export_facility_numbers = [];
+      
+        var facility_details_labels = scopeInstance.facilities_lables;
+
+        var facility_numbers_from_scope = scopeInstance.facility_numbers;
+
+        for( var index = 0; index < facility_numbers_from_scope.length; index++){
+            var facilityRecord = facility_numbers_from_scope[index];
+
+            var initiationRate = Math.round((facilityRecord.art_initiated/facilityRecord.hiv_positive_infants)*100);
+
+            var facility_instance = {                
+                facility_name : facility_details_labels[facilityRecord._id],
+                initiation_rate : initiationRate,
+                hiv_positive_infants : facilityRecord.hiv_positive_infants,
+                
+            }
+
+            export_facility_numbers.push(facility_instance);
+        }
+
+        return export_facility_numbers;
     }
 
     $scope.dateFilter=function(mode){
@@ -504,7 +665,7 @@ ctrllers.DashController=function($scope,$http){
                 $scope.to_age="all";
                 break;
 
-        }
+              }
 
         delete $scope.filter_regions["all"];
         delete $scope.filter_districts["all"];        
@@ -709,9 +870,9 @@ ctrllers.DashController=function($scope,$http){
         $scope.first_pcr_median_age=median($scope.pcr_one_ages);
         $scope.sec_pcr_median_age=median($scope.pcr_two_ages);
         $scope.displaySamplesRecieved();
-        $scope.displayHIVPositiveInfants();
-        $scope.displayPositivityRate();
-        $scope.displayInitiationRate();
+        //$scope.displayHIVPositiveInfants();
+        //$scope.displayPositivityRate();
+        //$scope.displayInitiationRate();
 
         $scope.filtered=count($scope.filter_regions)>0||count($scope.filter_districts)>0||count($scope.filter_care_levels)>0
             ||count($scope.filter_gender)>0 ||count($scope.filter_pcrs)>0 ||count($scope.filter_hubs)>0||$scope.date_filtered
@@ -758,177 +919,355 @@ ctrllers.DashController=function($scope,$http){
         $scope.first_pcr_median_age=data_init.first_pcr_median_age;
         $scope.sec_pcr_median_age=data_init.sec_pcr_median_age;
 
-        $scope.displaySamplesRecieved();
-        $scope.displayHIVPositiveInfants();
-        $scope.displayPositivityRate();
-        $scope.displayInitiationRate();
+        //$scope.displaySamplesRecieved();
+        //$scope.displayHIVPositiveInfants();
+        //$scope.displayPositivityRate();
+        //$scope.displayInitiationRate();
     }
     
-
-
-    $scope.displaySamplesRecieved=function(){   
-
-        var data=[
-            { 
-                "key" : "Tests" , 
-                "bar": true,
-                "color": "#ccf",
-                "values" : []
-            },
-            { 
-                "key" : "Positivity Rate" ,
-                "color" : "#333",
-                "values" : []
-            }
-        ];
+    $scope.displaySamplesRecieved=function(){ 
+        
+        $scope.months_array=[]; 
+        $scope.first_pcr_array=[];
+        $scope.second_pcr_array=[];
+        $scope.positivity_array=[];
 
         for(var i in $scope.duration_numbers){
             var obj=$scope.duration_numbers[i];
             var positivity_rate = ((obj.hiv_positive_infants/obj.total_tests)*100);
-            //data[0].values.push({"x":dateFormat(obj._id),"y":Math.round(obj.total_tests||0)});
-            //data[1].values.push({"x":dateFormat(obj._id),"y":Math.round(positivity_rate||0)}); 
-            data[0].values.push([dateFormatYearMonth(obj._id),obj.total_tests]);
             
-            data[1].values.push([dateFormatYearMonth(obj._id),Math.round(positivity_rate)]);            
+
+            $scope.months_array.push(dateFormatYearMonth(obj._id));
+            $scope.first_pcr_array.push(obj.pcr_one); 
+            $scope.second_pcr_array.push(obj.pcr_two);
+            $scope.positivity_array.push(Math.round(positivity_rate));
         }
 
-       nv.addGraph( function() {
-            var chart = nv.models.linePlusBarChart()
-                        .margin({right: 60,})
-                        .x(function(d,i) { return i })
-                        .y(function(d,i) {return d[1] }).focusEnable(false);
 
-            chart.xAxis.tickFormat(function(d) {
-                return data[0].values[d] && data[0].values[d][0] || " ";
-            });
-            //chart.reduceXTicks(false);
-            //chart.bars.forceY([0]);
-             chart.y2Axis.tickFormat(function(d) { return '%' + d3.format(',f')(d) });
-            chart.lines.forceY([0,100]);
-            chart.legendRightAxisHint("(Right Axis)").legendLeftAxisHint("(Left Axis)");
+                     var chartConfig = {
+                          chart: {
+                              type: 'xy'
+                          },
+                          title: {
+                              text: 'Samples Tested'
+                          },
+                          xAxis: {
+                              categories: $scope.months_array
+                          },
+                         yAxis: [{ // Primary yAxis
+                                labels: {
+                                    format: '{value}',
+                                    style: {
+                                        color: Highcharts.getOptions().colors[1]
+                                    }
+                                },
+                                title: {
+                                    text: 'Tests',
+                                    style: {
+                                        color: Highcharts.getOptions().colors[1]
+                                    }
+                                }
+                            }, { // Secondary yAxis
+                                title: {
+                                    text: 'Positivity',
+                                    style: {
+                                        color: Highcharts.getOptions().colors[0]
+                                    }
+                                },
+                                labels: {
+                                    format: '{value} %',
+                                    style: {
+                                        color: Highcharts.getOptions().colors[0]
+                                    }
+                                },
+                                opposite: true
+                            }],
+                          legend: {
+                              align: 'right',
+                              x: -70,
+                              verticalAlign: 'top',
+                              y: 20,
+                              floating: true,
+                              backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                              borderColor: '#CCC',
+                              borderWidth: 1,
+                              shadow: false
+                          },
+                          tooltip: {
+                              formatter: function() {
+                                  return '<b>'+ this.x +'</b><br/>'+
+                                      this.series.name +': '+ this.y +'<br/>'+
+                                      'Total: '+ this.point.stackTotal;
+                              }
+                          },
+                          plotOptions: {
+                              column: {
+                                  stacking: 'normal',
+                                  dataLabels: {
+                                      enabled: true,
+                                      color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                                      style: {
+                                          textShadow: '0 0 3px black, 0 0 3px black'
+                                      }
+                                  }
+                              }
+                          },
 
-            $('#visual1 svg').html(" ");
-           d3.select('#visual1 svg').datum(data).transition().duration(0).call(chart);
+                          series: [ {
+                              name: '2nd PCR',
+                              type: 'column',
+                              data: $scope.second_pcr_array
+                          }, {
+                              name: '1st PCR',
+                              type: 'column',
+                              data: $scope.first_pcr_array
+                          },{
+                                name: 'Positivity',
+                                type: 'spline',
+                                yAxis: 1,
+                                data: $scope.positivity_array,
+                                tooltip: {
+                                    valueSuffix: '%'
+                                }
+                              }
+                          ]
+                      };
+                    $scope.chartConfig = chartConfig;
+                    
+                    $('#divchart1').highcharts(chartConfig); 
+       
+    }
 
-      nv.utils.windowResize(chart.update);
-
-      return chart;
-        });
-    };
+    
     $scope.displayHIVPositiveInfants=function(){  
-        var hbd=$scope.hpi_by_duration; 
-        var data=[{"key":"Selection","values":[],"color":"#5EA361" }];
+           
+        $scope.months_array=[]; 
 
-        var labels=[];
-        var x=0;
-        var y_vals=[];
+        $scope.hiv_positive_infants_array=[];
 
-        for(var i in hbd){
-            var y_val=Math.round(hbd[i]);
-            y_vals.push(y_val);
-            data[0].values.push({"x":x,"y":y_val});
-            labels.push(dateFormat(i));
-            x++;
+        for(var i in $scope.duration_numbers){
+            var obj=$scope.duration_numbers[i];
+            $scope.months_array.push(dateFormatYearMonth(obj._id));
+            $scope.hiv_positive_infants_array.push(obj.hiv_positive_infants); 
+          
         }
 
-        nv.addGraph(function() {
-            var chart = nv.models.lineChart()
-                        .margin({right: 50})
-                        .useInteractiveGuideline(true)
-                        .x(function(d) { return d.x })
-                        .y(function(d) { return d.y })
-                        .forceY(y_terminals(y_vals));
-            
-            chart.xAxis.tickFormat(function(d) {
-                return labels[d];
-            });
 
-            chart.yAxis.tickFormat(d3.format(',.0d'));
+        var chartConfig = {
+              chart: {
+                  type: 'spline'
+              },
+              title: {
+                  text: 'Hiv Positives'
+              },
+              xAxis: {
+                  categories: $scope.months_array
+              },
+             yAxis: {
+                title: {
+                        text: 'Number of Hiv Positive Infants'
+                    }
+                },      
+              legend: {
+                  align: 'right',
+                  x: -70,
+                  verticalAlign: 'top',
+                  y: 20,
+                  floating: true,
+                  backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                  borderColor: '#CCC',
+                  borderWidth: 1,
+                  shadow: false
+              },
+              tooltip: {
+                  formatter: function() {
+                      return '<b>'+ this.x +'</b><br/>'+
+                          this.series.name +': '+ this.y +'<br/>'+
+                          'Total: '+ this.point.stackTotal;
+                  }
+              },
+              plotOptions: {
+                  column: {
+                      stacking: 'normal',
+                      dataLabels: {
+                          enabled: true,
+                          color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                          style: {
+                              textShadow: '0 0 3px black, 0 0 3px black'
+                          }
+                      }
+                  }
+              },
 
-            d3.select('#visual2 svg').datum(data).transition().duration(500).call(chart);
-            return chart;
-        });
+              series: [ {
+                    name: 'No. of Hiv Positive Infants',
+                    data: $scope.hiv_positive_infants_array,
+                    tooltip: {
+                        valueSuffix: 'infants'
+                    }
+                  }
+              ]
+          };
+        $scope.chartConfigHivPositiveInfants = chartConfig;
+        
+        $('#divcharthivpositiveinfants').highcharts(chartConfig);
     };
 
 
     $scope.displayPositivityRate=function(){ 
-        var srd=$scope.sr_by_duration; 
-        var hbd=$scope.hpi_by_duration;
-        var nat_srd=nat_sr_by_duration; 
-        var nat_hbd=nat_hpi_by_duration;
+       
+ 
 
-        var data=[{"key":"National","values":[],"color":"#6D6D6D" }];
+        $scope.months_array=[]; 
 
-        var slct=count($scope.filter_regions)>0||count($scope.filter_districts)>0||count($scope.filter_care_levels)>0;
-        if(slct){ data.push({"key":"Selection","values":[],"color":"#F5A623" }); }
-        var labels=[];
-        var x=0;
+        $scope.hiv_positivity_rate_array=[];
 
-        for(var i in nat_hbd){             
-            data[0].values.push({"x":x,"y":Math.round((nat_hbd[i]/nat_srd[i])*100)});
-            if(slct){ data[1].values.push({"x":x,"y":Math.round((hbd[i]/srd[i])*100)}); }
-            labels.push(dateFormat(i));
-            x++;
+        for(var i in $scope.duration_numbers){
+            var obj=$scope.duration_numbers[i];
+            $scope.months_array.push(dateFormatYearMonth(obj._id));
+            $scope.hiv_positivity_rate_array.push(Math.round((obj.hiv_positive_infants/obj.total_tests)*100)); 
+          
         }
 
-        nv.addGraph(function() {
-            var chart = nv.models.lineChart()
-                        .margin({right: 50})
-                        .useInteractiveGuideline(true)
-                        .x(function(d) { return d.x })
-                        .y(function(d) { return d.y })
-                        .forceY([0,20]);
-            
-            chart.xAxis.tickFormat(function(d) {
-                return labels[d];
-            });
 
-            chart.yAxis.tickFormat(d3.format(',.0d'));
+        var chartConfig = {
+              chart: {
+                  type: 'spline'
+              },
+              title: {
+                  text: 'Percentage of Positive Infants'
+              },
+              xAxis: {
+                  categories: $scope.months_array
+              },
+             yAxis: {
+                title: {
+                        text: 'Positivity Rate'
+                    }
+                },      
+              legend: {
+                  align: 'right',
+                  x: -70,
+                  verticalAlign: 'top',
+                  y: 20,
+                  floating: true,
+                  backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                  borderColor: '#CCC',
+                  borderWidth: 1,
+                  shadow: false
+              },
+              tooltip: {
+                  formatter: function() {
+                      return '<b>'+ this.x +'</b><br/>'+
+                          this.series.name +': '+ this.y +'<br/>'+
+                          'Total: '+ this.point.stackTotal;
+                  }
+              },
+              plotOptions: {
+                  column: {
+                      stacking: 'normal',
+                      dataLabels: {
+                          enabled: true,
+                          color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                          style: {
+                              textShadow: '0 0 3px black, 0 0 3px black'
+                          }
+                      }
+                  }
+              },
 
-            d3.select('#visual3 svg').datum(data).transition().duration(500).call(chart);
-            return chart;
-        });
+              series: [ {
+                    name: 'Positivity',
+                    data: $scope.hiv_positive_infants_array,
+                    tooltip: {
+                        valueSuffix: '%'
+                    }
+                  }
+              ]
+          };
+        $scope.chartConfigHivPositivityRate = chartConfig;
+        
+        $('#divcharthivpositivityrate').highcharts(chartConfig);
     };
 
 
+
     $scope.displayInitiationRate=function(){  
-        var hbd=$scope.hpi_by_duration;
-        var ibd=$scope.i_by_duration; 
-        var nat_hbd=nat_hpi_by_duration;
-        var nat_ibd=nat_i_by_duration; 
+        
+       
 
-        var data=[{"key":"National","values":[],"color":"#6D6D6D" }];
 
-        var slct=count($scope.filter_regions)>0||count($scope.filter_districts)>0||count($scope.filter_care_levels)>0;
-        if(slct){ data.push({"key":"Selection","values":[],"color":"#9F82D1" }); }
+        $scope.months_array=[]; 
 
-        var labels=[];
-        var x=0;
+        $scope.hiv_initiation_rate_array=[];
 
-        for(var i in nat_ibd){
-            data[0].values.push({"x":x,"y":Math.round((nat_ibd[i]/nat_hbd[i])*100)});
-            if(slct){ data[1].values.push({"x":x,"y":Math.round((ibd[i]/hbd[i])*100)}); }
-            labels.push(dateFormat(i));
-            x++;
+        for(var i in $scope.duration_numbers){
+            var obj=$scope.duration_numbers[i];
+            $scope.months_array.push(dateFormatYearMonth(obj._id));
+            $scope.hiv_initiation_rate_array.push(Math.round((obj.art_initiated/obj.hiv_positive_infants)*100)); 
+          
         }
 
-        nv.addGraph(function() {
-            var chart = nv.models.lineChart()
-                        .margin({right: 50})
-                        .useInteractiveGuideline(true)
-                        .x(function(d) { return d.x })
-                        .y(function(d) { return d.y })
-                        .forceY([0,100]);
-            
-            chart.xAxis.tickFormat(function(d) {
-                return labels[d];
-            });
 
-            chart.yAxis.tickFormat(d3.format(',.0d'));
+        var chartConfig = {
+              chart: {
+                  type: 'spline'
+              },
+              title: {
+                  text: 'Percentage of Infants Initiated on ART'
+              },
+              xAxis: {
+                  categories: $scope.months_array
+              },
+             yAxis: {
+                title: {
+                        text: 'Initiation Rate'
+                    }
+                },      
+              legend: {
+                  align: 'right',
+                  x: -70,
+                  verticalAlign: 'top',
+                  y: 20,
+                  floating: true,
+                  backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                  borderColor: '#CCC',
+                  borderWidth: 1,
+                  shadow: false
+              },
+              tooltip: {
+                  formatter: function() {
+                      return '<b>'+ this.x +'</b><br/>'+
+                          this.series.name +': '+ this.y +'<br/>'+
+                          'Total: '+ this.point.stackTotal;
+                  }
+              },
+              plotOptions: {
+                  column: {
+                      stacking: 'normal',
+                      dataLabels: {
+                          enabled: true,
+                          color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                          style: {
+                              textShadow: '0 0 3px black, 0 0 3px black'
+                          }
+                      }
+                  }
+              },
 
-            d3.select('#visual4 svg').datum(data).transition().duration(500).call(chart);
-            return chart;
-        });
+              series: [ {
+                    name: 'initiation Rate',
+                    data: $scope.hiv_initiation_rate_array,
+                    tooltip: {
+                        valueSuffix: '%'
+                    }
+                  }
+              ]
+          };
+        $scope.chartConfigInitiationRate = chartConfig;
+        
+        $('#divchartinitiationrate').highcharts(chartConfig);
+
     };
 
 
@@ -1081,7 +1420,7 @@ ctrllers.DashController=function($scope,$http){
         var year_key=parseInt(year_month_string.substring(2,4));
         var month_key= parseInt(year_month_string.substring(4));
 
-        var desired_date = $scope.month_labels[month_key]+" '"+year_key;
+        var desired_date = $scope.month_labels[month_key]+"'"+year_key;
         return desired_date;
     };
 
@@ -1114,6 +1453,8 @@ ctrllers.DashController=function($scope,$http){
             return (values[half-1] + values[half]) / 2.0;
     }
 
+    
+    
+    
 };
-
 app.controller(ctrllers);

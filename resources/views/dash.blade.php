@@ -53,6 +53,8 @@
     $(document).ready(function(){
 
        $("#highchart1").addClass("hidden");
+       $("#highcharthivpositiveinfants").addClass("hidden");
+       $("#highcharthivpositivityrate").addClass("hidden");
         //$("#highchart1").remove();
 
     });
@@ -170,12 +172,21 @@
                 </span> 
             </span>
         </span>
+        <span ng-model='filter_gender' ng-init='filter_gender={}'>
+            <span ng-repeat="(g_nr,g_name) in filter_gender">
+                <span class="filter-val ng-cloak"> <% g_name %> (g) <x class='glyphicon glyphicon-remove' ng-click='removeTag("gender",g_nr)'></x></span> 
+            </span>
+        </span>
         <span ng-model='filter_regions' ng-init='filter_regions={}'>
             <span ng-repeat="(r_nr,r_name) in filter_regions">
                 <span class="filter-val ng-cloak"> <% r_name %> (r) <x class='glyphicon glyphicon-remove' ng-click='removeTag("region",r_nr)'></x></span> 
             </span>
         </span>
-
+        <span ng-model='filter_hubs' ng-init='filter_hubs={}'>
+            <span ng-repeat="(hub_id,hub_name) in filter_hubs">
+                <span class="filter-val ng-cloak"> <% hub_name %> (h) <x class='glyphicon glyphicon-remove' ng-click='removeTag("hub",hub_id)'></x></span> 
+            </span>
+        </span>
         <span ng-model='filter_districts' ng-init='filter_districts={}'>
             <span ng-repeat="(d_nr,d_name) in filter_districts"> 
                 <span class="filter-val ng-cloak"> <% d_name %> (d) <x class='glyphicon glyphicon-remove' ng-click='removeTag("district",d_nr)'></x></span> 
@@ -190,21 +201,13 @@
             </span>
         </span>
 
-        <span ng-model='filter_gender' ng-init='filter_gender={}'>
-            <span ng-repeat="(g_nr,g_name) in filter_gender">
-                <span class="filter-val ng-cloak"> <% g_name %> (g) <x class='glyphicon glyphicon-remove' ng-click='removeTag("gender",g_nr)'></x></span> 
-            </span>
-        </span>
+        
         <span ng-model='filter_pcrs' ng-init='filter_pcrs={}'>
             <span ng-repeat="(pcr_id,pcr_name) in filter_pcrs">
                 <span class="filter-val ng-cloak"> <% pcr_name %> (p) <x class='glyphicon glyphicon-remove' ng-click='removeTag("pcr",pcr_id)'></x></span> 
             </span>
         </span>
-        <span ng-model='filter_hubs' ng-init='filter_hubs={}'>
-            <span ng-repeat="(hub_id,hub_name) in filter_hubs">
-                <span class="filter-val ng-cloak"> <% hub_name %> (h) <x class='glyphicon glyphicon-remove' ng-click='removeTag("hub",hub_id)'></x></span> 
-            </span>
-        </span>
+        
 
         <span ng-show="filtered" class="filter_clear" ng-click="clearAllFilters()">reset all</span>
         </div>
@@ -252,10 +255,26 @@
                 </select>
             </td>
             <td width='10%'>
+                <select ng-model="gender" ng-init="gender='all'" ng-change="filter('gender')">
+                    <option value='all'>SEX</option>
+                    <option class="ng-cloak" ng-repeat="gl in gender_slct | orderBy:'name'" value="<% gl.id %>">
+                        <% gl.name %>
+                    </option>
+                </select>
+            </td>
+            <td width='10%'>
                 <select ng-model="region" ng-init="region='all'" ng-change="filter('region')">
                     <option value='all'>REGIONS</option>
                     <option class="ng-cloak" ng-repeat="rg in regions_slct|orderBy:'name'" value="<% rg.id %>">
                         <% rg.name %>
+                    </option>
+                </select>
+            </td>
+            <td width='10%'>
+                <select ng-model="hubs" ng-init="hubs='all'" ng-change="filter('hub')">
+                    <option value='all'>HUBS</option>
+                    <option class="ng-cloak" ng-repeat="hub_instance in hubs_slct | orderBy:'name'" value="<% hub_instance.id %>">
+                        <% hub_instance.name %>
                     </option>
                 </select>
             </td>
@@ -276,14 +295,7 @@
                 </select>
             </td> 
             <!-- new filters-->
-            <td width='10%'>
-                <select ng-model="gender" ng-init="gender='all'" ng-change="filter('gender')">
-                    <option value='all'>SEX</option>
-                    <option class="ng-cloak" ng-repeat="gl in gender_slct | orderBy:'name'" value="<% gl.id %>">
-                        <% gl.name %>
-                    </option>
-                </select>
-            </td>
+            
             <td width='10%'>
                 <select ng-model="pcrs" ng-init="pcrs='all'" ng-change="filter('pcr')">
                     <option value='all'>PCR</option>
@@ -292,14 +304,7 @@
                     </option>
                 </select>
             </td>
-             <td width='10%'>
-                <select ng-model="hubs" ng-init="hubs='all'" ng-change="filter('hub')">
-                    <option value='all'>HUBS</option>
-                    <option class="ng-cloak" ng-repeat="hub_instance in hubs_slct | orderBy:'name'" value="<% hub_instance.id %>">
-                        <% hub_instance.name %>
-                    </option>
-                </select>
-            </td>
+             
              
         </tr>
      </table>
@@ -355,15 +360,70 @@
                 </div>
                 <div class="row">
                     <div class="panel panel-info">
-                      <div class="panel-heading collapsed" data-toggle="collapse" data-target="#bar">
+                      <div class="panel-heading collapsed" data-toggle="collapse" data-target="#tests_div">
                         <i class="fa fa-fw fa-chevron-down text-nowrap"> See less ...</i>
                         <i class="fa fa-fw fa-chevron-right text-nowrap"> See more ...</i>
                       </div>
                       <div class="panel-body">
-                        <!-- The inside div eliminates the 'jumping' animation. -->
-                        <div class="collapse" id="bar">
-                          Bar.
+                        
+                        <div id="tests_div" class="col-lg-6 facilties-sect facilties-sect-list1 collapse" >
+                        <span class='dist_faclty_toggle sect1' ng-model="show_fclties1" ng-init="show_fclties1=false" ng-click="showF(1)">
+                            <span class='active' id='d_shw1'>&nbsp;&nbsp;DISTRICTS&nbsp;&nbsp;</span>
+                            <span id='f_shw1'>&nbsp;&nbsp;FACILITIES &nbsp;&nbsp;</span>
+                        </span>
+                        <div ng-hide="show_fclties1">
+                          <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th width='70%'>District</th>
+                                    <th width='10%'>Total Tests</th>
+                                    <th width='10%'>Total 1<sup>st</sup> PCR</th>
+                                    <th width='10%'>Total 2<sup>nd</sup> PCR</th>
+                                </tr>
+                            </thead>
+                            <tbody>                                
+                                <tr ng-repeat="d in district_numbers" >
+                                    <td class="ng-cloak"><% districts_lables[d._id] %></td>
+                                    <td class="ng-cloak"><% d.total_tests|number %></td>
+                                    <td class="ng-cloak"><% d.pcr_one|number %></td>
+                                    <td class="ng-cloak"><% d.pcr_two|number %></td>
+                                </tr>                        
+                             </tbody>
+                           </table>
+
                         </div>
+                        
+                        <div ng-show="show_fclties1">
+                          <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
+                            <thead>
+                                <tr>
+                                    <th width='70%'>Facility</th>
+                                    <th width='10%'>Total Tests</th>
+                                    <th width='10%'>Total 1<sup>st</sup> PCR</th>
+                                    <th width='10%'>Total 2<sup>nd</sup> PCR</th>
+                                </tr>
+                            </thead>
+                            <tbody>                                
+                                <tr ng-repeat="f in facility_numbers" >
+                                    <td class="ng-cloak"><% facilities_lables[f._id] %></td>
+                                    <td class="ng-cloak"><% f.total_tests|number %></td>
+                                    <td class="ng-cloak"><% f.pcr_one|number %></td>
+                                    <td class="ng-cloak"><% f.pcr_two|number %></td>
+                                </tr>                        
+                             </tbody>
+                         </table>
+
+                        </div>
+                        
+                        <br>
+                        <br>
+                        <button ng-hide="show_fclties1" id="exportDistricts" type="button" ng-csv="export_district_numbers"  class="btn btn-success" filename="eid_district_samples_<%current_timestamp%>.csv" csv-header="['District', 'Total Tests', 'First PCR','Second PCR']">Download CSV</button>
+
+                        <br>
+                        <br>
+                        <button ng-show="show_fclties1" id="exportFacilities" type="button" ng-csv="export_facility_numbers" filename="eid_facility_samples_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Total Tests', 'First PCR','Second PCR']">Download CSV</button>
+
+                    </div>
                       </div>
                     </div>
                 </div>
@@ -371,15 +431,21 @@
 
             <section id="tab2">
                 <div class="row">
-
-                    <div class="col-lg-6">
-                       <div id="visual2" class="db-charts">
-                            <svg></svg>
-                        </div>
+                    <div id="divcharthivpositiveinfants" class="col-lg-12">                        
+                      <highchart id="highcharthivpositiveinfants" config="chartConfigHivPositiveInfants" class="span10"></highchart>
                     </div>
                    
-                    <div class="col-lg-6 facilties-sect facilties-sect-list2" >
-
+                </div> 
+                <div class="row">
+                    <div class="panel panel-info">
+                      <div class="panel-heading collapsed" data-toggle="collapse" data-target="#hiv_positive_infants_div">
+                        <i class="fa fa-fw fa-chevron-down text-nowrap"> See less ...</i>
+                        <i class="fa fa-fw fa-chevron-right text-nowrap"> See more ...</i>
+                      </div>
+                      <div class="panel-body">
+                        
+                      <div id="hiv_positive_infants_div" class="col-lg-6 facilties-sect facilties-sect-list2 collapse" >
+                        
                         <span class='dist_faclty_toggle sect2' ng-model="show_fclties2" ng-init="show_fclties2=false" ng-click="showF(2)">
                             <span class='active' id='d_shw2'>&nbsp;&nbsp;DISTRICTS&nbsp;&nbsp;</span>
                             <span id='f_shw2'>&nbsp;&nbsp;FACILITIES &nbsp;&nbsp;</span>
@@ -430,19 +496,30 @@
                         <br>
                         <button ng-show="show_fclties2" id="exportFacilitiesHivPositiveInfants" type="button" ng-csv="export_facility_hiv_positive_infants" filename="eid_facility_hiv_positives_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Absolute Positives','Total Tests']">Download CSV</button>
 
+                    
+                      </div>
+                      </div>
                     </div>
-                </div> 
+                </div>
+
             </section>
             <section id="tab3">
                 <div class="row">
-                    <div class="col-lg-6">
-                        <div id="visual3" class="db-charts">
-                            <svg></svg>
-                        </div>
+                    <div id="divcharthivpositivityrate" class="col-lg-12">                        
+                      <highchart id="highcharthivpositivityrate" config="chartConfigHivPositivityRate" class="span10"></highchart>
                     </div>
                    
-                    <div class="col-lg-6 facilties-sect facilties-sect-list3" >
-
+                </div> 
+                <div class="row">
+                    <div class="panel panel-info">
+                      <div class="panel-heading collapsed" data-toggle="collapse" data-target="#hiv_positivity_rate_div">
+                        <i class="fa fa-fw fa-chevron-down text-nowrap"> See less ...</i>
+                        <i class="fa fa-fw fa-chevron-right text-nowrap"> See more ...</i>
+                      </div>
+                      <div class="panel-body">
+                        
+                      <div id="hiv_positivity_rate_div" class="col-lg-6 facilties-sect facilties-sect-list3 collapse" >
+                        
                         <span class='dist_faclty_toggle sect3' ng-model="show_fclties3" ng-init="show_fclties3=false" ng-click="showF(3)">
                             <span class='active' id='d_shw3'>&nbsp;&nbsp;DISTRICTS&nbsp;&nbsp;</span>
                             <span id='f_shw3'>&nbsp;&nbsp;FACILITIES &nbsp;&nbsp;</span>
@@ -497,19 +574,32 @@
                         <br>
                         <button ng-show="show_fclties3" id="exportFacilitiesPositivityRate" type="button" ng-csv="export_facility_positivity_rate" filename="eid_facility_positivity_rate_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Positivity Rate','Absolute Positives','Total Tests']">Download CSV</button>
 
+                    </div>   
+                     
+                      </div>
                     </div>
+
                 </div>                
             </section>
             <section id="tab4">
+               
                 <div class="row">
-                    <div class="col-lg-6">
-                        <div id="visual4" class="db-charts">
-                            <svg></svg>
-                        </div>
+                    <div id="divchartinitiationrate" class="col-lg-12">                        
+                      <highchart id="highchartinitiationrate" config="chartConfigInitiationRate" class="span10"></highchart>
                     </div>
                    
-                    <div class="col-lg-6 facilties-sect facilties-sect-list4" >
-                        <span class='dist_faclty_toggle sect4' ng-model="show_fclties4" ng-init="show_fclties4=false" ng-click="showF(4)">
+                </div>
+                
+                 <div class="row">
+                    <div class="panel panel-info">
+                      <div class="panel-heading collapsed" data-toggle="collapse" data-target="#initiation_rate_div">
+                        <i class="fa fa-fw fa-chevron-down text-nowrap"> See less ...</i>
+                        <i class="fa fa-fw fa-chevron-right text-nowrap"> See more ...</i>
+                      </div>
+                      <div class="panel-body">
+                        
+                      <div id="initiation_rate_div" class="col-lg-6 facilties-sect facilties-sect-list4 collapse">
+                                         <span class='dist_faclty_toggle sect4' ng-model="show_fclties4" ng-init="show_fclties4=false" ng-click="showF(4)">
                             <span class='active' id='d_shw4'>&nbsp;&nbsp;DISTRICTS&nbsp;&nbsp;</span>
                             <span id='f_shw4'>&nbsp;&nbsp;FACILITIES &nbsp;&nbsp;</span>
                         </span>
@@ -558,6 +648,9 @@
                         <br>
                         <button ng-show="show_fclties4" id="exportFacilitiesInitiationRate" type="button" ng-csv="export_facility_initiation_rate" filename="eid_facility_initiation_rate_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Initiation Rate','Absolute Positives']">Download CSV</button>
 
+                      </div>   
+                     
+                      </div>
                     </div>
                 </div> 
                 <i style="font-size:12px;color:#9F82D1">* ART Initiation Rate is a preliminary estimate based on data collected at CPHL. CPHL is still revising the data collection mechanism</i>               
@@ -570,7 +663,7 @@
     <div class='addition-metrics'>
        <div class='row'>
         
-        
+        <div class='col-sm-1'></div>
         <div class='col-sm-1'></div>
         <div class='col-sm-2'>
             <font class='addition-metrics figure ng-cloak' ng-model='pcr_one' ng-init="pcr_one=0"><% pcr_one|number %></font><br>
@@ -588,8 +681,7 @@
             </font><br>
             <font class='addition-metrics desc'>TOTAL ART INITIATED CHILDREN</font>            
         </div>
-        <div class='col-sm-1'></div>
-       </div>
+       
     </div>
     <br>
 </div>

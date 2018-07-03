@@ -85,7 +85,7 @@ class LiveData extends Model
                     d.accepted_result,
                     d.date_dbs_taken as date_of_sample_collection,
                     b.date_dispatched_from_facility,
-                    b.date_rcvd_at_facility,
+                    b.date_rcvd_by_cphl,
                     d.date_dbs_tested,
                     d.date_results_entered,
                     fp.dispatch_at as date_printed,

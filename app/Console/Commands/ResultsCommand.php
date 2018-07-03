@@ -63,8 +63,8 @@ class ResultsCommand extends Command
 
 
         //pick data
-        $year=2017;
-        $month=7;
+        $year=2018;
+        $month=1;
         $res=LiveData::getAdhocResults($year,$month);
         $this->comment("Results retrieved at :: ".date('YmdHis'));
         //foreach($res AS $row){
@@ -84,7 +84,7 @@ class ResultsCommand extends Command
 
         $header=['specimen_id','exp_number','district',
         'facility_sample_came_from','type_of_pcr','accepted_result',
-        'date_of_sample_collection','date_dispatched_from_facility','date_rcvd_at_facility',
+        'date_of_sample_collection','date_dispatched_from_facility','date_rcvd_by_cphl',
         'date_dbs_tested','date_results_entered','date_printed','printed_by','printed_at_hub'];
         fputcsv($fp, $header);
 
@@ -100,7 +100,7 @@ class ResultsCommand extends Command
             
             array_push($record, $obj->date_of_sample_collection);
             array_push($record, $obj->date_dispatched_from_facility);
-            array_push($record, $obj->date_rcvd_at_facility);
+            array_push($record, $obj->date_rcvd_by_cphl);
 
             array_push($record, $obj->date_dbs_tested);
             array_push($record, $obj->date_results_entered);

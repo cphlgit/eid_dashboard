@@ -355,7 +355,37 @@ class DashboardController extends Controller {
 				 '_id'=>'$year_month',
 				'total_tests' => array('$sum' => 1 ),
 				'pcr_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
+
 				'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
+				
+				'pcr_one_hiv_positive_infants'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','FIRST'),
+									'$eq'=>array('$accepted_result', 'POSITIVE'))
+							 )
+						),1,0))),
+				'pcr_two_hiv_positive_infants'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','SECOND'),
+									'$eq'=>array('$accepted_result', 'POSITIVE'))
+							 )
+						),1,0))),
+				'pcr_one_art_initiated'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','FIRST'),
+									'$eq'=>array('$art_initiation_status', 'YES'))
+							 )
+						),1,0))),
+				'pcr_two_art_initiated'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','SECOND'),
+									'$eq'=>array('$art_initiation_status', 'YES'))
+							 )
+						),1,0))),
 				'hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$accepted_result','POSITIVE')),1,0))),
 				'art_initiated' => array('$sum' => array('$cond'=>array(array('$eq' => array('$art_initiation_status','YES')),1,0))),
 			 ));
@@ -377,10 +407,44 @@ class DashboardController extends Controller {
 				'total_tests' => array('$sum' => 1 ),
 				'pcr_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
 				'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
+
+				'pcr_one_hiv_positive_infants'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','FIRST'),
+									'$eq'=>array('$accepted_result', 'POSITIVE'))
+							 )
+						),1,0))),
+				'pcr_two_hiv_positive_infants'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','SECOND'),
+									'$eq'=>array('$accepted_result', 'POSITIVE'))
+							 )
+						),1,0))),
+				'pcr_one_art_initiated'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','FIRST'),
+									'$eq'=>array('$art_initiation_status', 'YES'))
+							 )
+						),1,0))),
+				'pcr_two_art_initiated'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','SECOND'),
+									'$eq'=>array('$art_initiation_status', 'YES'))
+							 )
+						),1,0))),
+
 				'hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$accepted_result','POSITIVE')),1,0))),
 				'art_initiated' => array('$sum' => array('$cond'=>array(array('$eq' => array('$art_initiation_status','YES')),1,0))),
 			 ));
-		
+		/*"$and": [ { "$eq": [ "$pcr", "FIRST" ] }, { "$eq": [ "$accepted_result", "POSITIVE" ] } ] 
+		=> array(
+			array('$eq'=>array('$pcr','FIRST'),
+				'$eq'=>array('$accepted_result', 'POSITIVE'))
+		 );*/
 		
 		$res=$this->mongo->eid_dashboard->aggregate($match_stage,$group_stage );
 		
@@ -396,6 +460,34 @@ class DashboardController extends Controller {
 				'_id' => '$district_id', 
 				'total_tests' => array('$sum' => 1 ),
 				'pcr_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
+				'pcr_one_hiv_positive_infants'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','FIRST'),
+									'$eq'=>array('$accepted_result', 'POSITIVE'))
+							 )
+						),1,0))),
+				'pcr_two_hiv_positive_infants'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','SECOND'),
+									'$eq'=>array('$accepted_result', 'POSITIVE'))
+							 )
+						),1,0))),
+				'pcr_one_art_initiated'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','FIRST'),
+									'$eq'=>array('$art_initiation_status', 'YES'))
+							 )
+						),1,0))),
+				'pcr_two_art_initiated'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','SECOND'),
+									'$eq'=>array('$art_initiation_status', 'YES'))
+							 )
+						),1,0))),
 				'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
 				'hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$accepted_result','POSITIVE')),1,0))),
 				'art_initiated' => array('$sum' => array('$cond'=>array(array('$eq' => array('$art_initiation_status','YES')),1,0))),

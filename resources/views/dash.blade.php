@@ -329,7 +329,7 @@
                         <span class="num ng-cloak" ng-model="hiv_positive_infants" ng-init="hiv_positive_infants=0">
                             <% hiv_positive_infants|number %>
                         </span>
-                        <span class="desc">hiv positive infants</span>
+                        <span class="desc">hiv positive tests</span>
                     </a>
                 </li>
                 <li id='tb_hd3'>
@@ -361,8 +361,8 @@
                 <div class="row">
                     <div class="panel panel-info">
                       <div class="panel-heading collapsed" data-toggle="collapse" data-target="#tests_div">
-                        <i class="fa fa-fw fa-chevron-down text-nowrap"> See less ...</i>
-                        <i class="fa fa-fw fa-chevron-right text-nowrap"> See more ...</i>
+                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Data Table ...</i>
+                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Data Table ...</i>
                       </div>
                       <div class="panel-body">
                         
@@ -375,18 +375,34 @@
                           <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
-                                    <th width='70%'>District</th>
+                                    <th width='40%'>District</th>
                                     <th width='10%'>Total Tests</th>
+
                                     <th width='10%'>Total 1<sup>st</sup> PCR</th>
+                                    <th width='10%'>Positive 1<sup>st</sup> PCR </th>
+                                    
+                                    
                                     <th width='10%'>Total 2<sup>nd</sup> PCR</th>
+                                    <th width='10%'>Positive 2<sup>nd</sup> PCR</th>
+                                    
+
+                                    <th width='10%'>% of Positives in 1<sup>st</sup> PCR</th>
                                 </tr>
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="d in district_numbers" >
                                     <td class="ng-cloak"><% districts_lables[d._id] %></td>
                                     <td class="ng-cloak"><% d.total_tests|number %></td>
+
                                     <td class="ng-cloak"><% d.pcr_one|number %></td>
+                                    <td class="ng-cloak"><% d.pcr_one_hiv_positive_infants|number %></td>
+                                    
                                     <td class="ng-cloak"><% d.pcr_two|number %></td>
+                                    <td class="ng-cloak"><% d.pcr_two_hiv_positive_infants|number %></td>
+
+                                    <td class="ng-cloak"><% (d.pcr_one_hiv_positive_infants > 0? (d.pcr_one_hiv_positive_infants/d.pcr_one)*100:0)|number:1 %>%</td>
+
+
                                 </tr>                        
                              </tbody>
                            </table>
@@ -397,18 +413,33 @@
                           <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
-                                    <th width='70%'>Facility</th>
+                                    <th width='40%'>Facility</th>
                                     <th width='10%'>Total Tests</th>
+                                    
                                     <th width='10%'>Total 1<sup>st</sup> PCR</th>
+                                    <th width='10%'>Positive 1<sup>st</sup> PCR </th>
+                                    
+                                    
                                     <th width='10%'>Total 2<sup>nd</sup> PCR</th>
+                                    <th width='10%'>Positive 2<sup>nd</sup> PCR</th>
+
+                                    <th width='10%'>% of Positives in 1<sup>st</sup> PCR</th>
                                 </tr>
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="f in facility_numbers" >
                                     <td class="ng-cloak"><% facilities_lables[f._id] %></td>
                                     <td class="ng-cloak"><% f.total_tests|number %></td>
+
                                     <td class="ng-cloak"><% f.pcr_one|number %></td>
+                                    <td class="ng-cloak"><% f.pcr_one_hiv_positive_infants|number %></td>
+
                                     <td class="ng-cloak"><% f.pcr_two|number %></td>
+                                    <td class="ng-cloak"><% f.pcr_two_hiv_positive_infants|number %></td>
+
+                                    <td class="ng-cloak"><% (f.pcr_one_hiv_positive_infants > 0? (f.pcr_one_hiv_positive_infants/f.pcr_one)*100:0)|number:1 %>%</td>
+
+
                                 </tr>                        
                              </tbody>
                          </table>
@@ -439,8 +470,8 @@
                 <div class="row">
                     <div class="panel panel-info">
                       <div class="panel-heading collapsed" data-toggle="collapse" data-target="#hiv_positive_infants_div">
-                        <i class="fa fa-fw fa-chevron-down text-nowrap"> See less ...</i>
-                        <i class="fa fa-fw fa-chevron-right text-nowrap"> See more ...</i>
+                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Data Table ...</i>
+                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Data Table ...</i>
                       </div>
                       <div class="panel-body">
                         
@@ -513,8 +544,8 @@
                 <div class="row">
                     <div class="panel panel-info">
                       <div class="panel-heading collapsed" data-toggle="collapse" data-target="#hiv_positivity_rate_div">
-                        <i class="fa fa-fw fa-chevron-down text-nowrap"> See less ...</i>
-                        <i class="fa fa-fw fa-chevron-right text-nowrap"> See more ...</i>
+                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Data Table ...</i>
+                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Data Table ...</i>
                       </div>
                       <div class="panel-body">
                         
@@ -593,8 +624,8 @@
                  <div class="row">
                     <div class="panel panel-info">
                       <div class="panel-heading collapsed" data-toggle="collapse" data-target="#initiation_rate_div">
-                        <i class="fa fa-fw fa-chevron-down text-nowrap"> See less ...</i>
-                        <i class="fa fa-fw fa-chevron-right text-nowrap"> See more ...</i>
+                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Data Table ...</i>
+                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Data Table ...</i>
                       </div>
                       <div class="panel-body">
                         
@@ -685,6 +716,18 @@
     </div>
     <br>
 </div>
+<br>
+<footer>
+    This platform and its content is copyright of CPHL Ministry of Health ,Uganda - © CPHL Ministry of Health ,Uganda 2018. All rights reserved.
+    <br>
+    <small>Any redistribution or reproduction of part or all of the contents in any form is prohibited other than the following:</small>
+        <ul>
+            <li><small>You may print or download to a local hard disk extracts for your personal and non-commercial use only</small></li>
+            <li><small>You may copy the content to individual third parties for their personal use, but only if you acknowledge the website as the source of the material</small></li>
+            <li><small>You may not, except with our express written permission, distribute or commercially exploit the content. Nor may you transmit it or store it in any other website or other form of electronic retrieval system.</small></li>
+        </ul>
+    
+</footer>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-sanitize.min.js"></script>
 <script src="{{ asset('js/ng-csv.js') }}"></script>
 <script src="{{ asset('js/ng-csv.min.js') }}"></script>

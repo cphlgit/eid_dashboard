@@ -261,9 +261,6 @@ ctrllers.DashController=function($scope,$http){
 
                 $scope.filtered = count($scope.filter_districts)>0||count($scope.filter_hubs)>0||count($scope.filtered_age_range)>0||$scope.date_filtered;    
                 $scope.loading = false;
-                
-
-                
 
                 //transposeDurationNumbers();
                 //console.log("lalallalal:: samples_received:: "+data.samples_received+" suppressed:: "+data.suppressed+" "+data.valid_results);
@@ -971,13 +968,13 @@ ctrllers.DashController=function($scope,$http){
                                 title: {
                                     text: 'Positivity',
                                     style: {
-                                        color: Highcharts.getOptions().colors[0]
+                                        color: '#F44336'
                                     }
                                 },
                                 labels: {
                                     format: '{value} %',
                                     style: {
-                                        color: Highcharts.getOptions().colors[0]
+                                        color: '#F44336'
                                     }
                                 },
                                 opposite: true
@@ -996,21 +993,21 @@ ctrllers.DashController=function($scope,$http){
                           tooltip: {
                               formatter: function() {
                                   return '<b>'+ this.x +'</b><br/>'+
-                                      this.series.name +': '+ this.y +'<br/>'+
-                                      'Total: '+ this.point.stackTotal;
+                                      this.series.name +': '+ this.y ;
                               }
                           },
                           plotOptions: {
                               column: {
                                   stacking: 'normal',
                                   dataLabels: {
-                                      enabled: true,
+                                      enabled: false,
                                       color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
                                       style: {
                                           textShadow: '0 0 3px black, 0 0 3px black'
                                       }
                                   }
                               }
+
                           },
 
                           series: [ {
@@ -1025,6 +1022,7 @@ ctrllers.DashController=function($scope,$http){
                                 name: 'Positivity',
                                 type: 'spline',
                                 yAxis: 1,
+                                color: '#d9534f',
                                 data: $scope.positivity_array,
                                 tooltip: {
                                     valueSuffix: '%'
@@ -1044,18 +1042,28 @@ ctrllers.DashController=function($scope,$http){
         $scope.months_array=[]; 
 
         $scope.hiv_positive_infants_array=[];
+        $scope.duration_pcr_one_hiv_positive_infants=[];
+        $scope.duration_pcr_two_hiv_positive_infants=[];
+        $scope.duration_pcr_one=[];
+        $scope.duration_pcr_two=[];
 
         for(var i in $scope.duration_numbers){
             var obj=$scope.duration_numbers[i];
             $scope.months_array.push(dateFormatYearMonth(obj._id));
             $scope.hiv_positive_infants_array.push(obj.hiv_positive_infants); 
+
+            $scope.duration_pcr_one_hiv_positive_infants.push(obj.pcr_one_hiv_positive_infants);
+            $scope.duration_pcr_two_hiv_positive_infants.push(obj.pcr_two_hiv_positive_infants);
+
+            $scope.duration_pcr_one.push(obj.pcr_one);
+            $scope.duration_pcr_two.push(obj.pcr_two);
           
         }
 
 
         var chartConfig = {
               chart: {
-                  type: 'spline'
+                  type: 'column'
               },
               title: {
                   text: 'Hiv Positives'
@@ -1083,14 +1091,14 @@ ctrllers.DashController=function($scope,$http){
                   formatter: function() {
                       return '<b>'+ this.x +'</b><br/>'+
                           this.series.name +': '+ this.y +'<br/>'+
-                          'Total: '+ this.point.stackTotal;
+                          'Total Postive Tests: '+ this.point.stackTotal;
                   }
               },
               plotOptions: {
                   column: {
                       stacking: 'normal',
                       dataLabels: {
-                          enabled: true,
+                          enabled: false,
                           color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
                           style: {
                               textShadow: '0 0 3px black, 0 0 3px black'
@@ -1100,12 +1108,22 @@ ctrllers.DashController=function($scope,$http){
               },
 
               series: [ {
-                    name: 'No. of Hiv Positive Infants',
-                    data: $scope.hiv_positive_infants_array,
+                    name: '2nd PCR Tests -Positive',
+                    data: $scope.duration_pcr_two_hiv_positive_infants,
+                    stack: 'positiveTests',
                     tooltip: {
-                        valueSuffix: 'infants'
+                        valueSuffix: 'positive tests'
+                    }
+                  },
+                  {
+                    name: '1st PCR Tests -Positive',
+                    data: $scope.duration_pcr_one_hiv_positive_infants,
+                    stack: 'positiveTests',
+                    tooltip: {
+                        valueSuffix: 'positive tests'
                     }
                   }
+                  
               ]
           };
         $scope.chartConfigHivPositiveInfants = chartConfig;
@@ -1159,8 +1177,7 @@ ctrllers.DashController=function($scope,$http){
               tooltip: {
                   formatter: function() {
                       return '<b>'+ this.x +'</b><br/>'+
-                          this.series.name +': '+ this.y +'<br/>'+
-                          'Total: '+ this.point.stackTotal;
+                          this.series.name +': '+ this.y +'<br/>';
                   }
               },
               plotOptions: {
@@ -1181,7 +1198,8 @@ ctrllers.DashController=function($scope,$http){
                     data: $scope.hiv_positive_infants_array,
                     tooltip: {
                         valueSuffix: '%'
-                    }
+                    },
+                    color: '#d9534f'
                   }
               ]
           };
@@ -1260,7 +1278,8 @@ ctrllers.DashController=function($scope,$http){
                     data: $scope.hiv_initiation_rate_array,
                     tooltip: {
                         valueSuffix: '%'
-                    }
+                    },
+                    color: '#d9534f'
                   }
               ]
           };

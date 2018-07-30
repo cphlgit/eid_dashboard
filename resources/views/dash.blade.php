@@ -39,12 +39,12 @@
     <!--script src="{{ asset('/js/d3.min.js') }}" charset="utf-8"></script>
     <script src="{{ asset('/js/nv.d3.min.js') }}"></script>
     <script src="{{ asset('/js/stream_layers.js') }}"></script-->
-    <script src="http://code.highcharts.com/highcharts.src.js"></script>
+    <script src="{{ asset('/js/highcharts/highcharts.src.js') }}"></script>
 
     <!--script src="https://code.highcharts.com/highcharts.js"></script-->
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="{{ asset('/js/highcharts-ng.js') }}"></script>
+    <script src="{{ asset('/js/highcharts/exporting.js') }}"></script>
+    <script src="{{ asset('/js/highcharts/export-data.js') }}"></script>
+    <script src="{{ asset('/js/highcharts-ng.js')}}"></script>
     <!--script src="https://code.highcharts.com/modules/series-label.js"></script-->
     
     <!--script src="https://highcharts.github.io/export-csv/export-csv.js"></script-->

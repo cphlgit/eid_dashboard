@@ -1195,7 +1195,7 @@ ctrllers.DashController=function($scope,$http){
 
               series: [ {
                     name: 'Positivity',
-                    data: $scope.hiv_positive_infants_array,
+                    data: $scope.hiv_positivity_rate_array,
                     tooltip: {
                         valueSuffix: '%'
                     },

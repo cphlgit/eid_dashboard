@@ -236,6 +236,7 @@ ctrllers.DashController=function($scope,$http){
                 
                 
                 $scope.duration_numbers = data.duration_numbers||0;
+                $scope.duration_numbers_test = data.duration_numbers_test||0;
 
                 $scope.displaySamplesRecieved();
                 $scope.displayHIVPositiveInfants();
@@ -867,9 +868,9 @@ ctrllers.DashController=function($scope,$http){
         $scope.first_pcr_median_age=median($scope.pcr_one_ages);
         $scope.sec_pcr_median_age=median($scope.pcr_two_ages);
         $scope.displaySamplesRecieved();
-        //$scope.displayHIVPositiveInfants();
-        //$scope.displayPositivityRate();
-        //$scope.displayInitiationRate();
+        $scope.displayHIVPositiveInfants();
+        $scope.displayPositivityRate();
+        $scope.displayInitiationRate();
 
         $scope.filtered=count($scope.filter_regions)>0||count($scope.filter_districts)>0||count($scope.filter_care_levels)>0
             ||count($scope.filter_gender)>0 ||count($scope.filter_pcrs)>0 ||count($scope.filter_hubs)>0||$scope.date_filtered
@@ -1256,8 +1257,8 @@ ctrllers.DashController=function($scope,$http){
               tooltip: {
                   formatter: function() {
                       return '<b>'+ this.x +'</b><br/>'+
-                          this.series.name +': '+ this.y +'<br/>'+
-                          'Total: '+ this.point.stackTotal;
+                          this.series.name +': '+ this.y +'<br/>';
+                          
                   }
               },
               plotOptions: {

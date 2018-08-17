@@ -1140,12 +1140,17 @@ ctrllers.DashController=function($scope,$http){
         $scope.months_array=[]; 
 
         $scope.hiv_positivity_rate_array=[];
+        $scope.pcr1_positivity_rate_array=[];
+        $scope.pcr2_positivity_rate_array=[];
 
         for(var i in $scope.duration_numbers){
             var obj=$scope.duration_numbers[i];
             $scope.months_array.push(dateFormatYearMonth(obj._id));
             $scope.hiv_positivity_rate_array.push(Math.round((obj.hiv_positive_infants/obj.total_tests)*100)); 
+
+            $scope.pcr1_positivity_rate_array.push(Math.round((obj.pcr_one_hiv_positive_infants/obj.pcr_one)*100)); 
           
+            $scope.pcr2_positivity_rate_array.push(Math.round((obj.pcr_two_hiv_positive_infants/obj.pcr_two)*100)); 
         }
 
 
@@ -1201,6 +1206,20 @@ ctrllers.DashController=function($scope,$http){
                         valueSuffix: '%'
                     },
                     color: '#d9534f'
+                  },
+                  {
+                    name: 'Positivity in PCR 1',
+                    data: $scope.pcr1_positivity_rate_array,
+                    tooltip: {
+                        valueSuffix: '%'
+                    }
+                  },
+                  {
+                    name: 'Positivity in PCR 2',
+                    data: $scope.pcr2_positivity_rate_array,
+                    tooltip: {
+                        valueSuffix: '%'
+                    }
                   }
               ]
           };
@@ -1219,12 +1238,17 @@ ctrllers.DashController=function($scope,$http){
         $scope.months_array=[]; 
 
         $scope.hiv_initiation_rate_array=[];
+        $scope.pcr1_hiv_initiation_rate_array=[];
+        $scope.pcr2_hiv_initiation_rate_array=[];
 
         for(var i in $scope.duration_numbers){
             var obj=$scope.duration_numbers[i];
             $scope.months_array.push(dateFormatYearMonth(obj._id));
             $scope.hiv_initiation_rate_array.push(Math.round((obj.art_initiated/obj.hiv_positive_infants)*100)); 
-          
+                      
+            $scope.pcr1_hiv_initiation_rate_array.push(Math.round((obj.pcr_one_art_initiated/obj.pcr_one_hiv_positive_infants)*100)); 
+            $scope.pcr2_hiv_initiation_rate_array.push(Math.round((obj.pcr_two_art_initiated/obj.pcr_two_hiv_positive_infants)*100)); 
+
         }
 
 
@@ -1274,14 +1298,32 @@ ctrllers.DashController=function($scope,$http){
                   }
               },
 
-              series: [ {
+              series: [ 
+                    {
                     name: 'initiation Rate',
                     data: $scope.hiv_initiation_rate_array,
                     tooltip: {
                         valueSuffix: '%'
                     },
                     color: '#d9534f'
+                  },
+
+                  {
+                    name: 'initiation Rate in PCR 1',
+                    data: $scope.pcr1_hiv_initiation_rate_array,
+                    tooltip: {
+                        valueSuffix: '%'
+                    }
+                  },
+
+                  {
+                    name: 'initiation Rate in PCR 2',
+                    data: $scope.pcr2_hiv_initiation_rate_array,
+                    tooltip: {
+                        valueSuffix: '%'
+                    }
                   }
+                  
               ]
           };
         $scope.chartConfigInitiationRate = chartConfig;

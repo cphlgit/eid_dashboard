@@ -6,21 +6,21 @@ use Illuminate\Console\Command;
 use EID\Mongo;
 use EID\Models\LiveData;
 
-class EidEngine extends Command
+class DashboardUpdater extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'eidengine:run';
+    protected $signature = 'eiddashboard:update';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Loads data into Mongo';
+    protected $description = 'Updates eiddashboard Daily';
 
     /**
      * Create a new command instance.
@@ -42,30 +42,37 @@ class EidEngine extends Command
     {
         ini_set('memory_limit', '2500M');
         //
-        $this->comment("Engine has started at :: ".date('YmdHis'));
+        $this->comment("Dashboard update has started at :: ".date('YmdHis'));
         
-        /*
-        $this->_loadHubs();
-        $this->_loadDistricts();
-        $this->_loadRegions();
-        $this->_loadCareLevels();
-        $this->_loadFacilities();*/
 
         $this->_loadData();
         
-        $this->comment("Engine has stopped at :: ".date('YmdHis'));
+        $this->comment("Dashboard updated at :: ".date('YmdHis'));
 
     }
     private function _loadData(){
-        $this->mongo->eid_dashboard->drop();
-        $year=2014;
-        $current_year=date('Y');
+        
        
-       
-        while($year<=$current_year){
-            $samples_records = LiveData::getSamples($year);
-            $counter=0;
+        $turnAroundTimeInMonths=env('TAT_MONTHS', 3);//Number of Months to consider for worst turn -around-time
+
+        //while($year<=$current_year){
+        //    $samples_records = LiveData::getSamples($year);
+        //    $counter=0;
             
+        for ($month=0; $month < $turnAroundTimeInMonths; $month++) { 
+            $turnAroundYear=intval(date("Y",strtotime("-$month month")));
+            $turnAroundMonth=intval(date("m",strtotime("-$month month")));
+
+            $dummyYearMonthString=$turnAroundYear.str_pad($turnAroundMonth,2,0,STR_PAD_LEFT);
+            $dummyYearMonth = intval($dummyYearMonthString);
+
+            $recordsRemoved =  $this->removeSamples($dummyYearMonth);
+
+            $samples_records = LiveData::getSamplesRecordsByMonth($turnAroundYear,$turnAroundMonth);
+            $year = $turnAroundYear;
+
+            $recordsInserted=0;
+
             try {
                 foreach($samples_records AS $s){
                     $data=[];
@@ -97,15 +104,31 @@ class EidEngine extends Command
                    
 
                    $this->mongo->eid_dashboard->insert($data);
-                   $counter ++;
+                   $recordsInserted ++;
                 }//end of for loop
-              echo " inserted $counter records for $year\n";
-              $year++;
+              echo " Removed $recordsRemoved records for $turnAroundYear-$turnAroundMonth\n";
+              echo " Inserted $recordsInserted records for $turnAroundYear-$turnAroundMonth\n";
             } catch (Exception $e) {
                 var_dump($e);
             }//end catch
 
         }//end of while loop
+    }
+
+    /*
+    * return 1 for when a record has been successfully removed,0 when nothing has been found.
+    */
+    private function removeSample($numberSampleID){
+        $options=[];
+        $options['justOne']=false;
+        $result=$this->mongo->eid_dashboard->remove(array('sample_id' => $numberSampleID), $options);
+        return $result['n'];//return 1 for when a record has been successfully removed,0 when nothing has been found.
+    }
+     private function removeSamples($yearMonth){
+        $options=[];
+        $options['justOne']=false;
+        $result=$this->mongo->eid_dashboard->remove(array('year_month' => $yearMonth), $options);
+        return $result['n'];//return 1 for when a record has been successfully removed,0 when nothing has been found.
     }
 
     public function _loadHubs(){

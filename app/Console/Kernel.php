@@ -14,6 +14,9 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \EID\Console\Commands\Inspire::class,
+        \EID\Console\Commands\EidEngine::class,
+        \EID\Console\Commands\ResultsCommand::class,
+        \EID\Console\Commands\DashboardUpdater::class
     ];
 
     /**
@@ -24,7 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('inspire')
-                 ->hourly();
+        //Run the task every day at midnight ->daily()
+        $schedule->command('eiddashboard:update')->daily();    
     }
 }

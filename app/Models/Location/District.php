@@ -44,4 +44,41 @@ class District extends Model {
 		return $arr;
 	}
 
+	public static function districtsInit(){
+		$arr=array();
+		foreach(District::all() AS $d){
+			$arr[$d->id]=0;
+		}
+		return $arr;
+	}
+
+	public static function districtsByRegions(){
+		$res=District::all();
+		$ret=[];
+		foreach ($res as $rw) {
+			$ret[$rw->regionID][$rw->id]=$rw->district;
+		}
+		return $ret;
+	}
+
+	public static function districtsFacilitiesInit(){
+		$arr=array();
+		$res=District::rightjoin('districts AS d','d.id','=','f.districtID')
+			 ->select('districtID','district','f.id AS facility_id')
+			 ->from('facilities AS f')
+			 ->get();
+		foreach($res AS $row){
+			$arr[$row->districtID][$row->facility_id]=0;
+		}
+		return $arr;
+	}
+
+	public static function distsNregs(){
+		$res=District::all();
+		$ret=[];
+		foreach ($res as $rw) {
+			$ret[$rw->id]=$rw->regionID;
+		}
+		return $ret;
+	}
 }

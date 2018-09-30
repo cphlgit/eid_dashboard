@@ -128,7 +128,7 @@ class DashboardController extends Controller {
 	}
 
 	private function _dateNMonthsBack(){
-    	$ret;
+    	$ret=0;
     	$n=env('INIT_MONTHS');
         $m=date('m');
         $y=date('Y');
@@ -154,6 +154,10 @@ class DashboardController extends Controller {
 		}
 
 		$conds=[];
+		$source = !isset($source)?'cphl':$source;
+		if($source!='all'){
+			$conds['$and'][] = ['source'=>$source];
+		}
 		$conds['$and'][]=['year_month'=>  ['$gte'=> (int)$fro_date] ];
 		$conds['$and'][]=[ 'year_month'=>  ['$lte'=> (int)$to_date] ];
 

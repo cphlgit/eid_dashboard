@@ -51,6 +51,7 @@ ctrllers.DashController=function($scope,$http){
     var gender_json={};
     var pcrs_json={};
     var hubs_json={};
+    $scope.source_val = 'cphl';
 
     $scope.districts_slct=[];
     $scope.districts_lables=[];
@@ -217,6 +218,7 @@ ctrllers.DashController=function($scope,$http){
             prms.care_levels = JSON.stringify($scope.params.care_levels);
             prms.genders = JSON.stringify($scope.params.genders);
             prms.pcrs = JSON.stringify($scope.params.pcrs);
+            prms.source = $scope.source_val;
            
             $http({method:'GET',url:"/live/",params:prms}).success(function(data) {
                 
@@ -676,6 +678,14 @@ ctrllers.DashController=function($scope,$http){
 
         getData();
     }
+
+    $scope.setSource = function(val){
+        $scope.source_val = val;
+        $('.sources').removeClass('active');
+        $('#sos_'+val).addClass('active');
+
+        getData();
+    };
 
     var isAgeRageValid=function(age_range_to_validate){
         var validated=true;

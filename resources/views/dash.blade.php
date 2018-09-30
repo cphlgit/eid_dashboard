@@ -95,7 +95,7 @@
 </div> 
 
 <div class='container'>
-    <br>
+    
     <?php //if(!isset($filter_val)) $filter_val="National Metrics, ".$time." thus far" ?>
       
      <?php
@@ -148,6 +148,18 @@
      <span ng-model="month_labels" ng-init='month_labels={!! json_encode(MyHTML::months()) !!}'></span>
      <span ng-model="filtered" ng-init='filtered=false'></span>
      <span class="hdr hdr-grey" style="float:right;font-size:11px"><% data_date %></span><br>
+
+    <div class="btn-group souces">
+        <button type="button" class="btn btn-default active sources" ng-click="setSource('cphl')" id='sos_cphl'> 
+            <span class='hdr hdr-grey'>CPHL</span>
+        </button>
+        <button type="button" class="btn btn-default sources" ng-click="setSource('poc')" id='sos_poc'> 
+            <span class='hdr hdr-grey'>POC</span>
+        </button>
+        <button type="button" class="btn btn-default sources"  ng-click="setSource('all')" id='sos_all'>
+            <span class='hdr hdr-grey'>ALL</span>
+        </button>
+    </div>
 
     <div class='row'>
         <div class='col-md-1' style="padding-top:17px; font-size:bolder">
@@ -728,6 +740,11 @@
         </ul>
     
 </footer>
+
+<script type="text/javascript">
+    
+
+</script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-sanitize.min.js"></script>
 <script src="{{ asset('js/ng-csv.js') }}"></script>
 <script src="{{ asset('js/ng-csv.min.js') }}"></script>
@@ -737,6 +754,7 @@
     [].slice.call( document.querySelectorAll( '.tabss' ) ).forEach( function( el ) {
         new CBPFWTabs( el );
     });
+
 })();
 </script>
 

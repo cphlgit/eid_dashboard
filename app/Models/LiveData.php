@@ -73,6 +73,11 @@ class LiveData extends Model
 		return $samples;
     }
 
+    public static function getPOCSamples($year){
+        $sql = "SELECT * FROM poc_data p inner join facilities f on p.facility_id=f.id";
+        return \DB::connection('live_db')->select($sql);
+    }
+
     public static function getSamplesRecordsByMonth($year,$month){
       $sql = "SELECT s.id,s.infant_exp_id,".self::GENDER_CASE." as sex,s.infant_dob,month(s.date_dbs_taken) as month_of_year,
          ".self::AGE_IN_MONTHS_STRING." as age_in_months ,b.facility_id,f.hubID,f.facilityLevelID as care_level_id,f.districtID,

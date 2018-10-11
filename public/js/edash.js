@@ -52,6 +52,9 @@ ctrllers.DashController=function($scope,$http){
     var pcrs_json={};
     var hubs_json={};
 
+    var mother_prophylaxes_json={};
+    var infant_prophylaxes_json={};
+
     $scope.districts_slct=[];
     $scope.districts_lables=[];
 
@@ -60,7 +63,9 @@ ctrllers.DashController=function($scope,$http){
 
 
     $scope.params = {
-        'districts':[],'hubs':[],'regions':[],'care_levels':[],'age_ranges':[],'genders':[],'pcrs':[]};
+        'districts':[],'hubs':[],'regions':[],'care_levels':[],'age_ranges':[],'genders':[],'pcrs':[],
+        'mother_prophylaxes':[],'infant_prophylaxes':[]
+    };
 
 
     //Age groups ----
@@ -121,6 +126,18 @@ ctrllers.DashController=function($scope,$http){
         $scope.to_age_slct =pairize(to_age_json);
         $scope.filter_to_age =pairize(to_age_json);
 
+        //initializeSys();        
+    });
+
+     $http.get("../json/mother_prophylaxis.json").success(function(data){
+        mother_prophylaxes_json=data||{};
+        $scope.mother_prophylaxis_slct=pairize(mother_prophylaxes_json);
+        //initializeSys();      
+    });
+
+     $http.get("../json/infant_prophylaxis.json").success(function(data){
+        infant_prophylaxes_json=data||{};
+        $scope.infant_prophylaxis_slct=pairize(infant_prophylaxes_json);
         //initializeSys();        
     });
 

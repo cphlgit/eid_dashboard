@@ -208,6 +208,11 @@
             </span>
         </span>
         
+        <span ng-model='filter_mother_prophylaxis' ng-init='filter_mother_prophylaxis={}'>
+            <span ng-repeat="(mother_prophylaxis_id,mother_prophylaxis_name) in filter_mother_prophylaxis">
+                <span class="filter-val ng-cloak"> <% mother_prophylaxis_name %> (mp) <x class='glyphicon glyphicon-remove' ng-click='removeTag("MotherProphylaxis",mother_prophylaxis_id)'></x></span> 
+            </span>
+        </span>
 
         <span ng-show="filtered" class="filter_clear" ng-click="clearAllFilters()">reset all</span>
         </div>
@@ -296,7 +301,7 @@
             </td> 
             <!-- new filters-->
             
-            <td width='10%'>
+            <td width='5%'>
                 <select ng-model="pcrs" ng-init="pcrs='all'" ng-change="filter('pcr')">
                     <option value='all'>PCR</option>
                     <option class="ng-cloak" ng-repeat="pcr_instance in pcrs_slct | orderBy:'name'" value="<% pcr_instance.id %>">
@@ -305,6 +310,14 @@
                 </select>
             </td>
              
+             <td width='5%'>
+                <select ng-model="mother_prophylaxes" ng-init="mother_prophylaxes='all'" ng-change="filter('mother_prophylaxis')">
+                    <option value='all'>Mother Prophylaxis</option>
+                    <option class="ng-cloak" ng-repeat="mother_prophylaxis_instance in mother_prophylaxis_slct | orderBy:'name'" value="<% mother_prophylaxis_instance.id %>">
+                        <% mother_prophylaxis_instance.name %>
+                    </option>
+                </select>
+            </td>
              
         </tr>
      </table>

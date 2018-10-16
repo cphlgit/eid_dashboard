@@ -24,6 +24,7 @@ class DashboardController extends Controller {
 		$this->months=\MyHTML::initMonths();
 		$this->mongo=Mongo::connect();
 		$this->conditions=$this->_setConditions();
+		$this->db = \DB::connection('live_db');
 		//$this->middleware('auth');
 	}
 
@@ -550,6 +551,38 @@ class DashboardController extends Controller {
 		
 		return isset($res['result'])?$res['result']:[];
 		
+	}
+
+	public function getResultsPrintingStatistics(){
+		
+		$sql = " SELECT facility,hub,ip,MAX(dispatch_at) as last_printed_on,
+		(CASE WHEN dispatched=0 THEN COUNT(dispatched) ELSE 0 END) AS pending_results,
+		(CASE WHEN dispatched=0 THEN DATEDIFF(now(),MIN(qc_at)) ELSE 0 END) AS oldest_result_pending_printing 
+		from
+			(SELECT DISTINCT d.id as specimen_id,
+								b.facility_id,
+			                    f.facility,h.hub,ips.ip,
+			                    
+			                    d.date_dbs_taken as date_of_sample_collection,
+			                    
+			                    fp.dispatch_at,fp.dispatched,fp.qc_at
+
+
+			                    from dbs_samples d left join batches b on d.batch_id = b.id 
+			                    left join facility_printing fp on b.id = fp.batch_id 
+			                    inner join facilities f on f.id=b.facility_id 
+			inner join hubs h on h.id=f.hubID 
+			inner join ips on ips.id = h.ipID
+			                    
+
+			                    where YEAR(d.date_dbs_taken)=2018 
+			) as printing 
+			group by facility_id";
+
+			$facilities = $this->db->select($sql);
+		
+		return compact('facilities');
+
 	}
 
 

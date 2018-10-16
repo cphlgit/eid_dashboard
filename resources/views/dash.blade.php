@@ -220,7 +220,7 @@
 
     <table border='1' cellpadding='0' cellspacing='0' class='filter-tb'>
         <tr>
-            <td width='10%' >
+            <td width='9%' >
                 <span ng-model='fro_date_slct' ng-init='fro_date_slct={!! json_encode($months_by_years) !!}'></span>
                 <select ng-model="fro_date" ng-init="fro_date='all'">
                     <option value='all'>FROM DATE</option>
@@ -231,7 +231,7 @@
                     </optgroup>
                 </select>
             </td>
-            <td width='10%' >
+            <td width='9%' >
                 <span ng-model='to_date_slct' ng-init='to_date_slct={!! json_encode($months_by_years) !!}'></span>
                 <select ng-model="to_date" ng-init="to_date='all'" ng-change="dateFilter('to')">
                     <option value='all'>TO DATE</option>
@@ -242,7 +242,7 @@
                     </optgroup>
                 </select>
             </td>
-            <td width='10%'>
+            <td width='9%'>
                 <select ng-model="from_age" ng-init="from_age='all'">
                     <option value='all'>From Age</option>
                     <option class="ng-cloak" ng-repeat="fro_age in from_age_slct|orderBy:'name' " value="<% fro_age %>">
@@ -251,7 +251,7 @@
                 </select>
 
             </td>
-            <td width='10%'>
+            <td width='9%'>
                 <select ng-model="to_age" ng-init="to_age='all'" ng-change="filter('age_range')">
                     <option value='all'>To Age</option>
                     <option class="ng-cloak" ng-repeat="to_age in to_age_slct|orderBy:'name' " value="<% to_age %>">
@@ -259,7 +259,7 @@
                     </option>
                 </select>
             </td>
-            <td width='10%'>
+            <td width='9%'>
                 <select ng-model="gender" ng-init="gender='all'" ng-change="filter('gender')">
                     <option value='all'>SEX</option>
                     <option class="ng-cloak" ng-repeat="gl in gender_slct | orderBy:'name'" value="<% gl.id %>">
@@ -267,7 +267,7 @@
                     </option>
                 </select>
             </td>
-            <td width='10%'>
+            <td width='9%'>
                 <select ng-model="region" ng-init="region='all'" ng-change="filter('region')">
                     <option value='all'>REGIONS</option>
                     <option class="ng-cloak" ng-repeat="rg in regions_slct|orderBy:'name'" value="<% rg.id %>">
@@ -275,7 +275,7 @@
                     </option>
                 </select>
             </td>
-            <td width='10%'>
+            <td width='9%'>
                 <select ng-model="hubs" ng-init="hubs='all'" ng-change="filter('hub')">
                     <option value='all'>HUBS</option>
                     <option class="ng-cloak" ng-repeat="hub_instance in hubs_slct | orderBy:'name'" value="<% hub_instance.id %>">
@@ -283,7 +283,7 @@
                     </option>
                 </select>
             </td>
-            <td width='10%'>
+            <td width='9%'>
                 <select ng-model="district" ng-init="district='all'" ng-change="filter('district')">
                     <option value='all'>DISTRICTS</option>
                     <option class="ng-cloak" ng-repeat="dist in districts_slct | orderBy:'name'" value="<% dist.id %>">
@@ -291,7 +291,7 @@
                     </option>
                 </select>
             </td>           
-            <td width='10%'>
+            <td width='9%'>
                 <select ng-model="care_level" ng-init="care_level='all'" ng-change="filter('care_level')">
                     <option value='all'>CARE LEVELS</option>
                     <option class="ng-cloak" ng-repeat="cl in care_levels_slct | orderBy:'name'" value="<% cl.id %>">
@@ -301,7 +301,7 @@
             </td> 
             <!-- new filters-->
             
-            <td width='5%'>
+            <td width='9%'>
                 <select ng-model="pcrs" ng-init="pcrs='all'" ng-change="filter('pcr')">
                     <option value='all'>PCR</option>
                     <option class="ng-cloak" ng-repeat="pcr_instance in pcrs_slct | orderBy:'name'" value="<% pcr_instance.id %>">
@@ -310,7 +310,7 @@
                 </select>
             </td>
              
-             <td width='5%'>
+             <td width='9%'>
                 <select ng-model="mother_prophylaxes" ng-init="mother_prophylaxes='all'" ng-change="filter('mother_prophylaxis')">
                     <option value='all'>Mother Prophylaxis</option>
                     <option class="ng-cloak" ng-repeat="mother_prophylaxis_instance in mother_prophylaxis_slct | orderBy:'name'" value="<% mother_prophylaxis_instance.id %>">
@@ -359,6 +359,12 @@
                             <% ((initiated/hiv_positive_infants)*100)|number:1 %>% <sup>*</sup>
                         </span>
                         <span class="desc">initiation rate</span>
+                    </a>
+                </li>
+                <li id='tb_hd5'>
+                    <a href="#tab5" id='tb_lnk5'>
+                        <span style="font-size:10px">Results Printing Status</span> 
+                        <span class="desc">Results Printing Status</span>
                     </a>
                 </li>
             </ul>
@@ -699,6 +705,7 @@
                 </div> 
                 <i style="font-size:12px;color:#9F82D1">* ART Initiation Rate is a preliminary estimate based on data collected at CPHL. CPHL is still revising the data collection mechanism</i>               
             </section>
+            <section id="tab5"> @include('sections._results_printing_statistics')</section>
         </div><!-- /content -->
     </div><!-- /tabs -->
     

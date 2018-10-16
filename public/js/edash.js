@@ -179,7 +179,10 @@ ctrllers.DashController=function($scope,$http){
         }
 
     });
-
+    
+    $http.get("/results_printing_stats/").success(function(data){
+        $scope.facilities_array=data.facilities;
+    });
    
     var initializeSys=function(){
         var d=new Date();

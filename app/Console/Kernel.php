@@ -16,7 +16,8 @@ class Kernel extends ConsoleKernel
         \EID\Console\Commands\Inspire::class,
         \EID\Console\Commands\EidEngine::class,
         \EID\Console\Commands\ResultsCommand::class,
-        \EID\Console\Commands\DashboardUpdater::class
+        \EID\Console\Commands\DashboardUpdater::class,
+        \EID\Console\Commands\POCEngine::class
     ];
 
     /**

@@ -101,6 +101,8 @@ class DashboardUpdater extends Command
                     $data["testing_completed"]=isset($s->testing_completed)? $s->testing_completed: "UNKNOWN";
                     $data["accepted_result"]=isset($s->accepted_result)? $s->accepted_result: "UNKNOWN";
                     $data["pcr"]=isset($s->pcr)? $s->pcr: "UNKNOWN";//
+
+                    $dat["source"] = "cphl";
                    
 
                    $this->mongo->eid_dashboard->insert($data);

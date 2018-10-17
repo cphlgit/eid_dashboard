@@ -559,29 +559,18 @@ class DashboardController extends Controller {
 
 	public function getResultsPrintingStatistics(){
 		
-		$sql = " SELECT facility,hub,ip,MAX(dispatch_at) as last_printed_on,
-		(CASE WHEN dispatched=0 THEN COUNT(dispatched) ELSE 0 END) AS pending_results,
-		(CASE WHEN dispatched=0 THEN DATEDIFF(now(),MIN(qc_at)) ELSE 0 END) AS oldest_result_pending_printing 
-		from
-			(SELECT DISTINCT d.id as specimen_id,
-								b.facility_id,
-			                    f.facility,h.hub,ips.ip,
-			                    
-			                    d.date_dbs_taken as date_of_sample_collection,
-			                    
-			                    fp.dispatch_at,fp.dispatched,fp.qc_at
-
-
-			                    from dbs_samples d left join batches b on d.batch_id = b.id 
-			                    left join facility_printing fp on b.id = fp.batch_id 
-			                    inner join facilities f on f.id=b.facility_id 
-			inner join hubs h on h.id=f.hubID 
-			inner join ips on ips.id = h.ipID
-			                    
-
-			                    where YEAR(d.date_dbs_taken)=2018 
-			) as printing 
-			group by facility_id";
+			$sql="SELECT f.facility,h.hub,ips.ip,
+                SUM(CASE WHEN fp.dispatched =0 THEN 1 ELSE 0 END) AS pending_results,
+                MAX(fp.dispatch_at) AS last_printed_on,
+                MIN(CASE WHEN fp.dispatched =0 THEN fp.qc_at END) AS oldest_result_pending_printing
+                FROM dbs_samples AS s
+                INNER JOIN batches AS b ON s.batch_id = b.id
+                INNER JOIN facility_printing AS fp ON b.id = fp.batch_id
+                inner join facilities f on f.id=b.facility_id 
+			    inner join hubs h on h.id=f.hubID 
+			    left join ips on ips.id = h.ipID
+                WHERE date(fp.qc_at)>='".env('RESULTS_CUTOFF', '')."'
+                GROUP BY f.id";
 
 			$facilities = $this->db->select($sql);
 		

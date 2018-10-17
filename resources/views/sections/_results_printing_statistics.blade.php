@@ -5,7 +5,7 @@
     
         <div>
             <span style="font-size: 10px; color: #F44336;">
-            {{env('UPDATE_MESSAGE')}}
+            {{env('UPDATE_MESSAGE')}} {{env('RESULTS_CUTOFF')}}
             </span>
             <br>
             <br>
@@ -27,7 +27,7 @@
                                 </tr>
                             </thead>
                                <tbody>                                
-                                    <tr ng-repeat="f in facilities_array" >
+                                    <tr ng-repeat="f in facilities_array" ng-if="f.pending_results > 0">
                                         <td class="ng-cloak"><% f.facility %></td>
                                         <td class="ng-cloak"><% f.hub %></td>
                                         <td class="ng-cloak"><% f.ip %></td>
@@ -35,7 +35,7 @@
 
                                         
                                         <td class="ng-cloak"><%f.last_printed_on %></td>
-                                        <td class="ng-cloak"><%f.oldest_result_pending_printing%></td>
+                                        <td class="ng-cloak"><% generateDaysDifference(f.oldest_result_pending_printing) %></td>
                                     </tr>                        
                                  </tbody>
                              

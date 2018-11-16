@@ -269,7 +269,7 @@
      <span ng-model="filtered" ng-init='filtered=false'></span>
      <span class="hdr hdr-grey" style="float:right;font-size:11px"><% data_date %></span><br>
 
-    <div class="btn-group souces">
+    <!--div class="btn-group souces">
         <button type="button" class="btn btn-default active sources" ng-click="setSource('cphl')" id='sos_cphl'> 
             <span class='hdr hdr-grey'>CPHL</span>
         </button>
@@ -279,7 +279,7 @@
         <button type="button" class="btn btn-default sources"  ng-click="setSource('all')" id='sos_all'>
             <span class='hdr hdr-grey'>ALL</span>
         </button>
-    </div>
+    </div-->
 
     <div class='row'>
         <div class='col-md-1' style="padding-top:17px; font-size:bolder">
@@ -512,8 +512,8 @@
                 <div class="row">
                     <div class="panel panel-info">
                       <div class="panel-heading collapsed" data-toggle="collapse" data-target="#tests_div">
-                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Data Table ...</i>
-                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Data Table ...</i>
+                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Shrink ...</i>
+                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Click here to view tabular data for districts and facilities ...</i>
                       </div>
                       <div class="panel-body">
                         
@@ -621,8 +621,8 @@
                 <div class="row">
                     <div class="panel panel-info">
                       <div class="panel-heading collapsed" data-toggle="collapse" data-target="#hiv_positive_infants_div">
-                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Data Table ...</i>
-                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Data Table ...</i>
+                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Shrink ...</i>
+                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Click here to view tabular data for districts and facilities ..</i>
                       </div>
                       <div class="panel-body">
                         
@@ -695,8 +695,8 @@
                 <div class="row">
                     <div class="panel panel-info">
                       <div class="panel-heading collapsed" data-toggle="collapse" data-target="#hiv_positivity_rate_div">
-                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Data Table ...</i>
-                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Data Table ...</i>
+                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Shrink ...</i>
+                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Click here to view tabular data for districts and facilities ..</i>
                       </div>
                       <div class="panel-body">
                         
@@ -775,8 +775,8 @@
                  <div class="row">
                     <div class="panel panel-info">
                       <div class="panel-heading collapsed" data-toggle="collapse" data-target="#initiation_rate_div">
-                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Data Table ...</i>
-                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Data Table ...</i>
+                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Shrink ...</i>
+                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Click here to view tabular data for districts and facilities ..</i>
                       </div>
                       <div class="panel-body">
                         

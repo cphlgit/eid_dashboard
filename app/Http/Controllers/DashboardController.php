@@ -24,6 +24,7 @@ class DashboardController extends Controller {
 		$this->months=\MyHTML::initMonths();
 		$this->mongo=Mongo::connect();
 		$this->conditions=$this->_setConditions();
+		$this->db = \DB::connection('live_db');
 		//$this->middleware('auth');
 	}
 
@@ -554,6 +555,27 @@ class DashboardController extends Controller {
 		
 		return isset($res['result'])?$res['result']:[];
 		
+	}
+
+	public function getResultsPrintingStatistics(){
+		
+			$sql="SELECT f.facility,h.hub,ips.ip,
+                SUM(CASE WHEN fp.dispatched =0 THEN 1 ELSE 0 END) AS pending_results,
+                MAX(fp.dispatch_at) AS last_printed_on,
+                MIN(CASE WHEN fp.dispatched =0 THEN fp.qc_at END) AS oldest_result_pending_printing
+                FROM dbs_samples AS s
+                INNER JOIN batches AS b ON s.batch_id = b.id
+                INNER JOIN facility_printing AS fp ON b.id = fp.batch_id
+                inner join facilities f on f.id=b.facility_id 
+			    inner join hubs h on h.id=f.hubID 
+			    left join ips on ips.id = h.ipID
+                WHERE date(fp.qc_at)>='".env('RESULTS_CUTOFF', '')."'
+                GROUP BY f.id";
+
+			$facilities = $this->db->select($sql);
+		
+		return compact('facilities');
+
 	}
 
 

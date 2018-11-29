@@ -68,11 +68,131 @@
     }
     </style>
 
+
+    <!-- CSS and Javascript for pop -->
+        <style type="text/css">
+            
+            /* Popup box BEGIN */
+        .hover_bkgr_fricc{
+            background:rgba(0,0,0,.4);
+            cursor:pointer;
+            display:none;
+            height:100%;
+            position:fixed;
+            text-align:center;
+            top:0;
+            width:100%;
+            z-index:10000;
+        }
+        .hover_bkgr_fricc .helper{
+            display:inline-block;
+            height:100%;
+            vertical-align:middle;
+        }
+        .hover_bkgr_fricc > div {
+            background-color: #fff;
+            box-shadow: 10px 10px 60px #555;
+            display: inline-block;
+            height: auto;
+            max-width: 551px;
+            min-height: 100px;
+            vertical-align: middle;
+            width: 60%;
+            position: relative;
+            border-radius: 8px;
+            padding: 15px 5%;
+        }
+        .popupCloseButton {
+            background-color: #fff;
+            border: 3px solid #999;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-block;
+            font-family: arial;
+            font-weight: bold;
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 25px;
+            line-height: 30px;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+        }
+        .popupCloseButton:hover {
+            background-color: #ccc;
+        }
+        .trigger_popup_fricc {
+            cursor: pointer;
+            font-size: 20px;
+            margin: 20px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        /* Popup box BEGIN */
+        </style>
+
+        <script type="text/javascript">
+
+         $(document).ready(function(){
+            $(window).load(function () {
+                $('.hover_bkgr_fricc').show();
+
+                $(".trigger_popup_fricc").click(function(){
+                   $('.hover_bkgr_fricc').show();
+                });
+                $('.hover_bkgr_fricc').click(function(){
+                    $('.hover_bkgr_fricc').hide();
+                });
+                $('.popupCloseButton').click(function(){
+                    $('.hover_bkgr_fricc').hide();
+                });
+            });
+            
+        });
+        </script>
+    <!-- end of CSS and Javascript for pop -->
+
+
     
 </head>
 
 <body ng-app="dashboard" ng-controller="DashController">
+@if(!Auth::check())
+        <div class="hover_bkgr_fricc">
+                <span class="helper"></span>
+                <div>
+                    <div class="popupCloseButton">X</div>
+                    <div class="modal-header text-danger">Why wait? - Print EID and Viral load results now!</div>
 
+                    <div class="modal-body text-left text-danger">
+                        <small>EID and Viral Load results can be printed real time from the Viral load and EID dashboards by the 
+                            Electronic results printing (e-RD).</small>
+
+                        <ul class="list-unstyled hover">
+                        <li>Advantages/Benefits</li>
+                            <ul><small>Instant access to completed results</small></ul>
+                            <ul><small>Continuous access to old results</small></ul>
+                            <ul><small>Ability to store electronic copy of results</small></ul>
+                            
+                        <li>What you need to print</li>
+                            <ul><small>Computer</small></ul>
+                            <ul><small>Printer</small></ul>
+                            <ul><small>Paper, A4</small></ul>
+                            <ul><small>Envelopes</small></ul>
+                            <ul><small>Internet Access</small></ul>
+                        <li>How to enroll for e-RD</li>
+                <ul><small>We call upon all facilities with capacity to print to contact our 
+                    customer care on 0800221100 or send email 
+                    to  <a>customercare@cphl.go.ug</a> for enrollment.</small></ul>
+                    </ul>
+
+                    </div>
+                    
+
+                </div>
+        </div>
+    @endif
 <div class="navbar-custom navbar navbar-inverse navbar-fixed-top" role="navigation">
     <img src="{{ asset('/images/uganda_flag2.png') }}" style="width:100%;height:10px;margin:0px">
     <div class="container">
@@ -149,7 +269,7 @@
      <span ng-model="filtered" ng-init='filtered=false'></span>
      <span class="hdr hdr-grey" style="float:right;font-size:11px"><% data_date %></span><br>
 
-    <div class="btn-group souces">
+    <!--div class="btn-group souces">
         <button type="button" class="btn btn-default active sources" ng-click="setSource('cphl')" id='sos_cphl'> 
             <span class='hdr hdr-grey'>CPHL</span>
         </button>
@@ -159,7 +279,7 @@
         <button type="button" class="btn btn-default sources"  ng-click="setSource('all')" id='sos_all'>
             <span class='hdr hdr-grey'>ALL</span>
         </button>
-    </div>
+    </div-->
 
     <div class='row'>
         <div class='col-md-1' style="padding-top:17px; font-size:bolder">
@@ -220,6 +340,11 @@
             </span>
         </span>
         
+        <span ng-model='filter_mother_prophylaxis' ng-init='filter_mother_prophylaxis={}'>
+            <span ng-repeat="(mother_prophylaxis_id,mother_prophylaxis_name) in filter_mother_prophylaxis">
+                <span class="filter-val ng-cloak"> <% mother_prophylaxis_name %> (mp) <x class='glyphicon glyphicon-remove' ng-click='removeTag("MotherProphylaxis",mother_prophylaxis_id)'></x></span> 
+            </span>
+        </span>
 
         <span ng-show="filtered" class="filter_clear" ng-click="clearAllFilters()">reset all</span>
         </div>
@@ -227,7 +352,7 @@
 
     <table border='1' cellpadding='0' cellspacing='0' class='filter-tb'>
         <tr>
-            <td width='10%' >
+            <td width='9%' >
                 <span ng-model='fro_date_slct' ng-init='fro_date_slct={!! json_encode($months_by_years) !!}'></span>
                 <select ng-model="fro_date" ng-init="fro_date='all'">
                     <option value='all'>FROM DATE</option>
@@ -238,7 +363,7 @@
                     </optgroup>
                 </select>
             </td>
-            <td width='10%' >
+            <td width='9%' >
                 <span ng-model='to_date_slct' ng-init='to_date_slct={!! json_encode($months_by_years) !!}'></span>
                 <select ng-model="to_date" ng-init="to_date='all'" ng-change="dateFilter('to')">
                     <option value='all'>TO DATE</option>
@@ -249,7 +374,7 @@
                     </optgroup>
                 </select>
             </td>
-            <td width='10%'>
+            <td width='9%'>
                 <select ng-model="from_age" ng-init="from_age='all'">
                     <option value='all'>From Age</option>
                     <option class="ng-cloak" ng-repeat="fro_age in from_age_slct|orderBy:'name' " value="<% fro_age %>">
@@ -258,7 +383,7 @@
                 </select>
 
             </td>
-            <td width='10%'>
+            <td width='9%'>
                 <select ng-model="to_age" ng-init="to_age='all'" ng-change="filter('age_range')">
                     <option value='all'>To Age</option>
                     <option class="ng-cloak" ng-repeat="to_age in to_age_slct|orderBy:'name' " value="<% to_age %>">
@@ -266,7 +391,7 @@
                     </option>
                 </select>
             </td>
-            <td width='10%'>
+            <td width='9%'>
                 <select ng-model="gender" ng-init="gender='all'" ng-change="filter('gender')">
                     <option value='all'>SEX</option>
                     <option class="ng-cloak" ng-repeat="gl in gender_slct | orderBy:'name'" value="<% gl.id %>">
@@ -274,7 +399,7 @@
                     </option>
                 </select>
             </td>
-            <td width='10%'>
+            <td width='9%'>
                 <select ng-model="region" ng-init="region='all'" ng-change="filter('region')">
                     <option value='all'>REGIONS</option>
                     <option class="ng-cloak" ng-repeat="rg in regions_slct|orderBy:'name'" value="<% rg.id %>">
@@ -282,7 +407,7 @@
                     </option>
                 </select>
             </td>
-            <td width='10%'>
+            <td width='9%'>
                 <select ng-model="hubs" ng-init="hubs='all'" ng-change="filter('hub')">
                     <option value='all'>HUBS</option>
                     <option class="ng-cloak" ng-repeat="hub_instance in hubs_slct | orderBy:'name'" value="<% hub_instance.id %>">
@@ -290,7 +415,7 @@
                     </option>
                 </select>
             </td>
-            <td width='10%'>
+            <td width='9%'>
                 <select ng-model="district" ng-init="district='all'" ng-change="filter('district')">
                     <option value='all'>DISTRICTS</option>
                     <option class="ng-cloak" ng-repeat="dist in districts_slct | orderBy:'name'" value="<% dist.id %>">
@@ -298,7 +423,7 @@
                     </option>
                 </select>
             </td>           
-            <td width='10%'>
+            <td width='9%'>
                 <select ng-model="care_level" ng-init="care_level='all'" ng-change="filter('care_level')">
                     <option value='all'>CARE LEVELS</option>
                     <option class="ng-cloak" ng-repeat="cl in care_levels_slct | orderBy:'name'" value="<% cl.id %>">
@@ -308,7 +433,7 @@
             </td> 
             <!-- new filters-->
             
-            <td width='10%'>
+            <td width='9%'>
                 <select ng-model="pcrs" ng-init="pcrs='all'" ng-change="filter('pcr')">
                     <option value='all'>PCR</option>
                     <option class="ng-cloak" ng-repeat="pcr_instance in pcrs_slct | orderBy:'name'" value="<% pcr_instance.id %>">
@@ -317,6 +442,14 @@
                 </select>
             </td>
              
+             <td width='9%'>
+                <select ng-model="mother_prophylaxes" ng-init="mother_prophylaxes='all'" ng-change="filter('mother_prophylaxis')">
+                    <option value='all'>Mother Prophylaxis</option>
+                    <option class="ng-cloak" ng-repeat="mother_prophylaxis_instance in mother_prophylaxis_slct | orderBy:'name'" value="<% mother_prophylaxis_instance.id %>">
+                        <% mother_prophylaxis_instance.name %>
+                    </option>
+                </select>
+            </td>
              
         </tr>
      </table>
@@ -360,6 +493,12 @@
                         <span class="desc">initiation rate</span>
                     </a>
                 </li>
+                <li id='tb_hd5'>
+                    <a href="#tab5" id='tb_lnk5'>
+                        <span style="font-size:10px">Results Printing Status</span> 
+                        <span class="desc">Results Printing Status</span>
+                    </a>
+                </li>
             </ul>
         </nav>
         <div class="content-wrap">
@@ -373,8 +512,8 @@
                 <div class="row">
                     <div class="panel panel-info">
                       <div class="panel-heading collapsed" data-toggle="collapse" data-target="#tests_div">
-                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Data Table ...</i>
-                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Data Table ...</i>
+                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Shrink ...</i>
+                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Click here to view tabular data for districts and facilities ...</i>
                       </div>
                       <div class="panel-body">
                         
@@ -482,8 +621,8 @@
                 <div class="row">
                     <div class="panel panel-info">
                       <div class="panel-heading collapsed" data-toggle="collapse" data-target="#hiv_positive_infants_div">
-                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Data Table ...</i>
-                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Data Table ...</i>
+                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Shrink ...</i>
+                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Click here to view tabular data for districts and facilities ..</i>
                       </div>
                       <div class="panel-body">
                         
@@ -556,8 +695,8 @@
                 <div class="row">
                     <div class="panel panel-info">
                       <div class="panel-heading collapsed" data-toggle="collapse" data-target="#hiv_positivity_rate_div">
-                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Data Table ...</i>
-                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Data Table ...</i>
+                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Shrink ...</i>
+                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Click here to view tabular data for districts and facilities ..</i>
                       </div>
                       <div class="panel-body">
                         
@@ -636,8 +775,8 @@
                  <div class="row">
                     <div class="panel panel-info">
                       <div class="panel-heading collapsed" data-toggle="collapse" data-target="#initiation_rate_div">
-                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Data Table ...</i>
-                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Data Table ...</i>
+                        <i class="fa fa-fw fa-chevron-down text-nowrap"> Shrink ...</i>
+                        <i class="fa fa-fw fa-chevron-right text-nowrap"> Click here to view tabular data for districts and facilities ..</i>
                       </div>
                       <div class="panel-body">
                         
@@ -698,6 +837,7 @@
                 </div> 
                 <i style="font-size:12px;color:#9F82D1">* ART Initiation Rate is a preliminary estimate based on data collected at CPHL. CPHL is still revising the data collection mechanism</i>               
             </section>
+            <section id="tab5"> @include('sections._results_printing_statistics')</section>
         </div><!-- /content -->
     </div><!-- /tabs -->
     

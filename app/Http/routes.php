@@ -29,3 +29,5 @@ Route::get('/reports',function(){
 });
 Route::get("/live","DashboardController@live");
 Route::get("/other_data/","DashboardController@other_data");
+Route::get("/results_printing_stats/","DashboardController@getResultsPrintingStatistics");
+

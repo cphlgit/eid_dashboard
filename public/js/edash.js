@@ -53,6 +53,9 @@ ctrllers.DashController=function($scope,$http){
     var hubs_json={};
     $scope.source_val = 'cphl';
 
+    var mother_prophylaxes_json={};
+    var infant_prophylaxes_json={};
+
     $scope.districts_slct=[];
     $scope.districts_lables=[];
 
@@ -61,7 +64,9 @@ ctrllers.DashController=function($scope,$http){
 
 
     $scope.params = {
-        'districts':[],'hubs':[],'regions':[],'care_levels':[],'age_ranges':[],'genders':[],'pcrs':[]};
+        'districts':[],'hubs':[],'regions':[],'care_levels':[],'age_ranges':[],'genders':[],'pcrs':[],
+        'mother_prophylaxes':[],'infant_prophylaxes':[]
+    };
 
 
     //Age groups ----
@@ -86,6 +91,7 @@ ctrllers.DashController=function($scope,$http){
     $scope.second_pcr_array=[];
     $scope.positivity_array=[];
     $scope.hiv_positive_infants_array=[];
+
 
     $http.get("../json/districts_by_region.json").success(function(data){
         dists_by_region=data||{};
@@ -122,6 +128,18 @@ ctrllers.DashController=function($scope,$http){
         $scope.to_age_slct =pairize(to_age_json);
         $scope.filter_to_age =pairize(to_age_json);
 
+        //initializeSys();        
+    });
+
+     $http.get("../json/mother_prophylaxis.json").success(function(data){
+        mother_prophylaxes_json=data||{};
+        $scope.mother_prophylaxis_slct=pairize(mother_prophylaxes_json);
+        //initializeSys();      
+    });
+
+     $http.get("../json/infant_prophylaxis.json").success(function(data){
+        infant_prophylaxes_json=data||{};
+        $scope.infant_prophylaxis_slct=pairize(infant_prophylaxes_json);
         //initializeSys();        
     });
 
@@ -163,7 +181,10 @@ ctrllers.DashController=function($scope,$http){
         }
 
     });
-
+    
+    $http.get("/results_printing_stats/").success(function(data){
+        $scope.facilities_array=data.facilities;
+    });
    
     var initializeSys=function(){
         var d=new Date();
@@ -514,6 +535,35 @@ ctrllers.DashController=function($scope,$http){
 
         return export_facility_numbers;
     }
+
+    // Returns the days between a & b date objects...
+   function dateDiffInDays(a, b) {
+        var _MS_PER_DAY = 1000 * 60 * 60 * 24;
+        // Discard the time and time-zone information.
+        var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+        var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+        return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+    }
+
+    var convertStringIntoDate=function(date_timestamp_string){
+        var time_stamp_array=date_timestamp_string.split(" ");
+        var date_string=time_stamp_array[0];
+        var date_array=date_string.split("-");
+
+        var year=date_array[0];
+        var month=date_array[1] - 1;
+        var day=date_array[2];
+
+        var new_date = new Date(year,month,day);
+        return new_date;
+    };
+
+    // Calculate how many days between now and an event...
+    $scope.generateDaysDifference=function(dateString1){
+        var oldest =  convertStringIntoDate(dateString1);
+        var latest = new Date();
+        return dateDiffInDays(oldest,latest);
+    };
 
     $scope.dateFilter=function(mode){
         if($scope.fro_date!="all" && $scope.to_date!="all"){

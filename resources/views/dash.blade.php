@@ -858,7 +858,7 @@
             <font class='addition-metrics desc'>TOTAL 2ND PCR</font>            
         </div>       
         <div class='col-sm-1'></div>
-        <div class='col-sm-2'>
+        <div class='col-sm-2' ng-show="show_art_init">
             <font class='addition-metrics figure ng-cloak' ng-model="initiated" ng-init="initiated=0">
                 <% initiated|number %>
             </font><br>

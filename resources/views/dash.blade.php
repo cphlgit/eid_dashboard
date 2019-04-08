@@ -269,17 +269,17 @@
      <span ng-model="filtered" ng-init='filtered=false'></span>
      <span class="hdr hdr-grey" style="float:right;font-size:11px"><% data_date %></span><br>
 
-    <!--div class="btn-group souces">
+    <div class="btn-group souces">
         <button type="button" class="btn btn-default active sources" ng-click="setSource('cphl')" id='sos_cphl'> 
-            <span class='hdr hdr-grey'>CPHL</span>
+            <span class='hdr hdr-dark'>CPHL</span>
         </button>
         <button type="button" class="btn btn-default sources" ng-click="setSource('poc')" id='sos_poc'> 
-            <span class='hdr hdr-grey'>POC</span>
+            <span class='hdr hdr-dark'>POC</span>
         </button>
         <button type="button" class="btn btn-default sources"  ng-click="setSource('all')" id='sos_all'>
-            <span class='hdr hdr-grey'>ALL</span>
+            <span class='hdr hdr-dark'>ALL</span>
         </button>
-    </div-->
+    </div>
 
     <div class='row'>
         <div class='col-md-1' style="padding-top:17px; font-size:bolder">
@@ -485,7 +485,7 @@
                         <span class="desc">positivity rate</span>
                     </a>
                 </li>
-                <li id='tb_hd4'>
+                <li id='tb_hd4' ng-show="show_art_init">
                     <a href="#tab4" id='tb_lnk4' ng-click="displayInitiationRate()">
                         <span class="num ng-cloak" ng-model="initiated" ng-init="initiated=0">
                             <% ((initiated/hiv_positive_infants)*100)|number:1 %>% <sup>*</sup>
@@ -493,7 +493,7 @@
                         <span class="desc">initiation rate</span>
                     </a>
                 </li>
-                <li id='tb_hd5'>
+                <li id='tb_hd5' ng-show="show_results_printing">
                     <a href="#tab5" id='tb_lnk5'>
                         <span style="font-size:10px">Results Printing Status</span> 
                         <span class="desc">Results Printing Status</span>

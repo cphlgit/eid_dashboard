@@ -61,6 +61,8 @@ ctrllers.DashController=function($scope,$http){
 
     $scope.facilities_slct=[];
     $scope.facilities_lables=[];
+    $scope.show_art_init = true;
+    $scope.show_results_printing = true;
 
 
     $scope.params = {
@@ -733,6 +735,13 @@ ctrllers.DashController=function($scope,$http){
         $scope.source_val = val;
         $('.sources').removeClass('active');
         $('#sos_'+val).addClass('active');
+        if(val=='poc'){
+            $scope.show_art_init = false;
+            $scope.show_results_printing = false;
+        }else{
+            $scope.show_art_init = true;
+            $scope.show_results_printing = true;
+        }
 
         getData();
     };

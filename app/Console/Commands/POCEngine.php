@@ -54,7 +54,7 @@ class POCEngine extends Command
         $current_year=date('Y');
        
        
-        while($year<=$current_year){
+        //while($year<=$current_year){
             $samples_records = LiveData::getPOCSamples($year);
             $counter=0;
             
@@ -98,7 +98,7 @@ class POCEngine extends Command
                 var_dump($e);
             }//end catch
 
-        }//end of while loop
+        //}//end of while loop
     }
 
     private function getPCRLevel($val=''){

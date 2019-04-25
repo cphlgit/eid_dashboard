@@ -258,6 +258,11 @@ ctrllers.DashController=function($scope,$http){
                 $scope.initiated=whole_numbers.art_initiated||0;
                 $scope.pcr_one =whole_numbers.pcr_one||0;
                 $scope.pcr_two =whole_numbers.pcr_two||0;
+
+                $scope.pcr_three =whole_numbers.pcr_three||0;
+                $scope.repeat_one =whole_numbers.repeat_one||0;
+                $scope.repeat_two =whole_numbers.repeat_two||0;
+                $scope.repeat_three =whole_numbers.repeat_three||0;
                 
                 
                 $scope.duration_numbers = data.duration_numbers||0;
@@ -997,6 +1002,11 @@ ctrllers.DashController=function($scope,$http){
         $scope.months_array=[]; 
         $scope.first_pcr_array=[];
         $scope.second_pcr_array=[];
+        $scope.third_pcr_array=[];
+        $scope.pcr_r1_array=[];
+        $scope.pcr_r2_array=[];
+        $scope.pcr_r3_array=[];
+
         $scope.positivity_array=[];
 
         for(var i in $scope.duration_numbers){
@@ -1007,6 +1017,11 @@ ctrllers.DashController=function($scope,$http){
             $scope.months_array.push(dateFormatYearMonth(obj._id));
             $scope.first_pcr_array.push(obj.pcr_one); 
             $scope.second_pcr_array.push(obj.pcr_two);
+            $scope.third_pcr_array.push(obj.pcr_three);
+            $scope.pcr_r1_array.push(obj.pcr_R1);
+            $scope.pcr_r2_array.push(obj.pcr_R2);
+            $scope.pcr_r3_array.push(obj.pcr_R3);
+
             $scope.positivity_array.push(Math.round(positivity_rate));
         }
 
@@ -1080,15 +1095,37 @@ ctrllers.DashController=function($scope,$http){
 
                           },
 
-                          series: [ {
-                              name: '2nd PCR',
-                              type: 'column',
-                              data: $scope.second_pcr_array
-                          }, {
+                          series: [ 
+                          {
                               name: '1st PCR',
                               type: 'column',
                               data: $scope.first_pcr_array
-                          },{
+                          },
+                          {
+                              name: '2nd PCR',
+                              type: 'column',
+                              data: $scope.second_pcr_array
+                          },
+                            {
+                              name: '3rd PCR',
+                              type: 'column',
+                              data: $scope.third_pcr_array
+                           },
+                           {
+                              name: 'R1',
+                              type: 'column',
+                              data: $scope.pcr_r1_array
+                          },
+                          {
+                              name: 'R2',
+                              type: 'column',
+                              data: $scope.pcr_r2_array
+                          },
+                          {
+                              name: 'R3',
+                              type: 'column',
+                              data: $scope.pcr_r3_array
+                          }, {
                                 name: 'Positivity',
                                 type: 'spline',
                                 yAxis: 1,
@@ -1112,10 +1149,20 @@ ctrllers.DashController=function($scope,$http){
         $scope.months_array=[]; 
 
         $scope.hiv_positive_infants_array=[];
+
         $scope.duration_pcr_one_hiv_positive_infants=[];
         $scope.duration_pcr_two_hiv_positive_infants=[];
+        $scope.duration_pcr_three_hiv_positive_infants=[];
+        $scope.duration_pcr_hiv_positive_infants_R1=[];
+        $scope.duration_pcr_hiv_positive_infants_R2=[];
+        $scope.duration_pcr_hiv_positive_infants_R3=[];
+
         $scope.duration_pcr_one=[];
         $scope.duration_pcr_two=[];
+        $scope.duration_pcr_three=[];
+        $scope.duration_pcr_R1=[];
+        $scope.duration_pcr_R2=[];
+        $scope.duration_pcr_R3=[];
 
         for(var i in $scope.duration_numbers){
             var obj=$scope.duration_numbers[i];
@@ -1124,9 +1171,17 @@ ctrllers.DashController=function($scope,$http){
 
             $scope.duration_pcr_one_hiv_positive_infants.push(obj.pcr_one_hiv_positive_infants);
             $scope.duration_pcr_two_hiv_positive_infants.push(obj.pcr_two_hiv_positive_infants);
+            $scope.duration_pcr_three_hiv_positive_infants.push(obj.pcr_three_hiv_positive_infants);
+            $scope.duration_pcr_hiv_positive_infants_R1.push(obj.pcr_R1_hiv_positive_infants);
+            $scope.duration_pcr_hiv_positive_infants_R2.push(obj.pcr_R2_hiv_positive_infants);
+            $scope.duration_pcr_hiv_positive_infants_R3.push(obj.pcr_R3_hiv_positive_infants);
 
             $scope.duration_pcr_one.push(obj.pcr_one);
             $scope.duration_pcr_two.push(obj.pcr_two);
+            $scope.duration_pcr_three.push(obj.pcr_three);
+            $scope.duration_pcr_R1.push(obj.pcr_R1);
+            $scope.duration_pcr_R2.push(obj.pcr_R2);
+            $scope.duration_pcr_R3.push(obj.pcr_R3);
           
         }
 
@@ -1177,7 +1232,16 @@ ctrllers.DashController=function($scope,$http){
                   }
               },
 
-              series: [ {
+              series: [ 
+               {
+                    name: '1st PCR Tests -Positive',
+                    data: $scope.duration_pcr_one_hiv_positive_infants,
+                    stack: 'positiveTests',
+                    tooltip: {
+                        valueSuffix: 'positive tests'
+                    }
+                  },
+                {
                     name: '2nd PCR Tests -Positive',
                     data: $scope.duration_pcr_two_hiv_positive_infants,
                     stack: 'positiveTests',
@@ -1186,14 +1250,37 @@ ctrllers.DashController=function($scope,$http){
                     }
                   },
                   {
-                    name: '1st PCR Tests -Positive',
-                    data: $scope.duration_pcr_one_hiv_positive_infants,
+                    name: '3rd PCR Tests -Positive',
+                    data: $scope.duration_pcr_three_hiv_positive_infants,
+                    stack: 'positiveTests',
+                    tooltip: {
+                        valueSuffix: 'positive tests'
+                    }
+                  },
+                  {
+                    name: 'R1 Tests -Positive',
+                    data: $scope.duration_pcr_hiv_positive_infants_R1,
+                    stack: 'positiveTests',
+                    tooltip: {
+                        valueSuffix: 'positive tests'
+                    }
+                  },
+                  {
+                    name: 'R2 Tests -Positive',
+                    data: $scope.duration_pcr_hiv_positive_infants_R2,
+                    stack: 'positiveTests',
+                    tooltip: {
+                        valueSuffix: 'positive tests'
+                    }
+                  },
+                  {
+                    name: 'R3 Tests -Positive',
+                    data: $scope.duration_pcr_hiv_positive_infants_R3,
                     stack: 'positiveTests',
                     tooltip: {
                         valueSuffix: 'positive tests'
                     }
                   }
-                  
               ]
           };
         $scope.chartConfigHivPositiveInfants = chartConfig;
@@ -1212,6 +1299,11 @@ ctrllers.DashController=function($scope,$http){
         $scope.pcr1_positivity_rate_array=[];
         $scope.pcr2_positivity_rate_array=[];
 
+        $scope.pcr3_positivity_rate_array=[];
+        $scope.pcr_positivity_rate_array_R1=[];
+        $scope.pcr_positivity_rate_array_R2=[];
+        $scope.pcr_positivity_rate_array_R3=[];
+
         for(var i in $scope.duration_numbers){
             var obj=$scope.duration_numbers[i];
             $scope.months_array.push(dateFormatYearMonth(obj._id));
@@ -1220,6 +1312,12 @@ ctrllers.DashController=function($scope,$http){
             $scope.pcr1_positivity_rate_array.push(Math.round((obj.pcr_one_hiv_positive_infants/obj.pcr_one)*100)); 
           
             $scope.pcr2_positivity_rate_array.push(Math.round((obj.pcr_two_hiv_positive_infants/obj.pcr_two)*100)); 
+
+            $scope.pcr3_positivity_rate_array.push(Math.round((obj.pcr_three_hiv_positive_infants/obj.pcr_three)*100));
+            $scope.pcr_positivity_rate_array_R1.push(Math.round((obj.pcr_R1_hiv_positive_infants/obj.pcr_R1)*100));
+            $scope.pcr_positivity_rate_array_R2.push(Math.round((obj.pcr_R2_hiv_positive_infants/obj.pcr_R2)*100));
+            $scope.pcr_positivity_rate_array_R3.push(Math.round((obj.pcr_R3_hiv_positive_infants/obj.pcr_R3)*100));
+
         }
 
 
@@ -1286,6 +1384,37 @@ ctrllers.DashController=function($scope,$http){
                   {
                     name: 'Positivity in PCR 2',
                     data: $scope.pcr2_positivity_rate_array,
+                    tooltip: {
+                        valueSuffix: '%'
+                    }
+                  }
+                  ,
+                  {
+                    name: 'Positivity in PCR 3',
+                    data: $scope.pcr3_positivity_rate_array,
+                    tooltip: {
+                        valueSuffix: '%'
+                    }
+                  }
+                  ,
+                  {
+                    name: 'Positivity in R1',
+                    data: $scope.pcr_positivity_rate_array_R1,
+                    tooltip: {
+                        valueSuffix: '%'
+                    }
+                  },
+                  {
+                    name: 'Positivity in R2',
+                    data: $scope.pcr_positivity_rate_array_R2,
+                    tooltip: {
+                        valueSuffix: '%'
+                    }
+                  }
+                  ,
+                  {
+                    name: 'Positivity in R3',
+                    data: $scope.pcr_positivity_rate_array_R3,
                     tooltip: {
                         valueSuffix: '%'
                     }

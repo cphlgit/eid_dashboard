@@ -346,6 +346,12 @@ class DashboardController extends Controller {
 				'total_tests' => array('$sum' => 1 ),
 				'pcr_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
 				'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
+
+				'pcr_three' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THREE')),1,0))),
+				'repeat_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R1')),1,0))),
+				'repeat_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R2')),1,0))),
+				'repeat_three' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R3')),1,0))),
+
 				'hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$accepted_result','POSITIVE')),1,0))),
 				'art_initiated' => array('$sum' => array('$cond'=>array(array('$eq' => array('$art_initiation_status','YES')),1,0))),
 			 ));
@@ -357,85 +363,199 @@ class DashboardController extends Controller {
 	
 	private function _durationNumbers(){
 		$match_stage['$match']=$this->conditions;
-	//total tests
-		$total_tests_statement = array('$sum' => 1 );
+	   //total tests
+	 	$total_tests_statement = array('$sum' => 1 );
 
-	//total pcr1 tests	        
+		//total pcr1 tests	        
 		$if_pcr_one = array('$eq' => array('$pcr','FIRST'));
 		$pcr1_cond = array($if_pcr_one,1,0);
 		$pcr1_cond_statement = array('$cond' =>$pcr1_cond );
 		$pcr1_sum_statement = array('$sum'=>$pcr1_cond_statement);
 
-	//total pcr2 tests
+		//total pcr2 tests
 		$if_pcr_two = array('$eq' => array('$pcr','SECOND'));
 		$pcr2_cond = array($if_pcr_two,1,0);
 		$pcr2_cond_statement = array('$cond' =>$pcr2_cond );
 		$pcr2_tests_sum_statement = array('$sum'=>$pcr2_cond_statement);
 
-	//pcr_one_hiv_positive_infants
-		$if_pcr_one = array('$eq' => array('$pcr','FIRST'));
-		$if_accepted_result = array('$eq' => array('$accepted_result','POSITIVE'));
-		$and_cond = array($if_pcr_one,$if_accepted_result);
-		$and_array=array('$and'=>$and_cond);
+		//total pcr3 tests
+		$if_pcr_three = array('$eq' => array('$pcr','THREE'));
+		$pcr3_cond = array($if_pcr_three,1,0);
+		$pcr3_cond_statement = array('$cond' =>$pcr3_cond );
+		$pcr3_tests_sum_statement = array('$sum'=>$pcr3_cond_statement);
 
-		$cond_statement = array($and_array,1,0);
-		$cond_array=array('$cond'=>$cond_statement);
-		$sum_satement = array('$sum'=>$cond_array);
+		//total R1 tests
+		$if_pcr_r1 = array('$eq' => array('$pcr','R1'));
+		$pcr_r1_cond = array($if_pcr_r1,1,0);
+		$pcr_r1_cond_statement = array('$cond' =>$pcr_r1_cond );
+		$pcr_r1_tests_sum_statement = array('$sum'=>$pcr_r1_cond_statement);
+
+		//total R2 tests
+		$if_pcr_r2 = array('$eq' => array('$pcr','R2'));
+		$pcr_r2_cond = array($if_pcr_r2,1,0);
+		$pcr_r2_cond_statement = array('$cond' =>$pcr_r2_cond );
+		$pcr_r2_tests_sum_statement = array('$sum'=>$pcr_r2_cond_statement);
+
+		//total R3 tests
+		$if_pcr_r3 = array('$eq' => array('$pcr','R3'));
+		$pcr_r3_cond = array($if_pcr_r3,1,0);
+		$pcr_r3_cond_statement = array('$cond' =>$pcr_r3_cond );
+		$pcr_r3_tests_sum_statement = array('$sum'=>$pcr_r3_cond_statement);
 
 
-	//pcr_two_hiv_positive_infants
-		$pcr2_if_pcr_two = array('$eq' => array('$pcr','SECOND'));
-		$pcr2_if_accepted_result = array('$eq' => array('$accepted_result','POSITIVE'));
-		$pcr2_and_cond = array($pcr2_if_pcr_two,$pcr2_if_accepted_result);
-		$pcr2_and_array=array('$and'=>$pcr2_and_cond);
+		//pcr_one_hiv_positive_infants
+			$if_pcr_one = array('$eq' => array('$pcr','FIRST'));
+			$if_accepted_result = array('$eq' => array('$accepted_result','POSITIVE'));
+			$and_cond = array($if_pcr_one,$if_accepted_result);
+			$and_array=array('$and'=>$and_cond);
 
-		$pcr2_cond_statement = array($pcr2_and_array,1,0);
-		$pcr2_cond_array=array('$cond'=>$pcr2_cond_statement);
-		$pcr2_sum_satement = array('$sum'=>$pcr2_cond_array);
+			$cond_statement = array($and_array,1,0);
+			$cond_array=array('$cond'=>$cond_statement);
+			$sum_satement = array('$sum'=>$cond_array);
 
-	//pcr_one_art_initiated	
-		$pcr1_art_initiated_if=array('$eq' => array('$pcr','FIRST'));
-		$pcr1_art_initiated_if_accepted_result=array('$eq' => array('$art_initiation_status','YES'));
-		$pcr1_art_initiated_and_cond=array($pcr1_art_initiated_if,$pcr1_art_initiated_if_accepted_result);
-		$pcr1_art_initiated_and_array=array('$and'=>$pcr1_art_initiated_and_cond);
-		$pcr1_art_initiated_cond_statement = array($pcr1_art_initiated_and_array,1,0);
-		$pcr1_art_initiated_cond_array=array('$cond'=>$pcr1_art_initiated_cond_statement);
-		$pcr1_art_initiated_sum_statement = array('$sum'=>$pcr1_art_initiated_cond_array);
+		//pcr_two_hiv_positive_infants
+			$pcr2_if_pcr_two = array('$eq' => array('$pcr','SECOND'));
+			$pcr2_if_accepted_result = array('$eq' => array('$accepted_result','POSITIVE'));
+			$pcr2_and_cond = array($pcr2_if_pcr_two,$pcr2_if_accepted_result);
+			$pcr2_and_array=array('$and'=>$pcr2_and_cond);
 
-	//pcr_two_art_initiated	
-		$pcr2_art_initiated_if=array('$eq' => array('$pcr','SECOND'));
-		$pcr2_art_initiated_if_accepted_result=array('$eq' => array('$art_initiation_status','YES'));
-		$pcr2_art_initiated_and_cond=array($pcr2_art_initiated_if,$pcr2_art_initiated_if_accepted_result);
-		$pcr2_art_initiated_and_array=array('$and'=>$pcr2_art_initiated_and_cond);
-		$pcr2_art_initiated_cond_statement = array($pcr2_art_initiated_and_array,1,0);
-		$pcr2_art_initiated_cond_array=array('$cond'=>$pcr2_art_initiated_cond_statement);
-		$pcr2_art_initiated_sum_statement = array('$sum'=>$pcr2_art_initiated_cond_array);
+			$pcr2_cond_statement = array($pcr2_and_array,1,0);
+			$pcr2_cond_array=array('$cond'=>$pcr2_cond_statement);
+			$pcr2_sum_satement = array('$sum'=>$pcr2_cond_array);
 
-	//'hiv_positive_infants'      	
-		$hiv_positive_infants_if=array('$eq' => array('$accepted_result','POSITIVE'));
-     	$hiv_positive_infants_cond_statement = array($hiv_positive_infants_if,1,0);
-     	$hiv_positive_infants_cond_array=array('$cond'=>$hiv_positive_infants_cond_statement);
-     	$hiv_positive_infants_sum_statement = array('$sum'=>$hiv_positive_infants_cond_array);
+		//pcr_three_hiv_positive_infants
+			$pcr3_if_pcr_three = array('$eq' => array('$pcr','THREE'));
+			$pcr3_if_accepted_result = array('$eq' => array('$accepted_result','POSITIVE'));
+			$pcr3_and_cond = array($pcr3_if_pcr_three,$pcr3_if_accepted_result);
+			$pcr3_and_array=array('$and'=>$pcr3_and_cond);
+
+			$pcr3_cond_statement = array($pcr3_and_array,1,0);
+			$pcr3_cond_array=array('$cond'=>$pcr3_cond_statement);
+			$pcr3_sum_satement = array('$sum'=>$pcr3_cond_array);
+
+		//pcr_R1_hiv_positive_infants
+			$pcr_if_pcr_R1 = array('$eq' => array('$pcr','R1'));
+			$pcr_if_accepted_result_R1 = array('$eq' => array('$accepted_result','POSITIVE'));
+			$pcr_and_cond_R1 = array($pcr_if_pcr_R1,$pcr_if_accepted_result_R1);
+			$pcr_and_array_R1=array('$and'=>$pcr_and_cond_R1);
+
+			$pcr_cond_statement_R1 = array($pcr_and_array_R1,1,0);
+			$pcr_cond_array_R1=array('$cond'=>$pcr_cond_statement_R1);
+			$pcr_sum_satement_R1 = array('$sum'=>$pcr_cond_array_R1);
+
+		//pcr_R2_hiv_positive_infants
+			$pcr_if_pcr_R2 = array('$eq' => array('$pcr','R2'));
+			$pcr_if_accepted_result_R2 = array('$eq' => array('$accepted_result','POSITIVE'));
+			$pcr_and_cond_R2 = array($pcr_if_pcr_R2,$pcr_if_accepted_result_R2);
+			$pcr_and_array_R2=array('$and'=>$pcr_and_cond_R2);
+
+			$pcr_cond_statement_R2 = array($pcr_and_array_R2,1,0);
+			$pcr_cond_array_R2=array('$cond'=>$pcr_cond_statement_R2);
+			$pcr_sum_satement_R2 = array('$sum'=>$pcr_cond_array_R2);
+
+		//pcr_R3_hiv_positive_infants
+			$pcr_if_pcr_R3 = array('$eq' => array('$pcr','R3'));
+			$pcr_if_accepted_result_R3 = array('$eq' => array('$accepted_result','POSITIVE'));
+			$pcr_and_cond_R3 = array($pcr_if_pcr_R3,$pcr_if_accepted_result_R3);
+			$pcr_and_array_R3=array('$and'=>$pcr_and_cond_R3);
+
+			$pcr_cond_statement_R3 = array($pcr_and_array_R3,1,0);
+			$pcr_cond_array_R3=array('$cond'=>$pcr_cond_statement_R3);
+			$pcr_sum_satement_R3 = array('$sum'=>$pcr_cond_array_R3);
+
+
+		//pcr_one_art_initiated	
+			$pcr1_art_initiated_if=array('$eq' => array('$pcr','FIRST'));
+			$pcr1_art_initiated_if_accepted_result=array('$eq' => array('$art_initiation_status','YES'));
+			$pcr1_art_initiated_and_cond=array($pcr1_art_initiated_if,$pcr1_art_initiated_if_accepted_result);
+			$pcr1_art_initiated_and_array=array('$and'=>$pcr1_art_initiated_and_cond);
+			$pcr1_art_initiated_cond_statement = array($pcr1_art_initiated_and_array,1,0);
+			$pcr1_art_initiated_cond_array=array('$cond'=>$pcr1_art_initiated_cond_statement);
+			$pcr1_art_initiated_sum_statement = array('$sum'=>$pcr1_art_initiated_cond_array);
+
+		//pcr_two_art_initiated	
+			$pcr2_art_initiated_if=array('$eq' => array('$pcr','SECOND'));
+			$pcr2_art_initiated_if_accepted_result=array('$eq' => array('$art_initiation_status','YES'));
+			$pcr2_art_initiated_and_cond=array($pcr2_art_initiated_if,$pcr2_art_initiated_if_accepted_result);
+			$pcr2_art_initiated_and_array=array('$and'=>$pcr2_art_initiated_and_cond);
+			$pcr2_art_initiated_cond_statement = array($pcr2_art_initiated_and_array,1,0);
+			$pcr2_art_initiated_cond_array=array('$cond'=>$pcr2_art_initiated_cond_statement);
+			$pcr2_art_initiated_sum_statement = array('$sum'=>$pcr2_art_initiated_cond_array);
+
+		//pcr_three_art_initiated	
+			$pcr3_art_initiated_if=array('$eq' => array('$pcr','THREE'));
+			$pcr3_art_initiated_if_accepted_result=array('$eq' => array('$art_initiation_status','YES'));
+			$pcr3_art_initiated_and_cond=array($pcr3_art_initiated_if,$pcr3_art_initiated_if_accepted_result);
+			$pcr3_art_initiated_and_array=array('$and'=>$pcr3_art_initiated_and_cond);
+			$pcr3_art_initiated_cond_statement = array($pcr3_art_initiated_and_array,1,0);
+			$pcr3_art_initiated_cond_array=array('$cond'=>$pcr3_art_initiated_cond_statement);
+			$pcr3_art_initiated_sum_statement = array('$sum'=>$pcr3_art_initiated_cond_array);
+
+		//pcr_art_initiated	R1
+			$pcr_art_initiated_if_R1=array('$eq' => array('$pcr','R1'));
+			$pcr_art_initiated_if_accepted_result_R1=array('$eq' => array('$art_initiation_status','YES'));
+			$pcr_art_initiated_and_cond_R1=array($pcr_art_initiated_if_R1,$pcr_art_initiated_if_accepted_result_R1);
+			$pcr_art_initiated_and_array_R1=array('$and'=>$pcr_art_initiated_and_cond_R1);
+			$pcr_art_initiated_cond_statement_R1 = array($pcr_art_initiated_and_array_R1,1,0);
+			$pcr_art_initiated_cond_array_R1=array('$cond'=>$pcr_art_initiated_cond_statement_R1);
+			$pcr_art_initiated_sum_statement_R1 = array('$sum'=>$pcr_art_initiated_cond_array_R1);
+
+		//pcr_art_initiated	R2
+			$pcr_art_initiated_if_R2=array('$eq' => array('$pcr','R2'));
+			$pcr_art_initiated_if_accepted_result_R2=array('$eq' => array('$art_initiation_status','YES'));
+			$pcr_art_initiated_and_cond_R2=array($pcr_art_initiated_if_R2,$pcr_art_initiated_if_accepted_result_R2);
+			$pcr_art_initiated_and_array_R2=array('$and'=>$pcr_art_initiated_and_cond_R2);
+			$pcr_art_initiated_cond_statement_R2 = array($pcr_art_initiated_and_array_R2,1,0);
+			$pcr_art_initiated_cond_array_R2=array('$cond'=>$pcr_art_initiated_cond_statement_R2);
+			$pcr_art_initiated_sum_statement_R2 = array('$sum'=>$pcr_art_initiated_cond_array_R2);
+
+
+		//pcr_art_initiated	R3
+			$pcr_art_initiated_if_R3=array('$eq' => array('$pcr','R3'));
+			$pcr_art_initiated_if_accepted_result_R3=array('$eq' => array('$art_initiation_status','YES'));
+			$pcr_art_initiated_and_cond_R3=array($pcr_art_initiated_if_R3,$pcr_art_initiated_if_accepted_result_R3);
+			$pcr_art_initiated_and_array_R3=array('$and'=>$pcr_art_initiated_and_cond_R3);
+			$pcr_art_initiated_cond_statement_R3 = array($pcr_art_initiated_and_array_R3,1,0);
+			$pcr_art_initiated_cond_array_R3=array('$cond'=>$pcr_art_initiated_cond_statement_R3);
+			$pcr_art_initiated_sum_statement_R3 = array('$sum'=>$pcr_art_initiated_cond_array_R3);
+
+		//'hiv_positive_infants'      	
+			$hiv_positive_infants_if=array('$eq' => array('$accepted_result','POSITIVE'));
+	     	$hiv_positive_infants_cond_statement = array($hiv_positive_infants_if,1,0);
+	     	$hiv_positive_infants_cond_array=array('$cond'=>$hiv_positive_infants_cond_statement);
+	     	$hiv_positive_infants_sum_statement = array('$sum'=>$hiv_positive_infants_cond_array);
      
-    //'art_initiated' 
-     	$art_initiated_if=array('$eq' => array('$art_initiation_status','YES'));
-     	$art_initiated_cond=array($art_initiated_if,1,0);
-     	$art_initiated_cond_array=array('$cond'=>$art_initiated_cond);
-     	$art_initiated_sum_statement=array('$sum'=>$art_initiated_cond_array);
+    	//'art_initiated' 
+	     	$art_initiated_if=array('$eq' => array('$art_initiation_status','YES'));
+	     	$art_initiated_cond=array($art_initiated_if,1,0);
+	     	$art_initiated_cond_array=array('$cond'=>$art_initiated_cond);
+	     	$art_initiated_sum_statement=array('$sum'=>$art_initiated_cond_array);
 
-	//group stage
+		//group stage
 		$group_array =array(
 			'_id'=>'$year_month',
 
 			'total_tests'=>$total_tests_statement,
 			'pcr_one'=>$pcr1_sum_statement,
 			'pcr_two'=>$pcr2_tests_sum_statement,
+			'pcr_three'=>$pcr3_tests_sum_statement,
+			'pcr_R1'=>$pcr_r1_tests_sum_statement,
+			'pcr_R2'=>$pcr_r2_tests_sum_statement,
+			'pcr_R3'=>$pcr_r3_tests_sum_statement,
 
 			'pcr_one_hiv_positive_infants'=>$sum_satement,
 			'pcr_two_hiv_positive_infants'=>$pcr2_sum_satement,
+			'pcr_three_hiv_positive_infants'=>$pcr3_sum_satement,
+			'pcr_R1_hiv_positive_infants'=>$pcr_sum_satement_R1,
+			'pcr_R2_hiv_positive_infants'=>$pcr_sum_satement_R2,
+			'pcr_R3_hiv_positive_infants'=>$pcr_sum_satement_R3, 
 
 			'pcr_one_art_initiated'=>$pcr1_art_initiated_sum_statement,
 			'pcr_two_art_initiated'=>$pcr2_art_initiated_sum_statement,
+			'pcr_three_art_initiated'=>$pcr3_art_initiated_sum_statement,
+			'pcr_R1_art_initiated'=>$pcr_art_initiated_sum_statement_R1,
+			'pcr_R2_art_initiated'=>$pcr_art_initiated_sum_statement_R2,
+			'pcr_R3_art_initiated'=>$pcr_art_initiated_sum_statement_R3,
 
 			'hiv_positive_infants'=>$hiv_positive_infants_sum_statement,
 			'art_initiated'=>$art_initiated_sum_statement
@@ -463,6 +583,10 @@ class DashboardController extends Controller {
 				'total_tests' => array('$sum' => 1 ),
 				'pcr_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
 				'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
+				'pcr_three' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THREE')),1,0))),
+				'pcr_R1' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R1')),1,0))),
+				'pcr_R2' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R2')),1,0))),
+				'pcr_R3' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R3')),1,0))),
 
 				'pcr_one_hiv_positive_infants'=>array('$sum' => array('$cond'=>array(
 					array( '$and'
@@ -478,6 +602,36 @@ class DashboardController extends Controller {
 									'$eq'=>array('$accepted_result', 'POSITIVE'))
 							 )
 						),1,0))),
+				'pcr_three_hiv_positive_infants'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','THREE'),
+									'$eq'=>array('$accepted_result', 'POSITIVE'))
+							 )
+						),1,0))),
+				'pcr_hiv_positive_infants_R1'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','R1'),
+									'$eq'=>array('$accepted_result', 'POSITIVE'))
+							 )
+						),1,0))),
+				'pcr_hiv_positive_infants_R2'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','R2'),
+									'$eq'=>array('$accepted_result', 'POSITIVE'))
+							 )
+						),1,0))),
+				'pcr_hiv_positive_infants_R3'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','R3'),
+									'$eq'=>array('$accepted_result', 'POSITIVE'))
+							 )
+						),1,0))),
+
+
 				'pcr_one_art_initiated'=>array('$sum' => array('$cond'=>array(
 					array( '$and'
 							=> array(
@@ -489,6 +643,34 @@ class DashboardController extends Controller {
 					array( '$and'
 							=> array(
 								array('$eq'=>array('$pcr','SECOND'),
+									'$eq'=>array('$art_initiation_status', 'YES'))
+							 )
+						),1,0))),
+				'pcr_three_art_initiated'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','THREE'),
+									'$eq'=>array('$art_initiation_status', 'YES'))
+							 )
+						),1,0))),
+				'pcr_art_initiated_R1'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','R1'),
+									'$eq'=>array('$art_initiation_status', 'YES'))
+							 )
+						),1,0))),
+				'pcr_art_initiated_R2'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','R2'),
+									'$eq'=>array('$art_initiation_status', 'YES'))
+							 )
+						),1,0))),
+				'pcr_art_initiated_R3'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','R3'),
 									'$eq'=>array('$art_initiation_status', 'YES'))
 							 )
 						),1,0))),
@@ -507,15 +689,22 @@ class DashboardController extends Controller {
 		
 		return isset($res['result'])?$res['result']:[];
 	}
+
 	private function _districtNumbers(){
 	
 		$match_stage['$match']=$this->conditions;
 		$group_stage = array(
-			
+
 			'$group' => array(
 				'_id' => '$district_id', 
 				'total_tests' => array('$sum' => 1 ),
 				'pcr_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
+				'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
+				'pcr_three' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THREE')),1,0))),
+				'pcr_R1' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R1')),1,0))),
+				'pcr_R2' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R2')),1,0))),
+				'pcr_R3' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R3')),1,0))),
+
 				'pcr_one_hiv_positive_infants'=>array('$sum' => array('$cond'=>array(
 					array( '$and'
 							=> array(
@@ -530,6 +719,36 @@ class DashboardController extends Controller {
 									'$eq'=>array('$accepted_result', 'POSITIVE'))
 							 )
 						),1,0))),
+				'pcr_three_hiv_positive_infants'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','THREE'),
+									'$eq'=>array('$accepted_result', 'POSITIVE'))
+							 )
+						),1,0))),
+				'pcr_hiv_positive_infants_R1'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','R1'),
+									'$eq'=>array('$accepted_result', 'POSITIVE'))
+							 )
+						),1,0))),
+				'pcr_hiv_positive_infants_R2'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','R2'),
+									'$eq'=>array('$accepted_result', 'POSITIVE'))
+							 )
+						),1,0))),
+				'pcr_hiv_positive_infants_R3'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','R3'),
+									'$eq'=>array('$accepted_result', 'POSITIVE'))
+							 )
+						),1,0))),
+
+
 				'pcr_one_art_initiated'=>array('$sum' => array('$cond'=>array(
 					array( '$and'
 							=> array(
@@ -544,18 +763,50 @@ class DashboardController extends Controller {
 									'$eq'=>array('$art_initiation_status', 'YES'))
 							 )
 						),1,0))),
-				'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
+				'pcr_three_art_initiated'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','THREE'),
+									'$eq'=>array('$art_initiation_status', 'YES'))
+							 )
+						),1,0))),
+				'pcr_art_initiated_R1'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','R1'),
+									'$eq'=>array('$art_initiation_status', 'YES'))
+							 )
+						),1,0))),
+				'pcr_art_initiated_R2'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','R2'),
+									'$eq'=>array('$art_initiation_status', 'YES'))
+							 )
+						),1,0))),
+				'pcr_art_initiated_R3'=>array('$sum' => array('$cond'=>array(
+					array( '$and'
+							=> array(
+								array('$eq'=>array('$pcr','R3'),
+									'$eq'=>array('$art_initiation_status', 'YES'))
+							 )
+						),1,0))),
+
 				'hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$accepted_result','POSITIVE')),1,0))),
 				'art_initiated' => array('$sum' => array('$cond'=>array(array('$eq' => array('$art_initiation_status','YES')),1,0))),
 			 ));
-		
+		/*"$and": [ { "$eq": [ "$pcr", "FIRST" ] }, { "$eq": [ "$accepted_result", "POSITIVE" ] } ] 
+		=> array(
+			array('$eq'=>array('$pcr','FIRST'),
+				'$eq'=>array('$accepted_result', 'POSITIVE'))
+		 );*/
 		
 		$res=$this->mongo->eid_dashboard->aggregate($match_stage,$group_stage );
 		
 		
 		return isset($res['result'])?$res['result']:[];
-		
 	}
+	
 
 	public function getResultsPrintingStatistics(){
 		

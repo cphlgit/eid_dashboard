@@ -73,6 +73,20 @@ class LiveData extends Model
 		return $samples;
     }
 
+    public static function getPCRs($year){
+
+        $sql = "SELECT id,date_dbs_taken,pcr,non_routine,
+            CASE 
+                WHEN non_routine IS NULL THEN pcr
+                ELSE non_routine
+            END as pcr_name
+             FROM dbs_samples where 
+             PCR_test_requested like 'YES' and year(date_dbs_taken)=$year";
+
+        $samples = \DB::connection('live_db')->select($sql);
+
+        return $samples;
+    }
     public static function getPOCSamples($year){
         $sql = "SELECT * FROM poc_data p inner join facilities f on p.facility_id=f.id";
         return \DB::connection('live_db')->select($sql);

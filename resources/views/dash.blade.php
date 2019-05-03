@@ -485,14 +485,14 @@
                         <span class="desc">positivity rate</span>
                     </a>
                 </li>
-                <li id='tb_hd4' ng-show="show_art_init">
+                <!--li id='tb_hd4' ng-show="show_art_init">
                     <a href="#tab4" id='tb_lnk4' ng-click="displayInitiationRate()">
                         <span class="num ng-cloak" ng-model="initiated" ng-init="initiated=0">
                             <% ((initiated/hiv_positive_infants)*100)|number:1 %>% <sup>*</sup>
                         </span>
                         <span class="desc">initiation rate</span>
                     </a>
-                </li>
+                </li -->
                 <li id='tb_hd5' ng-show="show_results_printing">
                     <a href="#tab5" id='tb_lnk5'>
                         <span style="font-size:10px">Results Printing Status</span> 
@@ -517,7 +517,7 @@
                       </div>
                       <div class="panel-body">
                         
-                        <div id="tests_div" class="col-lg-6 facilties-sect facilties-sect-list1 collapse" >
+                        <div id="tests_div" class="col-lg-12 facilties-sect facilties-sect-list1 collapse" >
                         <span class='dist_faclty_toggle sect1' ng-model="show_fclties1" ng-init="show_fclties1=false" ng-click="showF(1)">
                             <span class='active' id='d_shw1'>&nbsp;&nbsp;DISTRICTS&nbsp;&nbsp;</span>
                             <span id='f_shw1'>&nbsp;&nbsp;FACILITIES &nbsp;&nbsp;</span>
@@ -526,18 +526,30 @@
                           <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
-                                    <th width='40%'>District</th>
-                                    <th width='10%'>Total Tests</th>
+                                    <th width='30%'>District</th>
+                                    <th width='5%'>Total Tests</th>
 
-                                    <th width='10%'>Total 1<sup>st</sup> PCR</th>
-                                    <th width='10%'>Positive 1<sup>st</sup> PCR </th>
+                                    <th width='5%'>Total 1<sup>st</sup> PCR</th>
+                                    <th width='5%'>Positive 1<sup>st</sup> PCR </th>
                                     
                                     
-                                    <th width='10%'>Total 2<sup>nd</sup> PCR</th>
-                                    <th width='10%'>Positive 2<sup>nd</sup> PCR</th>
+                                    <th width='5%'>Total 2<sup>nd</sup> PCR</th>
+                                    <th width='5%'>Positive 2<sup>nd</sup> PCR</th>
+
+                                    <th width='5%'>Total 3<sup>rd</sup> PCR</th>
+                                    <th width='5%'>Positive 3<sup>rd</sup> PCR</th>
+
+                                    <th width='5%'>Total R1</th>
+                                    <th width='5%'>Positive R1</th>
+
+                                    <th width='5%'>Total R2</th>
+                                    <th width='5%'>Positive R2</th>
+
+                                    <th width='5%'>Total R3</th>
+                                    <th width='5%'>Positive R3</th>
                                     
 
-                                    <th width='10%'>% of Positives in 1<sup>st</sup> PCR</th>
+                                    <th width='5'>% of Positives in 1<sup>st</sup> PCR</th>
                                 </tr>
                             </thead>
                             <tbody>                                
@@ -550,6 +562,19 @@
                                     
                                     <td class="ng-cloak"><% d.pcr_two|number %></td>
                                     <td class="ng-cloak"><% d.pcr_two_hiv_positive_infants|number %></td>
+
+                                    <td class="ng-cloak"><% d.pcr_three|number %></td>
+                                    <td class="ng-cloak"><% d.pcr_three_hiv_positive_infants|number %></td>
+
+                                    <td class="ng-cloak"><% d.pcr_R1|number %></td>
+                                    <td class="ng-cloak"><% d.pcr_hiv_positive_infants_R1|number %></td>
+
+                                    <td class="ng-cloak"><% d.pcr_R2|number %></td>
+                                    <td class="ng-cloak"><% d.pcr_hiv_positive_infants_R2|number %></td>
+
+                                    <td class="ng-cloak"><% d.pcr_R3|number %></td>
+                                    <td class="ng-cloak"><% d.pcr_hiv_positive_infants_R3|number %></td>
+
 
                                     <td class="ng-cloak"><% (d.pcr_one_hiv_positive_infants > 0? (d.pcr_one_hiv_positive_infants/d.pcr_one)*100:0)|number:1 %>%</td>
 
@@ -564,17 +589,29 @@
                           <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
-                                    <th width='40%'>Facility</th>
-                                    <th width='10%'>Total Tests</th>
+                                    <th width='30%'>Facility</th>
+                                    <th width='5%'>Total Tests</th>
                                     
-                                    <th width='10%'>Total 1<sup>st</sup> PCR</th>
-                                    <th width='10%'>Positive 1<sup>st</sup> PCR </th>
+                                    <th width='5%'>Total 1<sup>st</sup> PCR</th>
+                                    <th width='5%'>Positive 1<sup>st</sup> PCR </th>
                                     
                                     
-                                    <th width='10%'>Total 2<sup>nd</sup> PCR</th>
-                                    <th width='10%'>Positive 2<sup>nd</sup> PCR</th>
+                                    <th width='5%'>Total 2<sup>nd</sup> PCR</th>
+                                    <th width='5%'>Positive 2<sup>nd</sup> PCR</th>
 
-                                    <th width='10%'>% of Positives in 1<sup>st</sup> PCR</th>
+                                    <th width='5%'>Total 3<sup>rd</sup> PCR</th>
+                                    <th width='5%'>Positive 3<sup>rd</sup> PCR</th>
+
+                                    <th width='5%'>Total R1</th>
+                                    <th width='5%'>Positive R1</th>
+
+                                    <th width='5%'>Total R2</th>
+                                    <th width='5%'>Positive R2</th>
+
+                                    <th width='5%'>Total R3</th>
+                                    <th width='5%'>Positive R3</th>
+
+                                    <th width='5%'>% of Positives in 1<sup>st</sup> PCR</th>
                                 </tr>
                             </thead>
                             <tbody>                                
@@ -587,6 +624,18 @@
 
                                     <td class="ng-cloak"><% f.pcr_two|number %></td>
                                     <td class="ng-cloak"><% f.pcr_two_hiv_positive_infants|number %></td>
+
+                                    <td class="ng-cloak"><% f.pcr_three|number %></td>
+                                    <td class="ng-cloak"><% f.pcr_three_hiv_positive_infants|number %></td>
+
+                                    <td class="ng-cloak"><% f.pcr_R1|number %></td>
+                                    <td class="ng-cloak"><% f.pcr_hiv_positive_infants_R1|number %></td>
+
+                                    <td class="ng-cloak"><% f.pcr_R2|number %></td>
+                                    <td class="ng-cloak"><% f.pcr_hiv_positive_infants_R2|number %></td>
+
+                                    <td class="ng-cloak"><% f.pcr_R3|number %></td>
+                                    <td class="ng-cloak"><% f.pcr_hiv_positive_infants_R3|number %></td>
 
                                     <td class="ng-cloak"><% (f.pcr_one_hiv_positive_infants > 0? (f.pcr_one_hiv_positive_infants/f.pcr_one)*100:0)|number:1 %>%</td>
 
@@ -763,7 +812,7 @@
 
                 </div>                
             </section>
-            <section id="tab4">
+            <!-- section id="tab4">
                
                 <div class="row">
                     <div id="divchartinitiationrate" class="col-lg-12">                        
@@ -836,7 +885,7 @@
                     </div>
                 </div> 
                 <i style="font-size:12px;color:#9F82D1">* ART Initiation Rate is a preliminary estimate based on data collected at CPHL. CPHL is still revising the data collection mechanism</i>               
-            </section>
+            </section -->
             <section id="tab5"> @include('sections._results_printing_statistics')</section>
         </div><!-- /content -->
     </div><!-- /tabs -->
@@ -846,18 +895,35 @@
     <div class='addition-metrics'>
        <div class='row'>
         
-        <div class='col-sm-1'></div>
-        <div class='col-sm-1'></div>
-        <div class='col-sm-2'>
+        
+        <div class='col-sm-1'>
             <font class='addition-metrics figure ng-cloak' ng-model='pcr_one' ng-init="pcr_one=0"><% pcr_one|number %></font><br>
             <font class='addition-metrics desc'>TOTAL 1ST PCR</font>            
         </div>
-        <div class='col-sm-1'></div>
-        <div class='col-sm-2'>
+        <div class='col-sm-1'></div>  
+        <div class='col-sm-1'>
             <font class='addition-metrics figure ng-cloak' ng-model='pcr_two' ng-init="pcr_two=0"><% pcr_two|number %></font><br>
             <font class='addition-metrics desc'>TOTAL 2ND PCR</font>            
-        </div>       
-        <div class='col-sm-1'></div>
+        </div>
+        <div class='col-sm-1'></div>  
+        <div class='col-sm-1'>
+            <font class='addition-metrics figure ng-cloak' ng-model='pcr_three' ng-init="pcr_three=0"><% pcr_three|number %></font><br>
+            <font class='addition-metrics desc'>TOTAL 3RD PCR</font>            
+        </div>
+        <div class='col-sm-1'></div>  
+        <div class='col-sm-1'>
+            <font class='addition-metrics figure ng-cloak' ng-model='repeat_one' ng-init="repeat_one=0"><% repeat_one|number %></font><br>
+            <font class='addition-metrics desc'>TOTAL R1</font>            
+        </div>
+        <div class='col-sm-1'></div>       
+        <div class='col-sm-1'>
+            <font class='addition-metrics figure ng-cloak' ng-model='repeat_two' ng-init="repeat_two=0"><% repeat_two|number %></font><br>
+            <font class='addition-metrics desc'>TOTAL R2</font>            
+        </div>
+        <div class='col-sm-1'>
+            <font class='addition-metrics figure ng-cloak' ng-model='repeat_three' ng-init="repeat_three=0"><% repeat_three|number %></font><br>
+            <font class='addition-metrics desc'>TOTAL R3</font>            
+        </div>
         <div class='col-sm-2' ng-show="show_art_init">
             <font class='addition-metrics figure ng-cloak' ng-model="initiated" ng-init="initiated=0">
                 <% initiated|number %>

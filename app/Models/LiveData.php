@@ -16,6 +16,11 @@ class LiveData extends Model
 	const RESULT_CASE = "CASE WHEN accepted_result ='POSITIVE' THEN 'POSITIVE' WHEN accepted_result='NEGATIVE' 
 	THEN 'NEGATIVE' ELSE 'UNKNOWN' END";
 
+    const PCR_NAME= "CASE 
+                WHEN s.non_routine IS NULL THEN s.pcr
+                ELSE s.non_routine
+            END as pcr_name";
+
 	public static function getHubs(){
 
     	$sql = "SELECT * FROM hubs";
@@ -73,7 +78,7 @@ class LiveData extends Model
 		return $samples;
     }
 
-    public static function getPCRs($year){
+    public static function getPCRs($year,$month){
 
         $sql = "SELECT id,date_dbs_taken,pcr,non_routine,
             CASE 
@@ -81,7 +86,7 @@ class LiveData extends Model
                 ELSE non_routine
             END as pcr_name
              FROM dbs_samples where 
-             PCR_test_requested like 'YES' and year(date_dbs_taken)=$year";
+             PCR_test_requested like 'YES' and year(date_dbs_taken)=$year and MONTH(date_dbs_taken)=$month";
 
         $samples = \DB::connection('live_db')->select($sql);
 
@@ -95,7 +100,8 @@ class LiveData extends Model
     public static function getSamplesRecordsByMonth($year,$month){
       $sql = "SELECT s.id,s.infant_exp_id,".self::GENDER_CASE." as sex,s.infant_dob,month(s.date_dbs_taken) as month_of_year,
          ".self::AGE_IN_MONTHS_STRING." as age_in_months ,b.facility_id,f.hubID,f.facilityLevelID as care_level_id,f.districtID,
-         d.regionID, s.f_ART_initiated,s.f_date_ART_initiated,".self::RESULT_CASE." as accepted_result,s.testing_completed, s.PCR_test_requested,s.pcr FROM dbs_samples s 
+         d.regionID, s.f_ART_initiated,s.f_date_ART_initiated,".self::RESULT_CASE." as accepted_result,s.testing_completed, 
+         s.PCR_test_requested,s.pcr,".self::PCR_NAME." FROM dbs_samples s 
         inner join batches b on s.batch_id =b.id 
         inner join facilities f on f.id = b.facility_id 
         inner join districts d on d.id = f.districtID
@@ -109,7 +115,7 @@ class LiveData extends Model
     }
 
     public static function getAdhocResults($year,$month){
-        Log::info('...1...');
+        //Log::info('...1...');
         $sql = " SELECT DISTINCT d.id as specimen_id,
                     d.infant_exp_id as exp_number,
                     b.facility_id,
@@ -131,7 +137,7 @@ class LiveData extends Model
                     
 
                     where YEAR(d.date_dbs_taken)=$year and MONTH(d.date_dbs_taken)=$month ";
-                Log::info('...2...');
+                //Log::info('...2...');
              $samples = \DB::connection('live_db')->select($sql);
                    
 

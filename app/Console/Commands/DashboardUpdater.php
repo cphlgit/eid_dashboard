@@ -100,7 +100,7 @@ class DashboardUpdater extends Command
                     $data["pcr_test_requested"]=isset($s->PCR_test_requested)? $s->PCR_test_requested: "UNKNOWN";//
                     $data["testing_completed"]=isset($s->testing_completed)? $s->testing_completed: "UNKNOWN";
                     $data["accepted_result"]=isset($s->accepted_result)? $s->accepted_result: "UNKNOWN";
-                    $data["pcr"]=isset($s->pcr)? $s->pcr: "UNKNOWN";//
+                    $data["pcr"]=isset($s->pcr)? $s->pcr_name: "UNKNOWN";//
 
                     $dat["source"] = "cphl";
                    

@@ -689,7 +689,7 @@ class DashboardController extends Controller {
 		
 		return isset($res['result'])?$res['result']:[];
 	}
-
+	
 	private function _districtNumbers(){
 	
 		$match_stage['$match']=$this->conditions;

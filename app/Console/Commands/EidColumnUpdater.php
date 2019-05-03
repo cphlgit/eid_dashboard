@@ -3,6 +3,7 @@
 namespace EID\Console\Commands;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputOption;
 use EID\Mongo;
 use EID\Models\LiveData;
 
@@ -30,6 +31,29 @@ class EidColumnUpdater extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->addOption(
+            'update_pcr_field',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Should the pcr field be updated?',
+            false
+        );
+
+        $this->addOption(
+            'year',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Year for which the data should be pick',
+            2014
+        );
+
+        $this->addOption(
+            'month',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Month for which the data should be pick',
+            0
+        );
         $this->mongo=Mongo::connect();
     }
 
@@ -43,10 +67,15 @@ class EidColumnUpdater extends Command
         ini_set('memory_limit', '2500M');
         //
         $this->comment("Engine has started at :: ".date('YmdHis'));
+
+        if($this->option('update_pcr_field')){
+            $this->updateSourceField();
+        }else if($this->option('year')>0 && $this->option('month') > 0 ){
+            $year = $this->option('year');
+            $month = $this->option('month');
+            $this->updatePCR($year,$month);
+        }
         
-        
-        $this->updateSourceField();
-        $this->updatePCR();
         
         $this->comment("Engine has stopped at :: ".date('YmdHis'));
 
@@ -89,32 +118,31 @@ class EidColumnUpdater extends Command
     }
 
 
-    private function updatePCR(){
+    private function updatePCR($year,$month){
         $this->comment("PCR updates started");
 
-        $year=2014;
-        $current_year=date('Y');
        
-       
-        while($year<=$current_year){
-            $samples_records = LiveData::getPCRs($year);
-            $counter=0;
-            
             try {
-                foreach($samples_records AS $s){
-                    $this->augmentSampleRecord(
-                    $s->id,
-                    'pcr',$s->pcr_name
-                    );
-                   $counter ++;
-                }//end of for loop
-              echo " Updated $counter PCR records for $year\n";
-              $year++;
+                
+                        $samples_records = LiveData::getPCRs($year,$month);
+                        $counter=0;
+                        foreach($samples_records AS $s){
+                            $this->augmentSampleRecord(
+                            $s->id,
+                            'pcr',$s->pcr_name
+                            );
+
+                           $counter ++;
+
+                        }//end of for loop-samples_records
+                        echo " Updated $counter PCR records for $year - $month \n";
+                
+             
             } catch (Exception $e) {
                 var_dump($e);
             }//end catch
 
-        }//end of while loop
+     
 
         $this->comment("PCR updates ended successfully");
 

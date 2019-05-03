@@ -485,14 +485,14 @@
                         <span class="desc">positivity rate</span>
                     </a>
                 </li>
-                <li id='tb_hd4' ng-show="show_art_init">
+                <!--li id='tb_hd4' ng-show="show_art_init">
                     <a href="#tab4" id='tb_lnk4' ng-click="displayInitiationRate()">
                         <span class="num ng-cloak" ng-model="initiated" ng-init="initiated=0">
                             <% ((initiated/hiv_positive_infants)*100)|number:1 %>% <sup>*</sup>
                         </span>
                         <span class="desc">initiation rate</span>
                     </a>
-                </li>
+                </li -->
                 <li id='tb_hd5' ng-show="show_results_printing">
                     <a href="#tab5" id='tb_lnk5'>
                         <span style="font-size:10px">Results Printing Status</span> 
@@ -812,7 +812,7 @@
 
                 </div>                
             </section>
-            <section id="tab4">
+            <!-- section id="tab4">
                
                 <div class="row">
                     <div id="divchartinitiationrate" class="col-lg-12">                        
@@ -885,7 +885,7 @@
                     </div>
                 </div> 
                 <i style="font-size:12px;color:#9F82D1">* ART Initiation Rate is a preliminary estimate based on data collected at CPHL. CPHL is still revising the data collection mechanism</i>               
-            </section>
+            </section -->
             <section id="tab5"> @include('sections._results_printing_statistics')</section>
         </div><!-- /content -->
     </div><!-- /tabs -->

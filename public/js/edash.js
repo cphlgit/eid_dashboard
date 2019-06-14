@@ -249,8 +249,10 @@ ctrllers.DashController=function($scope,$http){
 
                 
                 $scope.district_numbers = data.dist_numbers||{};
-                $scope.facility_numbers = data.facility_numbers||{};
+                $scope.district_numbers_positives = data.dist_numbers_for_positives||{};
 
+                $scope.facility_numbers = data.facility_numbers||{};
+                $scope.facility_numbers_for_positives = data.facility_numbers_for_positives||{};
                 
                 var whole_numbers=data.whole_numbers[0]||{};
                 $scope.samples_received=whole_numbers.total_tests||0;
@@ -336,6 +338,7 @@ ctrllers.DashController=function($scope,$http){
         var export_district_numbers = [];
         var district_labels = scopeInstance.districts_lables;
         var district_numbers_from_scope = scopeInstance.district_numbers;
+        var district_numbers_positives = scopeInstance.district_numbers_positives; 
 
         for( var index = 0; index < district_numbers_from_scope.length; index++){
             var districtRecord = district_numbers_from_scope[index];
@@ -343,8 +346,28 @@ ctrllers.DashController=function($scope,$http){
             var district_instance = {
                 district_name : district_labels[districtRecord._id],
                 total_tests : districtRecord.total_tests,
+
                 total_first_pcr : districtRecord.pcr_one,
+                positive_first_pcr: (district_numbers_positives[districtRecord._id] != null)? district_numbers_positives[districtRecord._id].pcr_one_hiv_positive_infants : 0,
+                
                 total_second_pcr : districtRecord.pcr_two,
+                positive_second_pcr: (district_numbers_positives[districtRecord._id] != null)? district_numbers_positives[districtRecord._id].pcr_two_hiv_positive_infants: 0,
+
+                total_third_pcr: districtRecord.pcr_three,
+                positive_third_pcr:(district_numbers_positives[districtRecord._id] != null)? district_numbers_positives[districtRecord._id].pcr_three_hiv_positive_infants: 0,
+
+                total_pcr_R1: districtRecord.pcr_R1,
+                positive_r1: (district_numbers_positives[districtRecord._id] != null)? district_numbers_positives[districtRecord._id].pcr_hiv_positive_infants_R1: 0,
+
+                total_pcr_R2: districtRecord.pcr_R2,
+                positive_r2: (district_numbers_positives[districtRecord._id] != null)? district_numbers_positives[districtRecord._id].pcr_hiv_positive_infants_R2: 0,
+
+                total_pcr_R3: districtRecord.pcr_R3,
+                positive_r3: (district_numbers_positives[districtRecord._id] != null)? district_numbers_positives[districtRecord._id].pcr_hiv_positive_infants_R3: 0,
+
+
+                positivity_in_first_pcr: getPositivity(districtRecord),
+
             }
 
             export_district_numbers.push(district_instance);
@@ -352,6 +375,16 @@ ctrllers.DashController=function($scope,$http){
 
         return export_district_numbers;
     }
+    function getPositivity(object_instance){
+        var positivity=0;
+        if(object_instance.pcr_one_hiv_positive_infants > 0){
+         positivity = (object_instance.pcr_one_hiv_positive_infants/object_instance.pcr_one)*100;
+         positivity = Math.round(positivity,1);
+        }
+
+        return positivity;
+    }
+    
     function exportFacilityNumbers(scopeInstance){
        
         var export_facility_numbers = [];
@@ -359,6 +392,7 @@ ctrllers.DashController=function($scope,$http){
         var facility_details_labels = scopeInstance.facilities_lables;
 
         var facility_numbers_from_scope = scopeInstance.facility_numbers;
+        var facility_numbers_for_positives = scopeInstance.facility_numbers_for_positives; 
 
         for( var index = 0; index < facility_numbers_from_scope.length; index++){
             var facilityRecord = facility_numbers_from_scope[index];
@@ -366,8 +400,28 @@ ctrllers.DashController=function($scope,$http){
             var facility_instance = {                
                 facility_name : facility_details_labels[facilityRecord._id],
                 total_tests : facilityRecord.total_tests,
+                  
+
                 total_first_pcr : facilityRecord.pcr_one,
-                total_second_pcr : facilityRecord.pcr_two    
+                positive_first_pcr: (facility_numbers_for_positives[facilityRecord._id] != null)? facility_numbers_for_positives[facilityRecord._id].pcr_one_hiv_positive_infants : 0,
+                
+                total_second_pcr : facilityRecord.pcr_two,
+                positive_second_pcr: (facility_numbers_for_positives[facilityRecord._id] != null)? facility_numbers_for_positives[facilityRecord._id].pcr_two_hiv_positive_infants: 0,
+
+                total_third_pcr: facilityRecord.pcr_three,
+                positive_third_pcr:(facility_numbers_for_positives[facilityRecord._id] != null)? facility_numbers_for_positives[facilityRecord._id].pcr_three_hiv_positive_infants: 0,
+
+                total_pcr_R1: facilityRecord.pcr_R1,
+                positive_r1: (facility_numbers_for_positives[facilityRecord._id] != null)? facility_numbers_for_positives[facilityRecord._id].pcr_hiv_positive_infants_R1: 0,
+
+                total_pcr_R2: facilityRecord.pcr_R2,
+                positive_r2: (facility_numbers_for_positives[facilityRecord._id] != null)? facility_numbers_for_positives[facilityRecord._id].pcr_hiv_positive_infants_R2: 0,
+
+                total_pcr_R3: facilityRecord.pcr_R3,
+                positive_r3: (facility_numbers_for_positives[facilityRecord._id] != null)? facility_numbers_for_positives[facilityRecord._id].pcr_hiv_positive_infants_R3: 0,
+
+
+                positivity_in_first_pcr: getPositivity(facilityRecord),  
             }
 
             export_facility_numbers.push(facility_instance);

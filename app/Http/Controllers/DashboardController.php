@@ -162,6 +162,7 @@ class DashboardController extends Controller {
 		$conds['$and'][]=['year_month'=>  ['$gte'=> (int)$fro_date] ];
 		$conds['$and'][]=[ 'year_month'=>  ['$lte'=> (int)$to_date] ];
 
+
 		if(!empty($age_ids)&&$age_ids!='[]') {
 			
 			$age_bands=json_decode($age_ids);
@@ -178,6 +179,7 @@ class DashboardController extends Controller {
 			
 			$conds['$and'][]=[ 'age_in_months'=>  ['$gte'=> (int)$lower_age_band] ];
 			$conds['$and'][]=[ 'age_in_months'=>  ['$lte'=> (int)$upper_age_band] ];
+			
 			
 		}
 		if(!empty($districts)&&$districts!='[]') $conds['$and'][]=[ 'district_id'=>  ['$in'=> json_decode($districts)] ];
@@ -329,12 +331,15 @@ class DashboardController extends Controller {
 		$whole_numbers=$this->_wholeNumbers();
 		$duration_numbers=$this->_durationNumbers();
 		
-		
-
+		$dist_numbers_for_positives = $this->_districtNumbersForPositivePCRs();
 		$dist_numbers=$this->_districtNumbers();
+
 		$facility_numbers=$this->_facilityNumbers();
-		
-		return compact("whole_numbers","duration_numbers","duration_numbers_test","dist_numbers","facility_numbers");
+		$facility_numbers_for_positives=$this->_facilityNumbersForPositivePCRs();
+
+		return compact("whole_numbers","duration_numbers","dist_numbers","dist_numbers_for_positives",
+			"facility_numbers_for_positives",
+			"facility_numbers");
 	}
 	
 	private function _wholeNumbers(){
@@ -550,12 +555,12 @@ class DashboardController extends Controller {
 			'pcr_R2_hiv_positive_infants'=>$pcr_sum_satement_R2,
 			'pcr_R3_hiv_positive_infants'=>$pcr_sum_satement_R3, 
 
-			'pcr_one_art_initiated'=>$pcr1_art_initiated_sum_statement,
-			'pcr_two_art_initiated'=>$pcr2_art_initiated_sum_statement,
-			'pcr_three_art_initiated'=>$pcr3_art_initiated_sum_statement,
-			'pcr_R1_art_initiated'=>$pcr_art_initiated_sum_statement_R1,
-			'pcr_R2_art_initiated'=>$pcr_art_initiated_sum_statement_R2,
-			'pcr_R3_art_initiated'=>$pcr_art_initiated_sum_statement_R3,
+			//'pcr_one_art_initiated'=>$pcr1_art_initiated_sum_statement,
+			//'pcr_two_art_initiated'=>$pcr2_art_initiated_sum_statement,
+			//'pcr_three_art_initiated'=>$pcr3_art_initiated_sum_statement,
+			//'pcr_R1_art_initiated'=>$pcr_art_initiated_sum_statement_R1,
+			//'pcr_R2_art_initiated'=>$pcr_art_initiated_sum_statement_R2,
+			//'pcr_R3_art_initiated'=>$pcr_art_initiated_sum_statement_R3,
 
 			'hiv_positive_infants'=>$hiv_positive_infants_sum_statement,
 			'art_initiated'=>$art_initiated_sum_statement
@@ -588,50 +593,8 @@ class DashboardController extends Controller {
 				'pcr_R2' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R2')),1,0))),
 				'pcr_R3' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R3')),1,0))),
 
-				'pcr_one_hiv_positive_infants'=>array('$sum' => array('$cond'=>array(
-					array( '$and'
-							=> array(
-								array('$eq'=>array('$pcr','FIRST'),
-									'$eq'=>array('$accepted_result', 'POSITIVE'))
-							 )
-						),1,0))),
-				'pcr_two_hiv_positive_infants'=>array('$sum' => array('$cond'=>array(
-					array( '$and'
-							=> array(
-								array('$eq'=>array('$pcr','SECOND'),
-									'$eq'=>array('$accepted_result', 'POSITIVE'))
-							 )
-						),1,0))),
-				'pcr_three_hiv_positive_infants'=>array('$sum' => array('$cond'=>array(
-					array( '$and'
-							=> array(
-								array('$eq'=>array('$pcr','THREE'),
-									'$eq'=>array('$accepted_result', 'POSITIVE'))
-							 )
-						),1,0))),
-				'pcr_hiv_positive_infants_R1'=>array('$sum' => array('$cond'=>array(
-					array( '$and'
-							=> array(
-								array('$eq'=>array('$pcr','R1'),
-									'$eq'=>array('$accepted_result', 'POSITIVE'))
-							 )
-						),1,0))),
-				'pcr_hiv_positive_infants_R2'=>array('$sum' => array('$cond'=>array(
-					array( '$and'
-							=> array(
-								array('$eq'=>array('$pcr','R2'),
-									'$eq'=>array('$accepted_result', 'POSITIVE'))
-							 )
-						),1,0))),
-				'pcr_hiv_positive_infants_R3'=>array('$sum' => array('$cond'=>array(
-					array( '$and'
-							=> array(
-								array('$eq'=>array('$pcr','R3'),
-									'$eq'=>array('$accepted_result', 'POSITIVE'))
-							 )
-						),1,0))),
-
-
+				
+				/*
 				'pcr_one_art_initiated'=>array('$sum' => array('$cond'=>array(
 					array( '$and'
 							=> array(
@@ -673,7 +636,7 @@ class DashboardController extends Controller {
 								array('$eq'=>array('$pcr','R3'),
 									'$eq'=>array('$art_initiation_status', 'YES'))
 							 )
-						),1,0))),
+						),1,0))),*/
 
 				'hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$accepted_result','POSITIVE')),1,0))),
 				'art_initiated' => array('$sum' => array('$cond'=>array(array('$eq' => array('$art_initiation_status','YES')),1,0))),
@@ -693,6 +656,139 @@ class DashboardController extends Controller {
 	private function _districtNumbers(){
 	
 		$match_stage['$match']=$this->conditions;
+		$group_stage = array(
+
+			'$group' => array(
+				'_id' => '$district_id', 
+				'total_tests' => array('$sum' => 1 ),
+				'pcr_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
+				'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
+				'pcr_three' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THREE')),1,0))),
+				'pcr_R1' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R1')),1,0))),
+				'pcr_R2' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R2')),1,0))),
+				'pcr_R3' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R3')),1,0))),
+
+
+				'hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$accepted_result','POSITIVE')),1,0))),
+				'art_initiated' => array('$sum' => array('$cond'=>array(array('$eq' => array('$art_initiation_status','YES')),1,0))),
+			 ));
+		/*"$and": [ { "$eq": [ "$pcr", "FIRST" ] }, { "$eq": [ "$accepted_result", "POSITIVE" ] } ] 
+		=> array(
+			array('$eq'=>array('$pcr','FIRST'),
+				'$eq'=>array('$accepted_result', 'POSITIVE'))
+		 );*/
+		
+		$res=$this->mongo->eid_dashboard->aggregate($match_stage,$group_stage );
+		
+		
+		return isset($res['result'])?$res['result']:[];
+	}
+	private function _districtNumbersForPositivePCRs(){
+		
+		$conds=$this->conditions;
+		
+		$conds['$and'][]=[ 'accepted_result'=>  ['$eq'=> 'POSITIVE'] ];
+		
+
+		$match_stage['$match']=$conds;
+		$group_stage = array(
+
+			'$group' => array(
+				'_id' => '$district_id', 
+				
+				'pcr_one_hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
+				'pcr_two_hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
+				'pcr_three_hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THREE')),1,0))),
+				'pcr_hiv_positive_infants_R1' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R1')),1,0))),
+				'pcr_hiv_positive_infants_R2' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R2')),1,0))),
+				'pcr_hiv_positive_infants_R3' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R3')),1,0)))
+			 ));
+		
+		
+		$res=$this->mongo->eid_dashboard->aggregate($match_stage,$group_stage );
+		
+		$pcr_positives=[];
+		foreach ($res['result'] as $key => $value) {
+			$key_id = $value['_id'];
+			$pcr_positives[$key_id] = $value;
+		}
+		//return isset($res['result'])?$res['result']:[];
+		return $pcr_positives;
+	}
+	private function _facilityNumbersForPositivePCRs(){
+		
+		$conds=$this->conditions;
+		
+		$conds['$and'][]=[ 'accepted_result'=>  ['$eq'=> 'POSITIVE'] ];
+		
+
+		$match_stage['$match']=$conds;
+		$group_stage = array(
+
+			'$group' => array(
+				'_id' => '$facility_id', 
+				
+				'pcr_one_hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
+				'pcr_two_hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
+				'pcr_three_hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THREE')),1,0))),
+				'pcr_hiv_positive_infants_R1' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R1')),1,0))),
+				'pcr_hiv_positive_infants_R2' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R2')),1,0))),
+				'pcr_hiv_positive_infants_R3' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R3')),1,0)))
+			 ));
+		
+		
+		$res=$this->mongo->eid_dashboard->aggregate($match_stage,$group_stage );
+		
+		$pcr_positives=[];
+		foreach ($res['result'] as $key => $value) {
+			$key_id = $value['_id'];
+			$pcr_positives[$key_id] = $value;
+		}
+		//return isset($res['result'])?$res['result']:[];
+		return $pcr_positives;
+	}
+	/*
+db.eid_dashboard.aggregate(
+  [    {
+       $match: {year_month:{$gt:201801}}
+      },
+      {
+          $group:{
+              _id:'$year_month',
+              hiv_pcr_one: {"$sum": 
+              					{
+                                  "$cond": 
+                                  [ 
+                                  	{ "$and": 
+                                		[ 
+                                    		{ $eq: [ "$pcr", "FIRST" ] }
+                                    
+                                        ] 
+                                   }, 
+                                   1, 
+                                   0 
+                                   ]
+                                }
+                            },
+                            
+          }
+      }
+  ]
+)
+
+	*/
+	private function _districtNumbersTester(){
+	
+		$match_stage['$match']=$this->conditions;
+		$group_tester = array('$group' => array(
+			'_id'=>'$year_month',
+			'hiv_pcr_one'=>array('$sum'=>array(
+				'$cond'=>array(array('$and'=>array(
+					array('$eq'=>array('$pcr','FIRST'))
+					)),1,0))),
+			), 
+		);
+
 		$group_stage = array(
 
 			'$group' => array(
@@ -800,14 +896,72 @@ class DashboardController extends Controller {
 			array('$eq'=>array('$pcr','FIRST'),
 				'$eq'=>array('$accepted_result', 'POSITIVE'))
 		 );*/
+
+		$group_stage1 = array(
+
+			'$group' => array(
+				'_id' => '$district_id', 
+				//'total_tests' => array('$sum' => 1 ),
+				//'pcr_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
+				//'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
+				//'pcr_three' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THIRD')),1,0))),
+				//'pcr_r1' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R1')),1,0))),
+				//'pcr_r2' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R2')),1,0))),
+				//'pcr_r3' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R3')),1,0))),
+
+				
+				'pcr_one_pst'=>[
+								'$sum'=>['$cond'=>[['$and'=>[[
+													 			'$eq'=>['$pcr','FIRST'],
+													 			'$eq'=>['$accepted_result','POSITIVE'],
+													 		]]],1,0]]
+				                ],
+				'pcr_two_pst'=>[
+								'$sum'=>['$cond'=>[['$and'=>[[
+													 			'$eq'=>['$pcr','SECOND'],
+													 			'$eq'=>['$accepted_result','POSITIVE'],
+													 		]]],1,0]]
+				                ],
+				'pcr_three_pst'=>[
+								'$sum'=>['$cond'=>[['$and'=>[[
+													 			'$eq'=>['$pcr','THREE'],
+													 			'$eq'=>['$accepted_result','POSITIVE'],
+													 		]]],1,0]]
+				                ],
+				'r1_pst'=>[
+								'$sum'=>['$cond'=>[['$and'=>[[
+													 			'$eq'=>['$pcr','R1'],
+													 			'$eq'=>['$accepted_result','POSITIVE'],
+													 		]]],1,0]]
+				                ],
+				'r2_pst'=>[
+								'$sum'=>['$cond'=>[['$and'=>[[
+													 			'$eq'=>['$pcr','R2'],
+													 			'$eq'=>['$accepted_result','POSITIVE'],
+													 		]]],1,0]]
+				                ],
+				'r3_pst'=>[
+								'$sum'=>['$cond'=>[['$and'=>[[
+													 			'$eq'=>['$pcr','R3'],
+													 			'$eq'=>['$accepted_result','POSITIVE'],
+													 		]]],1,0]]
+				                ],
+		));
 		
-		$res=$this->mongo->eid_dashboard->aggregate($match_stage,$group_stage );
-		
+		$res=null;
+		try{
+			$res=$this->mongo->eid_dashboard->aggregate($match_stage,$group_stage1 );
+		}catch(Exception $e){
+			$e->getMessage();
+		}
 		
 		return isset($res['result'])?$res['result']:[];
 	}
-	
+ 
 
+    public function mongoQueryExecutor($condition,$group){
+    	
+    }
 	public function getResultsPrintingStatistics(){
 		
 			$sql="SELECT f.facility,h.hub,ips.ip,

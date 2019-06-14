@@ -1,6 +1,7 @@
 <?php
 
 namespace EID;
+use \MongoClient;
 
 
 class Mongo{
@@ -11,6 +12,7 @@ class Mongo{
 		$user=env('MONGO_USER');
 		$pass=env('MONGO_PWD');
 		$client = new \MongoClient("mongodb://$user:$pass@$host/$db");
+
 		return $client->$db;
 	}
 

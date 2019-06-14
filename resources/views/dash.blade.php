@@ -558,22 +558,22 @@
                                     <td class="ng-cloak"><% d.total_tests|number %></td>
 
                                     <td class="ng-cloak"><% d.pcr_one|number %></td>
-                                    <td class="ng-cloak"><% d.pcr_one_hiv_positive_infants|number %></td>
+                                    <td class="ng-cloak"><% district_numbers_positives[d._id].pcr_one_hiv_positive_infants != null ? district_numbers_positives[d._id].pcr_one_hiv_positive_infants : 0 %></td>
                                     
                                     <td class="ng-cloak"><% d.pcr_two|number %></td>
-                                    <td class="ng-cloak"><% d.pcr_two_hiv_positive_infants|number %></td>
+                                    <td class="ng-cloak"><% district_numbers_positives[d._id].pcr_two_hiv_positive_infants != null ? district_numbers_positives[d._id].pcr_two_hiv_positive_infants : 0 %></td>
 
                                     <td class="ng-cloak"><% d.pcr_three|number %></td>
-                                    <td class="ng-cloak"><% d.pcr_three_hiv_positive_infants|number %></td>
+                                    <td class="ng-cloak"><% district_numbers_positives[d._id].pcr_three_hiv_positive_infants != null ? district_numbers_positives[d._id].pcr_three_hiv_positive_infants : 0%></td>
 
                                     <td class="ng-cloak"><% d.pcr_R1|number %></td>
-                                    <td class="ng-cloak"><% d.pcr_hiv_positive_infants_R1|number %></td>
+                                    <td class="ng-cloak"><% district_numbers_positives[d._id].pcr_hiv_positive_infants_R1 != null ? district_numbers_positives[d._id].pcr_hiv_positive_infants_R1 : 0%></td>
 
                                     <td class="ng-cloak"><% d.pcr_R2|number %></td>
-                                    <td class="ng-cloak"><% d.pcr_hiv_positive_infants_R2|number %></td>
+                                    <td class="ng-cloak"><% district_numbers_positives[d._id].pcr_hiv_positive_infants_R2 != null ? district_numbers_positives[d._id].pcr_hiv_positive_infants_R2 : 0%></td>
 
                                     <td class="ng-cloak"><% d.pcr_R3|number %></td>
-                                    <td class="ng-cloak"><% d.pcr_hiv_positive_infants_R3|number %></td>
+                                    <td class="ng-cloak"><% district_numbers_positives[d._id].pcr_hiv_positive_infants_R3 != null ? district_numbers_positives[d._id].pcr_hiv_positive_infants_R3 : 0 %></td>
 
 
                                     <td class="ng-cloak"><% (d.pcr_one_hiv_positive_infants > 0? (d.pcr_one_hiv_positive_infants/d.pcr_one)*100:0)|number:1 %>%</td>
@@ -620,22 +620,22 @@
                                     <td class="ng-cloak"><% f.total_tests|number %></td>
 
                                     <td class="ng-cloak"><% f.pcr_one|number %></td>
-                                    <td class="ng-cloak"><% f.pcr_one_hiv_positive_infants|number %></td>
+                                    <td class="ng-cloak"><% facility_numbers_for_positives[f._id].pcr_one_hiv_positive_infants != null ? facility_numbers_for_positives[f._id].pcr_one_hiv_positive_infants : 0 %></td>
 
                                     <td class="ng-cloak"><% f.pcr_two|number %></td>
-                                    <td class="ng-cloak"><% f.pcr_two_hiv_positive_infants|number %></td>
+                                    <td class="ng-cloak"><% facility_numbers_for_positives[f._id].pcr_two_hiv_positive_infants != null ? facility_numbers_for_positives[f._id].pcr_two_hiv_positive_infants : 0 %></td>
 
                                     <td class="ng-cloak"><% f.pcr_three|number %></td>
-                                    <td class="ng-cloak"><% f.pcr_three_hiv_positive_infants|number %></td>
+                                    <td class="ng-cloak"><% facility_numbers_for_positives[f._id].pcr_three_hiv_positive_infants != null ? facility_numbers_for_positives[f._id].pcr_three_hiv_positive_infants : 0%></td>
 
                                     <td class="ng-cloak"><% f.pcr_R1|number %></td>
-                                    <td class="ng-cloak"><% f.pcr_hiv_positive_infants_R1|number %></td>
+                                    <td class="ng-cloak"><% facility_numbers_for_positives[f._id].pcr_hiv_positive_infants_R1 != null ? facility_numbers_for_positives[f._id].pcr_hiv_positive_infants_R1 : 0 %></td>
 
                                     <td class="ng-cloak"><% f.pcr_R2|number %></td>
-                                    <td class="ng-cloak"><% f.pcr_hiv_positive_infants_R2|number %></td>
+                                    <td class="ng-cloak"><% facility_numbers_for_positives[f._id].pcr_hiv_positive_infants_R2 != null ? facility_numbers_for_positives[f._id].pcr_hiv_positive_infants_R2 : 0%></td>
 
                                     <td class="ng-cloak"><% f.pcr_R3|number %></td>
-                                    <td class="ng-cloak"><% f.pcr_hiv_positive_infants_R3|number %></td>
+                                    <td class="ng-cloak"><% facility_numbers_for_positives[f._id].pcr_hiv_positive_infants_R3 != null ? facility_numbers_for_positives[f._id].pcr_hiv_positive_infants_R3 : 0%></td>
 
                                     <td class="ng-cloak"><% (f.pcr_one_hiv_positive_infants > 0? (f.pcr_one_hiv_positive_infants/f.pcr_one)*100:0)|number:1 %>%</td>
 
@@ -648,11 +648,11 @@
                         
                         <br>
                         <br>
-                        <button ng-hide="show_fclties1" id="exportDistricts" type="button" ng-csv="export_district_numbers"  class="btn btn-success" filename="eid_district_samples_<%current_timestamp%>.csv" csv-header="['District', 'Total Tests', 'First PCR','Second PCR']">Download CSV</button>
+                        <button ng-hide="show_fclties1" id="exportDistricts" type="button" ng-csv="export_district_numbers"  class="btn btn-success" filename="eid_district_samples_<%current_timestamp%>.csv" csv-header="['District', 'Total Tests', 'First PCR','Positves in 1st PCR','Second PCR','Positives in 2nd PCR','Third PCR','Positives in 3rd PCR','Total R1','Positives in R1','Total R2','Positives in R2','Total R3','Positives in R3','Positives in 1st PCR']">Download CSV</button>
 
                         <br>
                         <br>
-                        <button ng-show="show_fclties1" id="exportFacilities" type="button" ng-csv="export_facility_numbers" filename="eid_facility_samples_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Total Tests', 'First PCR','Second PCR']">Download CSV</button>
+                        <button ng-show="show_fclties1" id="exportFacilities" type="button" ng-csv="export_facility_numbers" filename="eid_facility_samples_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Total Tests', 'First PCR','Positves in 1st PCR','Second PCR','Positives in 2nd PCR','Third PCR','Positives in 3rd PCR','Total R1','Positives in R1','Total R2','Positives in R2','Total R3','Positives in R3','Positives in 1st PCR']">Download CSV</button>
 
                     </div>
                       </div>

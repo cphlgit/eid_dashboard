@@ -30,6 +30,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         //Run the task every day at midnight ->daily()
-        $schedule->command('eiddashboard:update')->daily();    
+        //$schedule->command('eiddashboard:update')->daily();    
     }
 }

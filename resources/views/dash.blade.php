@@ -947,11 +947,8 @@
     
 </footer>
 
-<script type="text/javascript">
-    
 
-</script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-sanitize.min.js"></script>
+<script src="{{ asset('js/angular-sanitize-1.2.15.min.js') }}"></script>
 <script src="{{ asset('js/ng-csv.js') }}"></script>
 <script src="{{ asset('js/ng-csv.min.js') }}"></script>
 <script src=" {{ asset('js/cbpFWTabs.js') }} "></script>

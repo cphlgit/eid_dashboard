@@ -352,7 +352,7 @@ class DashboardController extends Controller {
 				'pcr_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
 				'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
 
-				'pcr_three' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THREE')),1,0))),
+				'pcr_three' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THIRD')),1,0))),
 				'repeat_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R1')),1,0))),
 				'repeat_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R2')),1,0))),
 				'repeat_three' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R3')),1,0))),
@@ -384,7 +384,7 @@ class DashboardController extends Controller {
 		$pcr2_tests_sum_statement = array('$sum'=>$pcr2_cond_statement);
 
 		//total pcr3 tests
-		$if_pcr_three = array('$eq' => array('$pcr','THREE'));
+		$if_pcr_three = array('$eq' => array('$pcr','THIRD'));
 		$pcr3_cond = array($if_pcr_three,1,0);
 		$pcr3_cond_statement = array('$cond' =>$pcr3_cond );
 		$pcr3_tests_sum_statement = array('$sum'=>$pcr3_cond_statement);
@@ -429,7 +429,7 @@ class DashboardController extends Controller {
 			$pcr2_sum_satement = array('$sum'=>$pcr2_cond_array);
 
 		//pcr_three_hiv_positive_infants
-			$pcr3_if_pcr_three = array('$eq' => array('$pcr','THREE'));
+			$pcr3_if_pcr_three = array('$eq' => array('$pcr','THIRD'));
 			$pcr3_if_accepted_result = array('$eq' => array('$accepted_result','POSITIVE'));
 			$pcr3_and_cond = array($pcr3_if_pcr_three,$pcr3_if_accepted_result);
 			$pcr3_and_array=array('$and'=>$pcr3_and_cond);
@@ -488,7 +488,7 @@ class DashboardController extends Controller {
 			$pcr2_art_initiated_sum_statement = array('$sum'=>$pcr2_art_initiated_cond_array);
 
 		//pcr_three_art_initiated	
-			$pcr3_art_initiated_if=array('$eq' => array('$pcr','THREE'));
+			$pcr3_art_initiated_if=array('$eq' => array('$pcr','THIRD'));
 			$pcr3_art_initiated_if_accepted_result=array('$eq' => array('$art_initiation_status','YES'));
 			$pcr3_art_initiated_and_cond=array($pcr3_art_initiated_if,$pcr3_art_initiated_if_accepted_result);
 			$pcr3_art_initiated_and_array=array('$and'=>$pcr3_art_initiated_and_cond);
@@ -588,7 +588,7 @@ class DashboardController extends Controller {
 				'total_tests' => array('$sum' => 1 ),
 				'pcr_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
 				'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
-				'pcr_three' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THREE')),1,0))),
+				'pcr_three' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THIRD')),1,0))),
 				'pcr_R1' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R1')),1,0))),
 				'pcr_R2' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R2')),1,0))),
 				'pcr_R3' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R3')),1,0))),
@@ -663,7 +663,7 @@ class DashboardController extends Controller {
 				'total_tests' => array('$sum' => 1 ),
 				'pcr_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
 				'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
-				'pcr_three' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THREE')),1,0))),
+				'pcr_three' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THIRD')),1,0))),
 				'pcr_R1' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R1')),1,0))),
 				'pcr_R2' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R2')),1,0))),
 				'pcr_R3' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R3')),1,0))),
@@ -698,7 +698,7 @@ class DashboardController extends Controller {
 				
 				'pcr_one_hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
 				'pcr_two_hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
-				'pcr_three_hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THREE')),1,0))),
+				'pcr_three_hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THIRD')),1,0))),
 				'pcr_hiv_positive_infants_R1' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R1')),1,0))),
 				'pcr_hiv_positive_infants_R2' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R2')),1,0))),
 				'pcr_hiv_positive_infants_R3' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R3')),1,0)))
@@ -730,7 +730,7 @@ class DashboardController extends Controller {
 				
 				'pcr_one_hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
 				'pcr_two_hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
-				'pcr_three_hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THREE')),1,0))),
+				'pcr_three_hiv_positive_infants' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THIRD')),1,0))),
 				'pcr_hiv_positive_infants_R1' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R1')),1,0))),
 				'pcr_hiv_positive_infants_R2' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R2')),1,0))),
 				'pcr_hiv_positive_infants_R3' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R3')),1,0)))
@@ -796,7 +796,7 @@ db.eid_dashboard.aggregate(
 				'total_tests' => array('$sum' => 1 ),
 				'pcr_one' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','FIRST')),1,0))),
 				'pcr_two' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','SECOND')),1,0))),
-				'pcr_three' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THREE')),1,0))),
+				'pcr_three' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','THIRD')),1,0))),
 				'pcr_R1' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R1')),1,0))),
 				'pcr_R2' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R2')),1,0))),
 				'pcr_R3' => array('$sum' => array('$cond'=>array(array('$eq' => array('$pcr','R3')),1,0))),
@@ -862,7 +862,7 @@ db.eid_dashboard.aggregate(
 				'pcr_three_art_initiated'=>array('$sum' => array('$cond'=>array(
 					array( '$and'
 							=> array(
-								array('$eq'=>array('$pcr','THREE'),
+								array('$eq'=>array('$pcr','THIRD'),
 									'$eq'=>array('$art_initiation_status', 'YES'))
 							 )
 						),1,0))),
@@ -924,7 +924,7 @@ db.eid_dashboard.aggregate(
 				                ],
 				'pcr_three_pst'=>[
 								'$sum'=>['$cond'=>[['$and'=>[[
-													 			'$eq'=>['$pcr','THREE'],
+													 			'$eq'=>['$pcr','THIRD'],
 													 			'$eq'=>['$accepted_result','POSITIVE'],
 													 		]]],1,0]]
 				                ],

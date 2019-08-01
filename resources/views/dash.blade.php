@@ -936,7 +936,7 @@
 </div>
 <br>
 <footer>
-    This platform and its content is copyright of CPHL Ministry of Health ,Uganda - © CPHL Ministry of Health ,Uganda 2018. All rights reserved.
+    This platform and its content is copyright of CPHL Ministry of Health ,Uganda - © CPHL Ministry of Health ,Uganda 2019. All rights reserved.
     <br>
     <small>Any redistribution or reproduction of part or all of the contents in any form is prohibited other than the following:</small>
         <ul>

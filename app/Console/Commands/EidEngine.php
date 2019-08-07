@@ -93,7 +93,8 @@ class EidEngine extends Command
                     $data["pcr_test_requested"]=isset($s->PCR_test_requested)? $s->PCR_test_requested: "UNKNOWN";//
                     $data["testing_completed"]=isset($s->testing_completed)? $s->testing_completed: "UNKNOWN";
                     $data["accepted_result"]=isset($s->accepted_result)? $s->accepted_result: "UNKNOWN";
-                    $data["pcr"]=isset($s->pcr)? $s->pcr: "UNKNOWN";//
+                    //$data["pcr"]=isset($s->pcr)? $s->pcr: "UNKNOWN";//
+                    $data["pcr"]=$this->extractPCR($s);
                     $data["source"] = "cphl";
                    
 
@@ -108,7 +109,21 @@ class EidEngine extends Command
 
         }//end of while loop
     }
+    private function extractPCR($sample){
+        $pcr='UNKNOWN';
+        if(isset($sample->pcr)){
+            
+            if($sample->pcr == 'FIRST' && $sample->non_routine == 'R2')//R1
+                $pcr = 'R1';
+            elseif ($sample->pcr == 'SECOND' && $sample->non_routine == 'R2'){//R2
+                $pcr = 'R2';
+            }else{
+                $pcr = $sample->pcr;
+            }
+        }
 
+        return $pcr;
+    }
     public function _loadHubs(){
         $this->mongo->hubs->drop();
         $res=LiveData::getHubs();

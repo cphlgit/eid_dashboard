@@ -48,6 +48,8 @@
     <!--script src="https://code.highcharts.com/modules/series-label.js"></script-->
     
     <!--script src="https://highcharts.github.io/export-csv/export-csv.js"></script-->
+ 
+
 
     <script>
     $(document).ready(function(){
@@ -56,6 +58,15 @@
        $("#highcharthivpositiveinfants").addClass("hidden");
        $("#highcharthivpositivityrate").addClass("hidden");
         //$("#highchart1").remove();
+
+
+    $('.date').datepicker({  
+
+       format: 'mm-dd-yyyy'
+
+     });  
+
+
 
     });
     </script>
@@ -353,6 +364,8 @@
     <table border='1' cellpadding='0' cellspacing='0' class='filter-tb'>
         <tr>
             <td width='9%' >
+
+
                 <span ng-model='fro_date_slct' ng-init='fro_date_slct={!! json_encode($months_by_years) !!}'></span>
                 <select ng-model="fro_date" ng-init="fro_date='all'">
                     <option value='all'>FROM DATE</option>

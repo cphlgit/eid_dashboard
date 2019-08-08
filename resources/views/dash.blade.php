@@ -26,6 +26,9 @@
     <script src="{{ asset('/js/general.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/js/jquery-2.1.3.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
+    <!--script type = "text/javascript" 
+         src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js">
+      </script-->
     <script src="{{ asset('/js/jquery-ui.min.js')}}" type="text/javascript"></script>
     <script src="{{ asset('/twitter-bootstrap-3.3/js/bootstrap.min.js') }}" type="text/javascript" ></script>
 
@@ -66,7 +69,8 @@
 
      });  
 
-
+     $( "#datepicker_start" ).datepicker();
+     $( "#datepicker_end" ).datepicker();
 
     });
     </script>
@@ -363,7 +367,15 @@
 
     <table border='1' cellpadding='0' cellspacing='0' class='filter-tb'>
         <tr>
-            <td width='9%' >
+         <td width='2%' >
+            <input type = "text" id = "datepicker_start"/>
+         </td>
+         <td width='2%' >
+            <input type = "text" id = "datepicker_end"/>
+         </td>
+
+            
+            <td width='7%' >
 
 
                 <span ng-model='fro_date_slct' ng-init='fro_date_slct={!! json_encode($months_by_years) !!}'></span>
@@ -376,7 +388,7 @@
                     </optgroup>
                 </select>
             </td>
-            <td width='9%' >
+            <td width='7%' >
                 <span ng-model='to_date_slct' ng-init='to_date_slct={!! json_encode($months_by_years) !!}'></span>
                 <select ng-model="to_date" ng-init="to_date='all'" ng-change="dateFilter('to')">
                     <option value='all'>TO DATE</option>
@@ -539,8 +551,11 @@
                           <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
-                                    <th width='30%'>District</th>
+                                    <th width='20%'>District</th>
                                     <th width='5%'>Total Tests</th>
+
+                                    <th width='5%'>0 - 2 months Total Tests</th>
+                                    <th width='5%'>0 - 2 months +ve Tests</th>
 
                                     <th width='5%'>Total 1<sup>st</sup> PCR</th>
                                     <th width='5%'>Positive 1<sup>st</sup> PCR </th>
@@ -569,6 +584,9 @@
                                 <tr ng-repeat="d in district_numbers" >
                                     <td class="ng-cloak"><% districts_lables[d._id] %></td>
                                     <td class="ng-cloak"><% d.total_tests|number %></td>
+
+                                    <td class="ng-cloak">0</td>
+                                    <td class="ng-cloak">0</td>
 
                                     <td class="ng-cloak"><% d.pcr_one|number %></td>
                                     <td class="ng-cloak"><% district_numbers_positives[d._id].pcr_one_hiv_positive_infants != null ? district_numbers_positives[d._id].pcr_one_hiv_positive_infants : 0 %></td>

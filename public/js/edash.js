@@ -5,8 +5,8 @@ Authors
 Name                        @       Period      Role       
 Logan Smith                 CHAI    2015(v1)    Interface Design, Q/A
 Ina Foalea                  CHAI    2015(v1)    Req Specification, Q/A, UAT
-Kitutu Paul                 CHAI    2015(v1)    System development
-
+Kitutu Paul                 CHAI    2015(v1)    System Development
+Simon Peter Muwanga         METS    2018(v2)    System Development
 Credit to CHAI Uganda, CPHL and stakholders
 */
 var app=angular.module('dashboard', ['datatables','ngSanitize', 'ngCsv','highcharts-ng'], function($interpolateProvider) {
@@ -63,6 +63,9 @@ ctrllers.DashController=function($scope,$http){
     $scope.facilities_lables=[];
     $scope.show_art_init = true;
     $scope.show_results_printing = true;
+
+    $scope.selected_start_date='';
+    $scope.selected_end_date='';
 
 
     $scope.params = {
@@ -227,7 +230,18 @@ ctrllers.DashController=function($scope,$http){
         return age_ids_array;
     };
      
-
+    var initializeDateRange=function(){
+        var today = new Date();
+        $scope.filtered_date_range=[];
+        
+        var date_time = today.setMonth(today.getMonth() - 10);
+        var first_date = new Date(date_time);
+        $scope.filtered_date_range[0]= first_date.getMonth()+"/01/"+first_date.getFullYear();
+        
+        var second_date = new Date();
+        $scope.filtered_date_range[1]=(second_date.getMonth()+1)+"/"+second_date.getDate()+"/"+second_date.getFullYear();
+    };
+    initializeDateRange();
     var getData=function(){
         $scope.loading = true;
             var prms = {};
@@ -628,9 +642,6 @@ ctrllers.DashController=function($scope,$http){
 
     $scope.dateFilter=function(mode){
         if($scope.fro_date!="all" && $scope.to_date!="all"){
-
-            
-
             var vals={};
             var fro_s=$scope.fro_date.split("-");
             var to_s=$scope.to_date.split("-");
@@ -642,8 +653,6 @@ ctrllers.DashController=function($scope,$http){
             var eval1=vals.from_year<=vals.to_year;
             var eval2=(vals.from_month>vals.to_month)&&(vals.from_year<vals.to_year);
             var eval3=(vals.from_month<=vals.to_month);
-
-
 
             if(eval1 && (eval2||eval3)){
                 //console.log("duration expression passed");
@@ -662,6 +671,13 @@ ctrllers.DashController=function($scope,$http){
                 //console.log("fro yr="+vals.from_year+" fro m"+vals.from_month+" to yr="+vals.to_year+" to m"+vals.to_month);
             }
         }
+    }
+    $scope.dateRangeFilter=function(mode){
+        
+        $scope.filtered_date_range=[];
+
+        $scope.filtered_date_range[0]= $scope.selected_start_date;
+        $scope.filtered_date_range[1]= $scope.selected_end_date;
     }
     var generateNumericYearMonth=function(year_value,month_value){
         var year_month_string="";

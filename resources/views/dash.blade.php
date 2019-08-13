@@ -63,13 +63,12 @@
         //$("#highchart1").remove();
 
 
-    $('.date').datepicker({  
+    
 
-       format: 'mm-dd-yyyy'
-
-     });  
-
-     $( "#datepicker_start" ).datepicker();
+     $( "#datepicker_start" ).datepicker({
+        format: 'dd-mm-yyyy'
+     }
+     );
      $( "#datepicker_end" ).datepicker();
 
     });
@@ -311,6 +310,18 @@
 
         <span style="font-size:15px;cursor:pointer;color:#000" onclick="alert('{!! $filtering_info !!}')" class='glyphicon glyphicon-info-sign' title="{!! $filtering_info !!}"></span>
 
+        <span ng-model='filtered_date_range'>
+          <span class="filter-val ng-cloak">
+            <% filtered_date_range[0] %> - <% filtered_date_range[1] %> 
+        </span>
+
+        <span ng-repeat="filtered_age_range_instance in filtered_age_range" ng-init="age_range_index = ageRangesCount()">
+                <span class="filter-val ng-cloak"> <% filtered_age_range_instance.from_age %> 
+                    - <% filtered_age_range_instance.to_age %>
+                    (months) <x ng-click='filtered_age_range.splice($index, 1)'>&#120;</x>
+                </span> 
+            </span>
+        </span>
         <span ng-model='filtered_age_range' ng-init='filtered_age_range=[]'>
             <span ng-repeat="filtered_age_range_instance in filtered_age_range" ng-init="age_range_index = ageRangesCount()">
                 <span class="filter-val ng-cloak"> <% filtered_age_range_instance.from_age %> 
@@ -368,10 +379,10 @@
     <table border='1' cellpadding='0' cellspacing='0' class='filter-tb'>
         <tr>
          <td width='2%' >
-            <input type = "text" id = "datepicker_start"/>
+            <input type = "text" id = "datepicker_start" ng-model="selected_start_date"/>
          </td>
          <td width='2%' >
-            <input type = "text" id = "datepicker_end"/>
+            <input type = "text" id = "datepicker_end" ng-model="selected_end_date" ng-change="dateRangeFilter('to')"/>
          </td>
 
             

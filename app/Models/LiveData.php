@@ -63,7 +63,8 @@ class LiveData extends Model
 
     public static function getSamples($year){
 
-    	$sql = "SELECT s.id,s.infant_exp_id,".self::GENDER_CASE." as sex,s.infant_dob,month(s.date_dbs_taken) as month_of_year,
+    	$sql = "SELECT s.id,s.infant_exp_id,".self::GENDER_CASE." as sex,s.infant_dob,
+        month(s.date_dbs_taken) as month_of_year,s.date_dbs_taken,
 		 ".self::AGE_IN_MONTHS_STRING." as age_in_months ,b.facility_id,f.hubID,f.facilityLevelID as care_level_id,f.districtID,
 		 d.regionID, s.f_ART_initiated,s.f_date_ART_initiated,".self::RESULT_CASE." as accepted_result,s.testing_completed, s.PCR_test_requested,s.pcr,s.non_routine FROM dbs_samples s 
 		inner join batches b on s.batch_id =b.id 

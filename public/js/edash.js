@@ -5,8 +5,8 @@ Authors
 Name                        @       Period      Role       
 Logan Smith                 CHAI    2015(v1)    Interface Design, Q/A
 Ina Foalea                  CHAI    2015(v1)    Req Specification, Q/A, UAT
-Kitutu Paul                 CHAI    2015(v1)    System development
-
+Kitutu Paul                 CHAI    2015(v1)    System Development
+Simon Peter Muwanga         METS    2018(v2)    System Development
 Credit to CHAI Uganda, CPHL and stakholders
 */
 var app=angular.module('dashboard', ['datatables','ngSanitize', 'ngCsv','highcharts-ng'], function($interpolateProvider) {
@@ -37,6 +37,16 @@ app.filter('d_format', function() {
             return month_labels[mth]+" '"+yr.slice(-2);
         }
     });
+app.filter('uganda_date_format', function() {
+        return function(m_d_y) {
+            var month_labels={1:'Jan',2:'Feb',3:'Mar',4:'Apr',5:'May',6:'Jun',7:'Jul',8:'Aug',9:'Sept',10:'Oct',11:'Nov',12:'Dec'};
+            var arr=m_d_y.split('/');
+            var year_format=arr[2]||"";
+            var month_format=arr[0]||"";
+            var day_format=arr[1]||"";
+            return day_format+"-"+month_labels[Number(month_format)]+"-"+year_format;
+        }
+    });
 
 
 var ctrllers={};
@@ -63,6 +73,9 @@ ctrllers.DashController=function($scope,$http){
     $scope.facilities_lables=[];
     $scope.show_art_init = true;
     $scope.show_results_printing = true;
+
+    $scope.selected_start_date='';
+    $scope.selected_end_date='';
 
 
     $scope.params = {
@@ -226,14 +239,74 @@ ctrllers.DashController=function($scope,$http){
 
         return age_ids_array;
     };
-     
+    var getDoubleDigitString=function(digit_string){
+        var digit_value = Number(digit_string);
+        if(digit_value > 9)
+            return ''+digit_value;
+        else
+            return '0'+digit_value;
+    };
+    var getNumbericDateValue=function(year_value,month_value,day_value){
+        var year_month_day_string='';
 
+        year_month_day_string=year_value+getDoubleDigitString(month_value)+getDoubleDigitString(day_value);
+        var year_month_day_numeric=Number(year_month_day_string);
+
+        return year_month_day_numeric;
+    };
+    var generateNumericYearMonth=function(year_value,month_value){
+        var year_month_string="";
+        if(month_value > 9){
+            year_month_string=year_value+''+month_value;
+        }else{
+            year_month_string=year_value+''+'0'+month_value;
+        }
+        var year_month_numeric=Number(year_month_string);
+
+        return year_month_numeric;
+        
+    };
+    var initializeDateRange=function(){
+        var today = new Date();
+        $scope.filtered_date_range=[];
+        
+        var date_time = today.setMonth(today.getMonth() - 10);
+        var first_date = new Date(date_time);
+        $scope.filtered_date_range[0]= first_date.getMonth()+"/01/"+first_date.getFullYear();
+        $scope.selected_start_date = first_date.getMonth()+"/01/"+first_date.getFullYear();
+
+        var second_date = new Date();
+        $scope.filtered_date_range[1]=(second_date.getMonth()+1)+"/"+second_date.getDate()+"/"+second_date.getFullYear();
+        $scope.selected_end_date = (second_date.getMonth()+1)+"/"+second_date.getDate()+"/"+second_date.getFullYear();
+
+
+        var start_date_array = $scope.selected_start_date.split("/");// mm/dd/YYYY
+        var start_date={};
+        
+        start_date.day=start_date_array[1];
+        start_date.month=start_date_array[0];
+        start_date.year=start_date_array[2];
+
+        var end_date_array = $scope.selected_end_date.split("/");// mm/dd/YYYY
+        var end_date={};
+
+        end_date.day=end_date_array[1];
+        end_date.month=end_date_array[0];
+        end_date.year=end_date_array[2];
+
+        $scope.fro_date_parameter=getNumbericDateValue(start_date.year,start_date.month,start_date.day);// YYYY-mm-dd
+        $scope.to_date_parameter=getNumbericDateValue(end_date.year,end_date.month,end_date.day);
+        
+
+       };
+    initializeDateRange();
     var getData=function(){
         $scope.loading = true;
             var prms = {};
          
             prms.fro_date = $scope.fro_date_parameter;
             prms.to_date = $scope.to_date_parameter;
+
             prms.age_ids = JSON.stringify(convertAgeRangesToAgeIds($scope.params.age_ranges));
             prms.districts = JSON.stringify($scope.params.districts);
             prms.regions = JSON.stringify($scope.params.regions);
@@ -628,12 +701,10 @@ ctrllers.DashController=function($scope,$http){
 
     $scope.dateFilter=function(mode){
         if($scope.fro_date!="all" && $scope.to_date!="all"){
-
-            
-
             var vals={};
             var fro_s=$scope.fro_date.split("-");
             var to_s=$scope.to_date.split("-");
+
             vals.from_year=Number(fro_s[0]);
             vals.from_month=Number(fro_s[1]);
             vals.to_year=Number(to_s[0]);
@@ -642,8 +713,6 @@ ctrllers.DashController=function($scope,$http){
             var eval1=vals.from_year<=vals.to_year;
             var eval2=(vals.from_month>vals.to_month)&&(vals.from_year<vals.to_year);
             var eval3=(vals.from_month<=vals.to_month);
-
-
 
             if(eval1 && (eval2||eval3)){
                 //console.log("duration expression passed");
@@ -663,18 +732,44 @@ ctrllers.DashController=function($scope,$http){
             }
         }
     }
-    var generateNumericYearMonth=function(year_value,month_value){
-        var year_month_string="";
-        if(month_value > 9){
-            year_month_string=year_value+''+month_value;
-        }else{
-            year_month_string=year_value+''+'0'+month_value;
-        }
-        var year_month_numeric=Number(year_month_string);
-
-        return year_month_numeric;
+    $scope.dateRangeFilter=function(mode){
         
+        $scope.filtered_date_range=[];
+        $scope.filtered_date_range[0]= $scope.selected_start_date;
+        $scope.filtered_date_range[1]= $scope.selected_end_date;
+
+        var start_date_array = $scope.selected_start_date.split("/");// mm/dd/YYYY
+        var start_date={};
+        
+        start_date.day=start_date_array[1];
+        start_date.month=start_date_array[0];
+        start_date.year=start_date_array[2];
+
+        var end_date_array = $scope.selected_end_date.split("/");// mm/dd/YYYY
+        var end_date={};
+
+        end_date.day=end_date_array[1];
+        end_date.month=end_date_array[0];
+        end_date.year=end_date_array[2];
+
+        $scope.selected_start_date_parameter=getNumbericDateValue(start_date.year,start_date.month,start_date.day);// YYYY-mm-dd
+        $scope.selected_end_date_parameter=getNumbericDateValue(end_date.year,end_date.month,end_date.day);
+        
+        
+
+        if($scope.selected_start_date_parameter > $scope.selected_end_date_parameter){
+            $scope.selected_start_date_parameter=0;
+            $scope.selected_end_date_parameter=0;
+            alert("Please make sure that the 'FROM DATE' is earlier than the 'TO DATE'");
+        }else{
+            $scope.fro_date_parameter = $scope.selected_start_date_parameter;
+            $scope.to_date_parameter = $scope.selected_end_date_parameter;
+            
+            getData(); 
+        }
+
     }
+    
     
     var computeDuration=function(vals){
         $scope.filter_duration=[];

@@ -74,7 +74,9 @@ class EidEngine extends Command
                     $data["sample_id"]=isset($s->id)? (int)$s->id: 0;
                     $data["infant_exp_id"]=isset($s->infant_exp_id)? $s->infant_exp_id: "UNKNOWN";//
                     $data["year_month"] = (int)$year_month;
-                    
+
+                    $data["year_month_day"] = $this->extractYearMonthDay($s->date_dbs_taken);
+
                     $data['district_id']=isset($s->districtID)?(int)$s->districtID:0;
                     $data['hub_id']=isset($s->hubID)?(int)$s->hubID:0;
 
@@ -108,6 +110,27 @@ class EidEngine extends Command
             }//end catch
 
         }//end of while loop
+    }
+    private function extractYearMonthDay($date_string){
+        $date_array = explode("-", $date_string);
+
+        $year_string=$this->getDigitString(intval($date_array[0]));
+        $month_string=$this->getDigitString(intval($date_array[1]));
+        $day_string=$this->getDigitString(intval($date_array[2]));
+
+
+        return $this->getDateNumbericValue($year_string,$month_string,$day_string);
+
+    }
+    private function getDateNumbericValue($year_string,$month_string,$day_string){
+        $year_month_day_string=$year_string.$month_string.$day_string;
+        return intval($year_month_day_string);
+    }
+    private function getDigitString($number_value){
+        if($number_value > 9)
+            return "".$number_value;
+        else
+            return "0".$number_value;
     }
     private function extractPCR($sample){
         $pcr='UNKNOWN';

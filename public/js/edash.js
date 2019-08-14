@@ -323,10 +323,15 @@ ctrllers.DashController=function($scope,$http){
                 
                 $scope.district_numbers = data.dist_numbers||{};
                 $scope.district_numbers_positives = data.dist_numbers_for_positives||{};
+                $scope.district_numbers_zero_to_two_months = data.dist_numbers_for_zero_to_two_months||{};
+                $scope.district_numbers_postives_zero_to_two_months=data.dist_numbers_for_positives_zero_to_two_months||{};
 
                 $scope.facility_numbers = data.facility_numbers||{};
                 $scope.facility_numbers_for_positives = data.facility_numbers_for_positives||{};
-                
+                $scope.facility_numbers_zero_to_two_months = data.facility_numbers_zero_to_two_months ||{};
+                $scope.facility_numbers_positves_zero_to_two_months = data.facility_numbers_positives_zero_to_two_months ||{};
+
+
                 var whole_numbers=data.whole_numbers[0]||{};
                 $scope.samples_received=whole_numbers.total_tests||0;
                 $scope.hiv_positive_infants=whole_numbers.hiv_positive_infants||0;

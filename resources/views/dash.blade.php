@@ -591,8 +591,8 @@
                                     <td class="ng-cloak"><% districts_lables[d._id] %></td>
                                     <td class="ng-cloak"><% d.total_tests|number %></td>
 
-                                    <td class="ng-cloak">0</td>
-                                    <td class="ng-cloak">0</td>
+                                    <td class="ng-cloak"><% district_numbers_zero_to_two_months[d._id].total_tests %></td>
+                                    <td class="ng-cloak"><% district_numbers_postives_zero_to_two_months[d._id].total_tests != null ? district_numbers_postives_zero_to_two_months[d._id].total_tests : 0 %></td>
 
                                     <td class="ng-cloak"><% d.pcr_one|number %></td>
                                     <td class="ng-cloak"><% district_numbers_positives[d._id].pcr_one_hiv_positive_infants != null ? district_numbers_positives[d._id].pcr_one_hiv_positive_infants : 0 %></td>
@@ -613,7 +613,7 @@
                                     <td class="ng-cloak"><% district_numbers_positives[d._id].pcr_hiv_positive_infants_R3 != null ? district_numbers_positives[d._id].pcr_hiv_positive_infants_R3 : 0 %></td>
 
 
-                                    <td class="ng-cloak"><% (d.pcr_one_hiv_positive_infants > 0? (d.pcr_one_hiv_positive_infants/d.pcr_one)*100:0)|number:1 %>%</td>
+                                    <td class="ng-cloak"><% (d.pcr_one_hiv_positive_infants > 0? ((d.pcr_one_hiv_positive_infants/d.pcr_one)*100):0) %>%</td>
 
 
                                 </tr>                        
@@ -626,9 +626,12 @@
                           <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
-                                    <th width='30%'>Facility</th>
+                                    <th width='20%'>Facility</th>
                                     <th width='5%'>Total Tests</th>
-                                    
+
+                                    <th width='5%'>0 - 2 months Total Tests</th>
+                                    <th width='5%'>0 - 2 months +ve Tests</th>
+
                                     <th width='5%'>Total 1<sup>st</sup> PCR</th>
                                     <th width='5%'>Positive 1<sup>st</sup> PCR </th>
                                     
@@ -655,6 +658,9 @@
                                 <tr ng-repeat="f in facility_numbers" >
                                     <td class="ng-cloak"><% facilities_lables[f._id] %></td>
                                     <td class="ng-cloak"><% f.total_tests|number %></td>
+
+                                    <td class="ng-cloak"><% facility_numbers_zero_to_two_months[f._id].total_tests != null ? facility_numbers_zero_to_two_months[f._id].total_tests : 0 %></td>
+                                    <td class="ng-cloak"><% facility_numbers_positves_zero_to_two_months[f._id].total_tests != null ? facility_numbers_positves_zero_to_two_months[f._id].total_tests : 0 %></td>
 
                                     <td class="ng-cloak"><% f.pcr_one|number %></td>
                                     <td class="ng-cloak"><% facility_numbers_for_positives[f._id].pcr_one_hiv_positive_infants != null ? facility_numbers_for_positives[f._id].pcr_one_hiv_positive_infants : 0 %></td>

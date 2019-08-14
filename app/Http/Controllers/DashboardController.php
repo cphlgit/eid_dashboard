@@ -187,9 +187,7 @@ class DashboardController extends Controller {
 		}
 		//$conds['$and'][]=['year_month'=>  ['$gte'=> (int)$fro_date] ];
 		//$conds['$and'][]=[ 'year_month'=>  ['$lte'=> (int)$to_date] ];
-		Log::info(".....1.....");
-		Log::info($fro_date);
-		Log::info(".....2.....");
+		
 		$conds['$and'][]=['year_month_day'=>  ['$gte'=> (int)$fro_date] ];
 		$conds['$and'][]=[ 'year_month_day'=>  ['$lte'=> (int)$to_date] ];
 
@@ -361,14 +359,21 @@ class DashboardController extends Controller {
 		$whole_numbers=$this->_wholeNumbers();
 		$duration_numbers=$this->_durationNumbers();
 		
+		$dist_numbers_for_zero_to_two_months = $this->_districtNumbersForZeroToTwoMonths();
+		$dist_numbers_for_positives_zero_to_two_months = $this->_districtNumbersPositivesForZeroToTwoMonths();
 		$dist_numbers_for_positives = $this->_districtNumbersForPositivePCRs();
 		$dist_numbers=$this->_districtNumbers();
 
 		$facility_numbers=$this->_facilityNumbers();
 		$facility_numbers_for_positives=$this->_facilityNumbersForPositivePCRs();
+		$facility_numbers_zero_to_two_months = $this->_facilityNumbersForZeroToTwoMonths();
+		$facility_numbers_positives_zero_to_two_months = $this->_facilityNumbersPositivesForZeroToTwoMonths();
 
-		return compact("whole_numbers","duration_numbers","dist_numbers","dist_numbers_for_positives",
-			"facility_numbers_for_positives",
+		return compact("whole_numbers","duration_numbers",
+			"dist_numbers","dist_numbers_for_positives",
+			"dist_numbers_for_zero_to_two_months","dist_numbers_for_positives_zero_to_two_months",
+			"facility_numbers_for_positives","facility_numbers_zero_to_two_months",
+			"facility_numbers_positives_zero_to_two_months",
 			"facility_numbers");
 	}
 	
@@ -779,6 +784,114 @@ class DashboardController extends Controller {
 		//return isset($res['result'])?$res['result']:[];
 		return $pcr_positives;
 	}
+
+	private function _districtNumbersForZeroToTwoMonths(){
+		
+		$conds=$this->conditions;
+		
+		$conds['$and'][]=[ 'age_in_months'=>  ['$lte'=> 2] ];
+		
+
+		$match_stage['$match']=$conds;
+		$group_stage = array(
+
+			'$group' => array(
+				'_id' => '$district_id', 
+				'total_tests' => array('$sum' => 1 )
+				 ));
+		
+		
+		$res=$this->mongo->eid_dashboard->aggregate($match_stage,$group_stage );
+		
+		$pcr_positives=[];
+		foreach ($res['result'] as $key => $value) {
+			$key_id = $value['_id'];
+			$pcr_positives[$key_id] = $value;
+		}
+		//return isset($res['result'])?$res['result']:[];
+		return $pcr_positives;
+	}
+	private function _districtNumbersPositivesForZeroToTwoMonths(){
+		
+		$conds=$this->conditions;
+		
+		$conds['$and'][]=[ 'age_in_months'=>  ['$lte'=> 2] ];
+		$conds['$and'][]=[ 'accepted_result'=>  ['$eq'=> 'POSITIVE'] ];
+
+		$match_stage['$match']=$conds;
+		$group_stage = array(
+
+			'$group' => array(
+				'_id' => '$district_id', 
+				'total_tests' => array('$sum' => 1 )
+				 ));
+		
+		
+		$res=$this->mongo->eid_dashboard->aggregate($match_stage,$group_stage );
+		
+		$pcr_positives=[];
+		foreach ($res['result'] as $key => $value) {
+			$key_id = $value['_id'];
+			$pcr_positives[$key_id] = $value;
+		}
+		//return isset($res['result'])?$res['result']:[];
+		return $pcr_positives;
+	}
+
+    private function _facilityNumbersForZeroToTwoMonths(){
+		
+		$conds=$this->conditions;
+		
+		$conds['$and'][]=[ 'age_in_months'=>  ['$lte'=> 2] ];
+		
+
+		$match_stage['$match']=$conds;
+		$group_stage = array(
+
+			'$group' => array(
+				'_id' => '$facility_id', 
+				'total_tests' => array('$sum' => 1 )
+				 ));
+		
+		
+		$res=$this->mongo->eid_dashboard->aggregate($match_stage,$group_stage );
+		
+		$pcr_positives=[];
+		foreach ($res['result'] as $key => $value) {
+			$key_id = $value['_id'];
+			$pcr_positives[$key_id] = $value;
+		}
+		//return isset($res['result'])?$res['result']:[];
+		return $pcr_positives;
+	}
+	private function _facilityNumbersPositivesForZeroToTwoMonths(){
+		
+		$conds=$this->conditions;
+		
+		$conds['$and'][]=[ 'age_in_months'=>  ['$lte'=> 2] ];
+		$conds['$and'][]=[ 'accepted_result'=>  ['$eq'=> 'POSITIVE'] ];
+
+		$match_stage['$match']=$conds;
+		$group_stage = array(
+
+			'$group' => array(
+				'_id' => '$facility_id', 
+				'total_tests' => array('$sum' => 1 )
+				 ));
+		
+		
+		$res=$this->mongo->eid_dashboard->aggregate($match_stage,$group_stage );
+		
+		$pcr_positives=[];
+		foreach ($res['result'] as $key => $value) {
+			$key_id = $value['_id'];
+			$pcr_positives[$key_id] = $value;
+		}
+		//return isset($res['result'])?$res['result']:[];
+		return $pcr_positives;
+	}
+	
+
 	/*
 db.eid_dashboard.aggregate(
   [    {

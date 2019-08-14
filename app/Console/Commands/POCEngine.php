@@ -68,6 +68,8 @@ class POCEngine extends Command
                     $ref_date_str = !empty($s->test_date)?strtotime($s->test_date):strtotime($s->created_at);
                     $data["year_month"] = (int) date('Ym', $ref_date_str);
                     
+                    $data["year_month_day"] = $this->extractYearMonthDay($s->date_dbs_taken);
+
                     $data['district_id']=isset($s->districtID)?(int)$s->districtID:0;
                     $data['hub_id']=isset($s->hubID)?(int)$s->hubID:0;
 
@@ -101,6 +103,27 @@ class POCEngine extends Command
         //}//end of while loop
     }
 
+    private function extractYearMonthDay($date_string){
+        $date_array = explode("-", $date_string);
+
+        $year_string=$this->getDigitString(intval($date_array[0]));
+        $month_string=$this->getDigitString(intval($date_array[1]));
+        $day_string=$this->getDigitString(intval($date_array[2]));
+
+
+        return $this->getDateNumbericValue($year_string,$month_string,$day_string);
+
+    }
+    private function getDateNumbericValue($year_string,$month_string,$day_string){
+        $year_month_day_string=$year_string.$month_string.$day_string;
+        return intval($year_month_day_string);
+    }
+    private function getDigitString($number_value){
+        if($number_value > 9)
+            return "".$number_value;
+        else
+            return "0".$number_value;
+    }
     private function getPCRLevel($val=''){
         $ret = "";
         if($val=='R1' or $val=='R2'){

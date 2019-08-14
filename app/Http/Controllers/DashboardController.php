@@ -146,22 +146,52 @@ class DashboardController extends Controller {
         }
         return $ret;
     }
+    private function _getDefaultStartDate(){
+    	$ret=0;
+    	$n=env('INIT_MONTHS');
+        $m=date('m');
+        $y=date('Y');
+        for($i=1;$i<=$n;$i++){
+        	
+            if($m==0){
+                $m=12;
+                $y--;
+            }
+            if($i==$n){
+        		$ret=$y.str_pad($m, 2,0, STR_PAD_LEFT)."01";
+        	} 
+            $m--;
+        }
+        return $ret;
+    }
 	private function _setConditions(){
 		extract(\Request::all());
 	
-		if((empty($fro_date) && empty($to_date))||$fro_date=='all' && $to_date=='all'){
-			$to_date=date("Ym");
-			$fro_date=$this->_dateNMonthsBack();
+		
+		//if((empty($fro_date) && empty($to_date))||$fro_date=='all' && $to_date=='all'){
+		//	$to_date=date("Ym");
+		//	$fro_date=$this->_dateNMonthsBack();
+		//}
+
+		if(empty($fro_date) && empty($to_date)){
+			$to_date=date("Ymd");
+			$fro_date=$this->_getDefaultStartDate();
+			
 		}
+       
 
 		$conds=[];
 		$source = !isset($source)?'cphl':$source;
 		if($source!='all'){
 			$conds['$and'][] = ['source'=>$source];
 		}
-		$conds['$and'][]=['year_month'=>  ['$gte'=> (int)$fro_date] ];
-		$conds['$and'][]=[ 'year_month'=>  ['$lte'=> (int)$to_date] ];
-
+		//$conds['$and'][]=['year_month'=>  ['$gte'=> (int)$fro_date] ];
+		//$conds['$and'][]=[ 'year_month'=>  ['$lte'=> (int)$to_date] ];
+		Log::info(".....1.....");
+		Log::info($fro_date);
+		Log::info(".....2.....");
+		$conds['$and'][]=['year_month_day'=>  ['$gte'=> (int)$fro_date] ];
+		$conds['$and'][]=[ 'year_month_day'=>  ['$lte'=> (int)$to_date] ];
 
 		if(!empty($age_ids)&&$age_ids!='[]') {
 			
@@ -343,6 +373,8 @@ class DashboardController extends Controller {
 	}
 	
 	private function _wholeNumbers(){
+
+
 		$match_stage['$match']=$this->conditions;
 		$project_stage = array(
 

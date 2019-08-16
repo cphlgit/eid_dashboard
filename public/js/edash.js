@@ -427,9 +427,10 @@ ctrllers.DashController=function($scope,$http){
                 district_name : district_labels[districtRecord._id],
                 total_tests : districtRecord.total_tests,
 
-                total_zero_to_two_months : district_total_zero_to_two_months[districtRecord._id].total_tests,
-                postive_zero_to_months : (district_numbers_postives_zero_to_two_months[districtRecord._id].total_tests != null)?
-                district_numbers_postives_zero_to_two_months[districtRecord._id].total_tests : 0,
+                total_zero_to_two_months :(district_total_zero_to_two_months[districtRecord._id] != null)? 
+                    district_total_zero_to_two_months[districtRecord._id].total_tests : 0,
+                postive_zero_to_months : (district_positive_zero_to_two_months[districtRecord._id] != null)?
+                    district_positive_zero_to_two_months[districtRecord._id].total_tests : 0,
 
                 total_first_pcr : districtRecord.pcr_one,
                 positive_first_pcr: (district_numbers_positives[districtRecord._id] != null)? district_numbers_positives[districtRecord._id].pcr_one_hiv_positive_infants : 0,
@@ -489,10 +490,10 @@ ctrllers.DashController=function($scope,$http){
                 facility_name : facility_details_labels[facilityRecord._id],
                 total_tests : facilityRecord.total_tests,
 
-                total_zero_to_two_months : ( facility_total_zero_to_two_months[facilityRecord._id].total_tests != null)? 
+                total_zero_to_two_months : ( facility_total_zero_to_two_months[facilityRecord._id] != null )? 
                  facility_total_zero_to_two_months[facilityRecord._id].total_tests : 0,
 
-                positive_zero_to_two_months : (typeof facility_positive_zero_to_two_months[facilityRecord._id].total_tests == undefined)? 0:
+                positive_zero_to_two_months : ( facility_positive_zero_to_two_months[facilityRecord._id] == null)? 0:
                         facility_positive_zero_to_two_months[facilityRecord._id].total_tests ,
                   
 

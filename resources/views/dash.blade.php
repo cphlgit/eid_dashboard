@@ -691,11 +691,11 @@
                         
                         <br>
                         <br>
-                        <button ng-hide="show_fclties1" id="exportDistricts" type="button" ng-csv="export_district_numbers"  class="btn btn-success" filename="eid_district_samples_<%current_timestamp%>.csv" csv-header="['District', 'Total Tests', 'First PCR','Positves in 1st PCR','Second PCR','Positives in 2nd PCR','Third PCR','Positives in 3rd PCR','Total R1','Positives in R1','Total R2','Positives in R2','Total R3','Positives in R3','Positives in 1st PCR']">Download CSV</button>
+                        <button ng-hide="show_fclties1" id="exportDistricts" type="button" ng-csv="export_district_numbers"  class="btn btn-success" filename="eid_district_samples_<%current_timestamp%>.csv" csv-header="['District', 'Total Tests','0 - 2 months Total Tests','0 - 2 months +ve Tests', 'First PCR','Positves in 1st PCR','Second PCR','Positives in 2nd PCR','Third PCR','Positives in 3rd PCR','Total R1','Positives in R1','Total R2','Positives in R2','Total R3','Positives in R3','Positives in 1st PCR']">Download CSV</button>
 
                         <br>
                         <br>
-                        <button ng-show="show_fclties1" id="exportFacilities" type="button" ng-csv="export_facility_numbers" filename="eid_facility_samples_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Total Tests', 'First PCR','Positves in 1st PCR','Second PCR','Positives in 2nd PCR','Third PCR','Positives in 3rd PCR','Total R1','Positives in R1','Total R2','Positives in R2','Total R3','Positives in R3','Positives in 1st PCR']">Download CSV</button>
+                        <button ng-show="show_fclties1" id="exportFacilities" type="button" ng-csv="export_facility_numbers" filename="eid_facility_samples_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Total Tests','0 - 2 months Total Tests','0 - 2 months +ve Tests', 'First PCR','Positves in 1st PCR','Second PCR','Positives in 2nd PCR','Third PCR','Positives in 3rd PCR','Total R1','Positives in R1','Total R2','Positives in R2','Total R3','Positives in R3','Positives in 1st PCR']">Download CSV</button>
 
                     </div>
                       </div>

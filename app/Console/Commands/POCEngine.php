@@ -68,7 +68,7 @@ class POCEngine extends Command
                     $ref_date_str = !empty($s->test_date)?strtotime($s->test_date):strtotime($s->created_at);
                     $data["year_month"] = (int) date('Ym', $ref_date_str);
                     
-                    $data["year_month_day"] = $this->extractYearMonthDay($s->date_dbs_taken);
+                    $data["year_month_day"] = !empty($s->test_date)?$this->extractYearMonthDay($s->test_date):$this->extractYearMonthDay($s->created_at);//$this->extractYearMonthDay($s->created_at);
 
                     $data['district_id']=isset($s->districtID)?(int)$s->districtID:0;
                     $data['hub_id']=isset($s->hubID)?(int)$s->hubID:0;

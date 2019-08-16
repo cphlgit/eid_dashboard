@@ -417,6 +417,8 @@ ctrllers.DashController=function($scope,$http){
         var district_labels = scopeInstance.districts_lables;
         var district_numbers_from_scope = scopeInstance.district_numbers;
         var district_numbers_positives = scopeInstance.district_numbers_positives; 
+        var district_total_zero_to_two_months = scopeInstance.district_numbers_zero_to_two_months;
+        var district_positive_zero_to_two_months = scopeInstance.district_numbers_postives_zero_to_two_months;
 
         for( var index = 0; index < district_numbers_from_scope.length; index++){
             var districtRecord = district_numbers_from_scope[index];
@@ -424,6 +426,11 @@ ctrllers.DashController=function($scope,$http){
             var district_instance = {
                 district_name : district_labels[districtRecord._id],
                 total_tests : districtRecord.total_tests,
+
+                total_zero_to_two_months :(district_total_zero_to_two_months[districtRecord._id] != null)? 
+                    district_total_zero_to_two_months[districtRecord._id].total_tests : 0,
+                postive_zero_to_months : (district_positive_zero_to_two_months[districtRecord._id] != null)?
+                    district_positive_zero_to_two_months[districtRecord._id].total_tests : 0,
 
                 total_first_pcr : districtRecord.pcr_one,
                 positive_first_pcr: (district_numbers_positives[districtRecord._id] != null)? district_numbers_positives[districtRecord._id].pcr_one_hiv_positive_infants : 0,
@@ -472,12 +479,22 @@ ctrllers.DashController=function($scope,$http){
         var facility_numbers_from_scope = scopeInstance.facility_numbers;
         var facility_numbers_for_positives = scopeInstance.facility_numbers_for_positives; 
 
+        var facility_total_zero_to_two_months = scopeInstance.facility_numbers_zero_to_two_months;
+        var facility_positive_zero_to_two_months = scopeInstance.facility_numbers_positves_zero_to_two_months;
+
+
         for( var index = 0; index < facility_numbers_from_scope.length; index++){
             var facilityRecord = facility_numbers_from_scope[index];
 
             var facility_instance = {                
                 facility_name : facility_details_labels[facilityRecord._id],
                 total_tests : facilityRecord.total_tests,
+
+                total_zero_to_two_months : ( facility_total_zero_to_two_months[facilityRecord._id] != null )? 
+                 facility_total_zero_to_two_months[facilityRecord._id].total_tests : 0,
+
+                positive_zero_to_two_months : ( facility_positive_zero_to_two_months[facilityRecord._id] == null)? 0:
+                        facility_positive_zero_to_two_months[facilityRecord._id].total_tests ,
                   
 
                 total_first_pcr : facilityRecord.pcr_one,

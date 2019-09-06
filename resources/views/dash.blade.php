@@ -218,7 +218,8 @@
             <ul class="nav navbar-nav">
                 <li id='l1' class='active'>{!! link_to("/","DASHBOARD",['class'=>'hdr']) !!}</li>  
                <!--  <li id='l2'>{!! link_to("/reports","REPORTS",['class'=>'hdr']) !!}</li>  -->  
-               <li id='l3'><a href='https://www.cphluganda.org/results'>RESULTS</a></li>         
+               <li id='l3'><a href='https://www.cphluganda.org/results'>RESULTS</a></li>  
+                     
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><span style="font-size: 30px;vertical-align: middle;margin-right:25px;"> <img src="{{ asset('/images/ug.png') }}" height="35" width="35"> </span></li>
@@ -561,8 +562,11 @@
                                     <th width='5%'>Total Tests</th>
 
                                     <th width='5%'>0 - 2 months Total Tests</th>
+                                    <th width='5%'>0 - 2 months Total Tests(1<sup>st</sup> PCR)</th>
+                                    
                                     <th width='5%'>0 - 2 months +ve Tests</th>
 
+                                    
                                     <th width='5%'>Total 1<sup>st</sup> PCR</th>
                                     <th width='5%'>Positive 1<sup>st</sup> PCR </th>
                                     
@@ -576,14 +580,14 @@
                                     <th width='5%'>Total R1</th>
                                     <th width='5%'>Positive R1</th>
 
-                                    <th width='5%'>Total R2</th>
-                                    <th width='5%'>Positive R2</th>
+                                    <th width='4%'>Total R2</th>
+                                    <th width='4%'>Positive R2</th>
 
-                                    <th width='5%'>Total R3</th>
-                                    <th width='5%'>Positive R3</th>
+                                    <th width='4%'>Total R3</th>
+                                    <th width='4%'>Positive R3</th>
                                     
 
-                                    <th width='5'>% of Positives in 1<sup>st</sup> PCR</th>
+                                    <th width='4'>% of Positives in 1<sup>st</sup> PCR</th>
                                 </tr>
                             </thead>
                             <tbody>                                
@@ -592,7 +596,11 @@
                                     <td class="ng-cloak"><% d.total_tests|number %></td>
 
                                     <td class="ng-cloak"><% district_numbers_zero_to_two_months[d._id].total_tests %></td>
+                                    <td class="ng-cloak"><% district_numbers_zero_to_two_months_pcr1[d._id].total_tests %></td>
+
                                     <td class="ng-cloak"><% district_numbers_postives_zero_to_two_months[d._id].total_tests != null ? district_numbers_postives_zero_to_two_months[d._id].total_tests : 0 %></td>
+                                    
+                                    
 
                                     <td class="ng-cloak"><% d.pcr_one|number %></td>
                                     <td class="ng-cloak"><% district_numbers_positives[d._id].pcr_one_hiv_positive_infants != null ? district_numbers_positives[d._id].pcr_one_hiv_positive_infants : 0 %></td>
@@ -630,6 +638,7 @@
                                     <th width='5%'>Total Tests</th>
 
                                     <th width='5%'>0 - 2 months Total Tests</th>
+                                    <th width='5%'>0 - 2 months Total Tests(1<sup>st</sup> PCR)</th>
                                     <th width='5%'>0 - 2 months +ve Tests</th>
 
                                     <th width='5%'>Total 1<sup>st</sup> PCR</th>
@@ -660,6 +669,8 @@
                                     <td class="ng-cloak"><% f.total_tests|number %></td>
 
                                     <td class="ng-cloak"><% facility_numbers_zero_to_two_months[f._id].total_tests != null ? facility_numbers_zero_to_two_months[f._id].total_tests : 0 %></td>
+                                    <td class="ng-cloak"><% facility_numbers_zero_to_two_months_pcr1[f._id].total_tests != null ? facility_numbers_zero_to_two_months_pcr1[f._id].total_tests : 0 %></td>
+
                                     <td class="ng-cloak"><% facility_numbers_positves_zero_to_two_months[f._id].total_tests != null ? facility_numbers_positves_zero_to_two_months[f._id].total_tests : 0 %></td>
 
                                     <td class="ng-cloak"><% f.pcr_one|number %></td>
@@ -691,11 +702,11 @@
                         
                         <br>
                         <br>
-                        <button ng-hide="show_fclties1" id="exportDistricts" type="button" ng-csv="export_district_numbers"  class="btn btn-success" filename="eid_district_samples_<%current_timestamp%>.csv" csv-header="['District', 'Total Tests','0 - 2 months Total Tests','0 - 2 months +ve Tests', 'First PCR','Positves in 1st PCR','Second PCR','Positives in 2nd PCR','Third PCR','Positives in 3rd PCR','Total R1','Positives in R1','Total R2','Positives in R2','Total R3','Positives in R3','Positives in 1st PCR']">Download CSV</button>
+                        <button ng-hide="show_fclties1" id="exportDistricts" type="button" ng-csv="export_district_numbers"  class="btn btn-success" filename="eid_district_samples_<%current_timestamp%>.csv" csv-header="['District', 'Total Tests','0 - 2 months Total Tests','0 - 2 months Total Tests(First PCR)','0 - 2 months +ve Tests', 'First PCR','Positves in 1st PCR','Second PCR','Positives in 2nd PCR','Third PCR','Positives in 3rd PCR','Total R1','Positives in R1','Total R2','Positives in R2','Total R3','Positives in R3','Positives in 1st PCR']">Download CSV</button>
 
                         <br>
                         <br>
-                        <button ng-show="show_fclties1" id="exportFacilities" type="button" ng-csv="export_facility_numbers" filename="eid_facility_samples_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Total Tests','0 - 2 months Total Tests','0 - 2 months +ve Tests', 'First PCR','Positves in 1st PCR','Second PCR','Positives in 2nd PCR','Third PCR','Positives in 3rd PCR','Total R1','Positives in R1','Total R2','Positives in R2','Total R3','Positives in R3','Positives in 1st PCR']">Download CSV</button>
+                        <button ng-show="show_fclties1" id="exportFacilities" type="button" ng-csv="export_facility_numbers" filename="eid_facility_samples_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Total Tests','0 - 2 months Total Tests','0 - 2 months Total Tests(First PCR)','0 - 2 months +ve Tests', 'First PCR','Positves in 1st PCR','Second PCR','Positives in 2nd PCR','Third PCR','Positives in 3rd PCR','Total R1','Positives in R1','Total R2','Positives in R2','Total R3','Positives in R3','Positives in 1st PCR']">Download CSV</button>
 
                     </div>
                       </div>

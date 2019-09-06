@@ -323,12 +323,15 @@ ctrllers.DashController=function($scope,$http){
                 
                 $scope.district_numbers = data.dist_numbers||{};
                 $scope.district_numbers_positives = data.dist_numbers_for_positives||{};
+
                 $scope.district_numbers_zero_to_two_months = data.dist_numbers_for_zero_to_two_months||{};
+                $scope.district_numbers_zero_to_two_months_pcr1 = data.dist_numbers_for_zero_to_two_months_pcr1||{};
                 $scope.district_numbers_postives_zero_to_two_months=data.dist_numbers_for_positives_zero_to_two_months||{};
 
                 $scope.facility_numbers = data.facility_numbers||{};
                 $scope.facility_numbers_for_positives = data.facility_numbers_for_positives||{};
                 $scope.facility_numbers_zero_to_two_months = data.facility_numbers_zero_to_two_months ||{};
+                $scope.facility_numbers_zero_to_two_months_pcr1 =data.facility_numbers_zero_to_two_months_pcr1||{};
                 $scope.facility_numbers_positves_zero_to_two_months = data.facility_numbers_positives_zero_to_two_months ||{};
 
 
@@ -418,6 +421,7 @@ ctrllers.DashController=function($scope,$http){
         var district_numbers_from_scope = scopeInstance.district_numbers;
         var district_numbers_positives = scopeInstance.district_numbers_positives; 
         var district_total_zero_to_two_months = scopeInstance.district_numbers_zero_to_two_months;
+        var district_total_zero_to_two_months_prc1=scopeInstance.district_numbers_zero_to_two_months_pcr1;
         var district_positive_zero_to_two_months = scopeInstance.district_numbers_postives_zero_to_two_months;
 
         for( var index = 0; index < district_numbers_from_scope.length; index++){
@@ -429,6 +433,10 @@ ctrllers.DashController=function($scope,$http){
 
                 total_zero_to_two_months :(district_total_zero_to_two_months[districtRecord._id] != null)? 
                     district_total_zero_to_two_months[districtRecord._id].total_tests : 0,
+
+                total_zero_to_two_months_pcr1 :(district_total_zero_to_two_months_prc1[districtRecord._id] != null)? 
+                    district_total_zero_to_two_months_prc1[districtRecord._id].total_tests : 0,
+
                 postive_zero_to_months : (district_positive_zero_to_two_months[districtRecord._id] != null)?
                     district_positive_zero_to_two_months[districtRecord._id].total_tests : 0,
 
@@ -480,6 +488,7 @@ ctrllers.DashController=function($scope,$http){
         var facility_numbers_for_positives = scopeInstance.facility_numbers_for_positives; 
 
         var facility_total_zero_to_two_months = scopeInstance.facility_numbers_zero_to_two_months;
+        var facility_total_zero_to_two_months_pcr1 = scopeInstance.facility_numbers_zero_to_two_months_pcr1;
         var facility_positive_zero_to_two_months = scopeInstance.facility_numbers_positves_zero_to_two_months;
 
 
@@ -492,6 +501,9 @@ ctrllers.DashController=function($scope,$http){
 
                 total_zero_to_two_months : ( facility_total_zero_to_two_months[facilityRecord._id] != null )? 
                  facility_total_zero_to_two_months[facilityRecord._id].total_tests : 0,
+
+                facility_total_zero_to_two_months_pcr1 : ( facility_total_zero_to_two_months_pcr1[facilityRecord._id] != null )? 
+                 facility_total_zero_to_two_months_pcr1[facilityRecord._id].total_tests : 0,
 
                 positive_zero_to_two_months : ( facility_positive_zero_to_two_months[facilityRecord._id] == null)? 0:
                         facility_positive_zero_to_two_months[facilityRecord._id].total_tests ,

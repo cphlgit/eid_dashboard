@@ -61,6 +61,15 @@ class LiveData extends Model
         return $facilities;
     }
 
+    public static function getDhis2FacilityData(){
+
+        $sql = "SELECT * FROM backend_facilities";
+        $facilities =  \DB::connection('dhis2_db')->select($sql);
+        
+        return $facilities;
+    }
+
+
     public static function getSamples($year){
 
     	$sql = "SELECT s.id,s.infant_exp_id,".self::GENDER_CASE." as sex,s.infant_dob,

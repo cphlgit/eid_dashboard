@@ -13,7 +13,7 @@ class EidEngine extends Command
      *
      * @var string
      */
-    protected $signature = 'eidengine:run';
+    protected $signature = 'eidengine:run {--facilities}';
 
     /**
      * The console command description.
@@ -44,14 +44,21 @@ class EidEngine extends Command
         //
         $this->comment("Engine has started at :: ".date('YmdHis'));
         
-        
-        $this->_loadHubs();
-        $this->_loadDistricts();
-        $this->_loadRegions();
-        $this->_loadCareLevels();
-        $this->_loadFacilities();
+        $facilities_flag = $this->option('facilities');
+        if($facilities_flag == 1){
+            $this->updateFacilityDhis2Records();
+            $this->_loadFacilities();
+        }else{
+             $this->_loadHubs();
+            $this->_loadDistricts();
+            $this->_loadRegions();
+            $this->_loadCareLevels();
+            $this->_loadFacilities();
 
-        $this->_loadData();
+            $this->_loadData();
+        }
+
+       
         
         $this->comment("Engine has stopped at :: ".date('YmdHis'));
 
@@ -187,12 +194,59 @@ class EidEngine extends Command
         $this->mongo->facilities->drop();
         $res=LiveData::getFacilities();
         foreach($res AS $row){
-            $data=['id'=>$row->id,'name'=>$row->facility];
+            $data=[
+            'id'=>$row->id,
+            'name'=>$row->facility,
+            'district_id'=>$row->districtID,
+            'hub_id' => $row->hubID,
+            'dhis2_name'=>$row->dhis2_name,
+            'dhis2_uid' =>$row->dhis2_uid
+            ];
             $this->mongo->facilities->insert($data);
         }
     }
 
-   
+   private function updateFacilityDhis2Records(){
+        $eid_facilities = LiveData::getFacilities();
+        $dhis2_facilities = LiveData::getDhis2FacilityData();
+       
+
+        $dhis2_name_string = "";
+        $dhis2_uid_string = "";
+        $where_id_in_string = "";
+
+        $counter =0;
+        foreach ($eid_facilities as $eid_facility) {
+            
+            foreach ($dhis2_facilities as $dhis2_facility) {
+                if($eid_facility->facility == $dhis2_facility->facility){
+                    $dhis2_name_string = $dhis2_name_string . 'WHEN '.$eid_facility->id .' THEN "'.$dhis2_facility->dhis2_name.'" ';
+                    $dhis2_uid_string = $dhis2_uid_string . 'WHEN '.$eid_facility->id .' THEN "'.$dhis2_facility->dhis2_uid.'" ';
+                    $where_id_in_string = $where_id_in_string . $dhis2_facility->id .',';
+                    $counter++;
+
+                    break;
+                }
+            }
+            
+        }
+
+        $where_id_in_string = $this->removeLastComma($where_id_in_string);
+        $sql = 'UPDATE facilities SET dhis2_name = 
+        (CASE id  '.$dhis2_name_string .' END),  dhis2_uid = (CASE id  '.$dhis2_uid_string .' END) 
+        WHERE id IN ('.$where_id_in_string .')';
+
+        $result_flag = \DB::connection('live_db')->select($sql);
+        $this->comment("....DHIS2 Records Update: Completed ....");
+        
+
+
+
+    }//end method
+
+    private function removeLastComma($where_string){
+      return substr_replace($where_string, '', -1);
+    }
 
   
 

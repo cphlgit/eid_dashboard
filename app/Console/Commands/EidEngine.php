@@ -230,6 +230,8 @@ class EidEngine extends Command
             }
             
         }
+try{
+
 
         $where_id_in_string = $this->removeLastComma($where_id_in_string);
         $sql = 'UPDATE facilities SET dhis2_name = 
@@ -238,6 +240,9 @@ class EidEngine extends Command
 
         $result_flag = \DB::connection('live_db')->select($sql);
         $this->comment("....DHIS2 Records Update: Completed ....");
+    }catch(Exception $e){
+        
+    }
         
 
 

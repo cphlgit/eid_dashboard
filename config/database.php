@@ -75,7 +75,18 @@ return [
             'strict'    => false,
             
         ],
-
+        'dhis2_db' => [
+            'driver'    => 'mysql',
+            'host'      => env('DHIS2_HOST'),
+            'database'  => env('DHIS2_DATABASE'),
+            'username'  => env('DHIS2_USERNAME'),
+            'password'  => env('DHIS2_PASSWORD'),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
+            
+        ],
         'pgsql' => [
             'driver'   => 'pgsql',
             'host'     => env('DB_HOST', 'localhost'),

@@ -178,14 +178,14 @@ ctrllers.DashController=function($scope,$http){
             var obj = data.districts[i];
             districts_json[obj.id] = obj.name;
             $scope.districts_slct.push({"id":obj.id,"name":obj.name});
-            $scope.districts_lables[obj.id]=obj.name;
+            $scope.districts_lables[obj.id]=obj;
         }
 
         for(var i in data.facilities){
             var obj = data.facilities[i];
             
             $scope.facilities_slct.push({"id":obj.id,"name":obj.name});
-            $scope.facilities_lables[obj.id]=obj.name;
+            $scope.facilities_lables[obj.id]=obj;
         }
 
         $scope.care_levels_slct=[];
@@ -481,7 +481,7 @@ ctrllers.DashController=function($scope,$http){
     function exportFacilityNumbers(scopeInstance){
        
         var export_facility_numbers = [];
-      
+      var district_labels = scopeInstance.districts_lables;
         var facility_details_labels = scopeInstance.facilities_lables;
 
         var facility_numbers_from_scope = scopeInstance.facility_numbers;
@@ -496,7 +496,12 @@ ctrllers.DashController=function($scope,$http){
             var facilityRecord = facility_numbers_from_scope[index];
 
             var facility_instance = {                
-                facility_name : facility_details_labels[facilityRecord._id],
+                facility_name : facility_details_labels[facilityRecord._id].name,
+                
+                dhis2_uid : facility_details_labels[facilityRecord._id].dhis2_uid,
+                dhis2_name : facility_details_labels[facilityRecord._id].dhis2_name,
+                district : district_labels[facility_details_labels[facilityRecord._id].district_id].name,
+
                 total_tests : facilityRecord.total_tests,
 
                 total_zero_to_two_months : ( facility_total_zero_to_two_months[facilityRecord._id] != null )? 
@@ -586,7 +591,7 @@ ctrllers.DashController=function($scope,$http){
     function exportFacilityHivPositiveInfant(scopeInstance){
        
         var export_facility_numbers = [];
-      
+      var district_labels = scopeInstance.districts_lables;
         var facility_details_labels = scopeInstance.facilities_lables;
 
         var facility_numbers_from_scope = scopeInstance.facility_numbers;
@@ -595,7 +600,14 @@ ctrllers.DashController=function($scope,$http){
             var facilityRecord = facility_numbers_from_scope[index];
 
             var facility_instance = {                
-                facility_name : facility_details_labels[facilityRecord._id],
+
+                facility_name : facility_details_labels[facilityRecord._id].name,
+                
+                dhis2_uid : facility_details_labels[facilityRecord._id].dhis2_uid,
+                dhis2_name : facility_details_labels[facilityRecord._id].dhis2_name,
+                district : district_labels[facility_details_labels[facilityRecord._id].district_id].name,
+
+
                 hiv_positive_infants : facilityRecord.hiv_positive_infants,
                 total_tests : facilityRecord.total_tests,
             }
@@ -634,16 +646,21 @@ ctrllers.DashController=function($scope,$http){
         var export_facility_numbers = [];
       
         var facility_details_labels = scopeInstance.facilities_lables;
-
+        var district_labels = scopeInstance.districts_lables;
         var facility_numbers_from_scope = scopeInstance.facility_numbers;
 
         for( var index = 0; index < facility_numbers_from_scope.length; index++){
             var facilityRecord = facility_numbers_from_scope[index];
-
+      
             var positivityRate = Math.round((facilityRecord.hiv_positive_infants/facilityRecord.total_tests)*100);
 
             var facility_instance = {                
-                facility_name : facility_details_labels[facilityRecord._id],
+                facility_name : facility_details_labels[facilityRecord._id].name,
+                
+                dhis2_uid : facility_details_labels[facilityRecord._id].dhis2_uid,
+                dhis2_name : facility_details_labels[facilityRecord._id].dhis2_name,
+                district : district_labels[facility_details_labels[facilityRecord._id].district_id].name,
+
                 positivity_rate : positivityRate,
                 hiv_positive_infants : facilityRecord.hiv_positive_infants,
                 total_tests : facilityRecord.total_tests,

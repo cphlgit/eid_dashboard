@@ -592,7 +592,7 @@
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="d in district_numbers" >
-                                    <td class="ng-cloak"><% districts_lables[d._id] %></td>
+                                    <td class="ng-cloak"><% districts_lables[d._id].name %></td>
                                     <td class="ng-cloak"><% d.total_tests|number %></td>
 
                                     <td class="ng-cloak"><% district_numbers_zero_to_two_months[d._id].total_tests %></td>
@@ -634,7 +634,11 @@
                           <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
-                                    <th width='20%'>Facility</th>
+                                    <th width='15%'>Facility</th>
+
+                                    <th width='10%'>DHIS2 Facility Name</th>
+                                    <th width='6%'>District</th>
+
                                     <th width='5%'>Total Tests</th>
 
                                     <th width='5%'>0 - 2 months Total Tests</th>
@@ -645,27 +649,31 @@
                                     <th width='5%'>Positive 1<sup>st</sup> PCR </th>
                                     
                                     
-                                    <th width='5%'>Total 2<sup>nd</sup> PCR</th>
-                                    <th width='5%'>Positive 2<sup>nd</sup> PCR</th>
+                                    <th width='4%'>Total 2<sup>nd</sup> PCR</th>
+                                    <th width='4%'>Positive 2<sup>nd</sup> PCR</th>
 
-                                    <th width='5%'>Total 3<sup>rd</sup> PCR</th>
-                                    <th width='5%'>Positive 3<sup>rd</sup> PCR</th>
+                                    <th width='4%'>Total 3<sup>rd</sup> PCR</th>
+                                    <th width='4%'>Positive 3<sup>rd</sup> PCR</th>
 
-                                    <th width='5%'>Total R1</th>
-                                    <th width='5%'>Positive R1</th>
+                                    <th width='4%'>Total R1</th>
+                                    <th width='4%'>Positive R1</th>
 
-                                    <th width='5%'>Total R2</th>
-                                    <th width='5%'>Positive R2</th>
+                                    <th width='4%'>Total R2</th>
+                                    <th width='4%'>Positive R2</th>
 
-                                    <th width='5%'>Total R3</th>
-                                    <th width='5%'>Positive R3</th>
+                                    <th width='4%'>Total R3</th>
+                                    <th width='4%'>Positive R3</th>
 
-                                    <th width='5%'>% of Positives in 1<sup>st</sup> PCR</th>
+                                    <th width='4%'>% of Positives in 1<sup>st</sup> PCR</th>
                                 </tr>
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="f in facility_numbers" >
-                                    <td class="ng-cloak"><% facilities_lables[f._id] %></td>
+                                    <td class="ng-cloak"><% facilities_lables[f._id].name %></td>
+                                    
+                                    <td class="ng-cloak"><% facilities_lables[f._id].dhis2_name %></td>
+                                    <td class="ng-cloak"><% districts_lables[facilities_lables[f._id].district_id].name %></td>
+
                                     <td class="ng-cloak"><% f.total_tests|number %></td>
 
                                     <td class="ng-cloak"><% facility_numbers_zero_to_two_months[f._id].total_tests != null ? facility_numbers_zero_to_two_months[f._id].total_tests : 0 %></td>
@@ -706,7 +714,7 @@
 
                         <br>
                         <br>
-                        <button ng-show="show_fclties1" id="exportFacilities" type="button" ng-csv="export_facility_numbers" filename="eid_facility_samples_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Total Tests','0 - 2 months Total Tests','0 - 2 months Total Tests(First PCR)','0 - 2 months +ve Tests', 'First PCR','Positves in 1st PCR','Second PCR','Positives in 2nd PCR','Third PCR','Positives in 3rd PCR','Total R1','Positives in R1','Total R2','Positives in R2','Total R3','Positives in R3','Positives in 1st PCR']">Download CSV</button>
+                        <button ng-show="show_fclties1" id="exportFacilities" type="button" ng-csv="export_facility_numbers" filename="eid_facility_samples_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','dhis2_uid','dhis2_name','district','Total Tests','0 - 2 months Total Tests','0 - 2 months Total Tests(First PCR)','0 - 2 months +ve Tests', 'First PCR','Positves in 1st PCR','Second PCR','Positives in 2nd PCR','Third PCR','Positives in 3rd PCR','Total R1','Positives in R1','Total R2','Positives in R2','Total R3','Positives in R3','Positives in 1st PCR']">Download CSV</button>
 
                     </div>
                       </div>
@@ -746,7 +754,7 @@
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="d in district_numbers" >
-                                    <td class="ng-cloak"><% districts_lables[d._id] %></td>
+                                    <td class="ng-cloak"><% districts_lables[d._id].name %></td>
                                     <td class="ng-cloak"><% d.hiv_positive_infants|number %></td>
                                     <td class="ng-cloak"><% d.total_tests|number %></td>
                                 </tr>                        
@@ -758,14 +766,24 @@
                          <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
-                                    <th width='80%'>Facility</th>
+                                    <th width='30%'>Facility</th>
+
+                                    <th width='30%'>DHIS2 Facility Name</th>
+                                    <th width='20%'>District</th>
+
                                     <th width='10%'>Absolute Positives</th>
                                     <th width='10%'>Total Tests</th>
                                 </tr>
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="f in facility_numbers" >
-                                    <td class="ng-cloak"><% facilities_lables[f._id]%></td>
+                                    <td class="ng-cloak"><% facilities_lables[f._id].name %></td>
+                                    
+                                    <td class="ng-cloak"><% facilities_lables[f._id].dhis2_name %></td>
+                                    <td class="ng-cloak"><% districts_lables[facilities_lables[f._id].district_id].name %></td>
+
+
+                                    
                                     <td class="ng-cloak"><% f.hiv_positive_infants|number %></td>
                                     <td class="ng-cloak"><% f.total_tests|number %></td>
                                 </tr>                        
@@ -779,7 +797,7 @@
 
                         <br>
                         <br>
-                        <button ng-show="show_fclties2" id="exportFacilitiesHivPositiveInfants" type="button" ng-csv="export_facility_hiv_positive_infants" filename="eid_facility_hiv_positives_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Absolute Positives','Total Tests']">Download CSV</button>
+                        <button ng-show="show_fclties2" id="exportFacilitiesHivPositiveInfants" type="button" ng-csv="export_facility_hiv_positive_infants" filename="eid_facility_hiv_positives_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','dhis2_uid','dhis2_name','district','Absolute Positives','Total Tests']">Download CSV</button>
 
                     
                       </div>
@@ -821,7 +839,7 @@
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="d in district_numbers" >
-                                    <td class="ng-cloak"><% districts_lables[d._id] %></td>
+                                    <td class="ng-cloak"><% districts_lables[d._id].name %></td>
                                     <td class="ng-cloak"><% ((d.hiv_positive_infants/d.total_tests)*100)|number:1 %>%</td>
                                     <td class="ng-cloak"><% d.hiv_positive_infants|number %></td>
                                     <td class="ng-cloak"><% d.total_tests|number %></td>
@@ -831,10 +849,14 @@
                         </div>
 
                         <div ng-show="show_fclties3">
+                            <br>
                           <table datatable="ng" ng-hide="checked" class="row-border hover table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
-                                    <th width='70%'>Facility</th>
+                                     <th width='30%'>CPHL Facility Name</th>
+                                    <th width='20%'>DHIS2 Facility Name</th>
+                                    <th width='20%'>District</th>
+
                                     <th width='10%'>Positivity Rate</th>
                                     <th width='10%'>Absolute Positives</th>
                                     <th width='10%'>Total Tests</th>
@@ -842,7 +864,12 @@
                             </thead>
                             <tbody>                                
                                 <tr ng-repeat="f in facility_numbers" >
-                                    <td class="ng-cloak"><% facilities_lables[f._id] %></td>
+                                    <td class="ng-cloak"><% facilities_lables[f._id].name %></td>
+                                    
+                                    <td class="ng-cloak"><% facilities_lables[f._id].dhis2_name %></td>
+                                    <td class="ng-cloak"><% districts_lables[facilities_lables[f._id].district_id].name %></td>
+
+                                    
                                     <td class="ng-cloak"><% ((f.hiv_positive_infants/f.total_tests)*100)|number:1 %>%</td>
                                     <td class="ng-cloak"><% f.hiv_positive_infants|number %></td>
                                     <td class="ng-cloak"><% f.total_tests|number %></td>
@@ -857,7 +884,7 @@
 
                         <br>
                         <br>
-                        <button ng-show="show_fclties3" id="exportFacilitiesPositivityRate" type="button" ng-csv="export_facility_positivity_rate" filename="eid_facility_positivity_rate_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','Positivity Rate','Absolute Positives','Total Tests']">Download CSV</button>
+                        <button ng-show="show_fclties3" id="exportFacilitiesPositivityRate" type="button" ng-csv="export_facility_positivity_rate" filename="eid_facility_positivity_rate_<%current_timestamp%>.csv" class="btn btn-success" csv-header="['Facility','dhis2_uid','dhis2_name','district','Positivity Rate','Absolute Positives','Total Tests']">Download CSV</button>
 
                     </div>   
                      

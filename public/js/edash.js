@@ -577,7 +577,7 @@ ctrllers.DashController=function($scope,$http){
             var districtRecord = district_numbers_from_scope[index];
 
             var district_instance = {
-                district_name : district_labels[districtRecord._id],
+                district_name : district_labels[districtRecord._id].name,
                 hiv_positive_infants : districtRecord.hiv_positive_infants,
                 total_tests : districtRecord.total_tests,
                 
@@ -629,7 +629,7 @@ ctrllers.DashController=function($scope,$http){
    
             var positivityRate = Math.round((districtRecord.hiv_positive_infants/districtRecord.total_tests)*100);
             var district_instance = {
-                district_name : district_labels[districtRecord._id],
+                district_name : district_labels[districtRecord._id].name,
                 positivity_rate : positivityRate,
                 hiv_positive_infants : districtRecord.hiv_positive_infants,
                 total_tests : districtRecord.total_tests,
@@ -683,7 +683,7 @@ ctrllers.DashController=function($scope,$http){
    
             var initiationRate = Math.round((districtRecord.art_initiated/districtRecord.hiv_positive_infants)*100);
             var district_instance = {
-                district_name : district_labels[districtRecord._id],
+                district_name : district_labels[districtRecord._id].name,
                 initiation_rate : initiationRate,
                 hiv_positive_infants : districtRecord.hiv_positive_infants,
                 

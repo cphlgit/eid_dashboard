@@ -428,7 +428,7 @@ ctrllers.DashController=function($scope,$http){
             var districtRecord = district_numbers_from_scope[index];
 
             var district_instance = {
-                district_name : district_labels[districtRecord._id],
+                district_name : district_labels[districtRecord._id].name,
                 total_tests : districtRecord.total_tests,
 
                 total_zero_to_two_months :(district_total_zero_to_two_months[districtRecord._id] != null)? 

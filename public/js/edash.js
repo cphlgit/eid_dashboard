@@ -266,15 +266,22 @@ ctrllers.DashController=function($scope,$http){
         return year_month_numeric;
         
     };
+
     var initializeDateRange=function(){
         var today = new Date();
         $scope.filtered_date_range=[];
         
         var date_time = today.setMonth(today.getMonth() - 10);
         var first_date = new Date(date_time);
+
         $scope.filtered_date_range[0]= first_date.getMonth()+"/01/"+first_date.getFullYear();
         $scope.selected_start_date = first_date.getMonth()+"/01/"+first_date.getFullYear();
 
+        if(first_date.getMonth() == 0){
+            $scope.filtered_date_range[0]= 12+"/01/"+(first_date.getFullYear() - 1);
+            $scope.selected_start_date = 12+"/01/"+(first_date.getFullYear() - 1);
+
+        }
         var second_date = new Date();
         $scope.filtered_date_range[1]=(second_date.getMonth()+1)+"/"+second_date.getDate()+"/"+second_date.getFullYear();
         $scope.selected_end_date = (second_date.getMonth()+1)+"/"+second_date.getDate()+"/"+second_date.getFullYear();

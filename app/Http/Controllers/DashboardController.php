@@ -10,6 +10,7 @@ use EID\Models\Location\Region;
 use EID\Models\Location\District;
 use EID\Models\FacilityLevel;
 use EID\Models\Sample;
+use EID\Models\HealthFacility;
 use EID\Mongo;
 use Validator;
 use Lang;
@@ -17,6 +18,7 @@ use Redirect;
 use Request;
 use Session;
 use Log;
+//use Illuminate\Http\Request;
 
 class DashboardController extends Controller {
 
@@ -221,7 +223,21 @@ class DashboardController extends Controller {
 			
 		return $conds;
 	}
+	private function _setApiConditions($from_date,$to_date){
+		extract(\Request::all());
+	
+       
+		$conds=[];
+		$source = !isset($source)?'cphl':$source;
+		if($source!='all'){
+			$conds['$and'][] = ['source'=>$source];
+		}
+	
+		$conds['$and'][]=['year_month_day'=>  ['$gte'=> (int)$from_date] ];
+		$conds['$and'][]=[ 'year_month_day'=>  ['$lte'=> (int)$to_date] ];
 
+		return $conds;
+	}
 	private function totalSums($totals){
 		$ret=0;
 		foreach ($totals as $lvl_id => $reg_data) {
@@ -1213,6 +1229,93 @@ db.eid_dashboard.aggregate(
 
 	}
 
+	public function getSurgeTests(Request $request_parameters,$from_date,$to_date){
+		$error_message = "";
+		$surge_test_report  = array();
+		try {
+			$from_date_int = intval($from_date);
+			$to_date_int = intval($to_date);
+			if($to_date_int >= $from_date_int){
+
+				$surge_test_report = $this->prepareSurgeTestReports($from_date_int,$to_date_int);
+
+			}else{
+				$error_message = "The from-date must older than the to-date.";
+			}
+		} catch (Exception $e) {
+			$error_message = "Ensure the dates are in the format 'YYYYMMDD'";
+		}
+		if($error_message != ""){
+			return $error_message;
+		}
+				
+		return $surge_test_report;
+	}
+
+	private function prepareSurgeTestReports($from_date,$to_date){
+		$this->conditions = $this->_setApiConditions($from_date,$to_date);
+
+		$facility_numbers=$this->_facilityNumbers();
+		//$facility_numbers_for_positives=$this->_facilityNumbersForPositivePCRs();
+		$facility_numbers_zero_to_two_months = $this->_facilityNumbersForZeroToTwoMonths();
+		$facility_numbers_zero_to_two_months_pcr1=$this->_facilityNumbersForZeroToTwoMonthsFirstPcr();
+		//$facility_numbers_positives_zero_to_two_months = $this->_facilityNumbersPositivesForZeroToTwoMonths();
+
+		$mongo_facilities=iterator_to_array($this->mongo->facilities->find());
+
+		$clean_result_set=array();
+        //$clean_result_set['description']=$params;
+           
+            //headers
+            $header['cphl_facilityID']='facilityID';
+            $header['cphl_facility_name']='facility_name';
+            $header['facility_dhis2_name']='dhis2_facility_name';
+            $header['facility_dhis2_code']='dhis2_uid';
+
+            $header['total_tested_first_pcr']='total_tested_first_pcr';
+            $header['total_tested_0_2_months']='total_tested_0_2_months';
+            
+        	array_push($clean_result_set, $header);
+
+        	$facilities  = array( );
+        	foreach ($mongo_facilities as $key => $facility) {
+        	 	
+
+        	 	$health_facilitity = new HealthFacility(
+        	 		$facility['id'],
+        	 		$facility['name'],
+        	 		$facility['district_id'],
+        	 		$facility['dhis2_name'],
+        	 		$facility['dhis2_uid']
+        	 		);
+        	 	
+        	 	
+        	 	$facilities[$facility['id']] = $health_facilitity;
+        	} 
+
+        	foreach ($facility_numbers as $key => $record) {
+
+            $facility_id=$record['_id'];
+            $facility = $facilities[$facility_id];
+
+            $fields['cphl_facilityID']=$record['_id'];
+            
+            
+            $fields['cphl_facility_name']=isset($facility->name) ? $facility->name: 'Null';
+            $fields['facility_dhis2_name'] = isset($facility->dhis2_uid) ? $facility->dhis2_uid: 'Null';
+            $fields['facility_dhis2_code']=isset($facility->dhis2_name) ? $facility->dhis2_name: 'Null';
+           
+           	$fields['total_tested_first_pcr']=isset($facility_numbers_zero_to_two_months_pcr1[$facility_id]->total_tests) ?
+           									$facility_numbers_zero_to_two_months_pcr1[$facility_id]->total_tests:
+           									0;
+            $fields['total_tested_0_2_months']=isset($facility_numbers_zero_to_two_months[$facility_id]->total_tests) ? 
+            									$facility_numbers_zero_to_two_months[$facility_id]->total_tests : 
+            									0;
+                        
+            array_push($clean_result_set, $fields);
+        }
+        return $clean_result_set;
+	}
 
 	/*
 

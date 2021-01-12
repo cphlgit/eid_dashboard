@@ -216,15 +216,15 @@ class EidEngine extends Command
         $current_date = date("Ymd");
         $this->comment($current_date);
         //current week number
-        $sending_date = strtotime("Friday");
+        $sending_date = strtotime("Tuesday");
         $start_date_timestamp = strtotime("-11 days",$sending_date);
         $end_date_timestamp = strtotime("-5 days", $sending_date);
 
-        $start_date = 20200203;//date("Ymd",$start_date_timestamp);
-        $end_date = 20200209;//date("Ymd",$end_date_timestamp);
+        $start_date = date("Ymd",$start_date_timestamp);
+        $end_date = date("Ymd",$end_date_timestamp);//20200216;
 
-        $week_number = idate('W',$start_date_timestamp);
-        $week_number_string =  idate('Y',$start_date_timestamp) .'#'.$week_number;
+        $week_number = idate('W',$start_date_timestamp);//'W08';//
+        $week_number_string =  idate('Y',$start_date_timestamp).$week_number;
         $this->comment('Start date: '.$start_date);
         $this->comment('End date: '.$end_date);
         $this->comment('Week Number: '.$week_number_string);
@@ -232,8 +232,11 @@ class EidEngine extends Command
         //fetch data
         //--facility, number_of_pcr_1,number_of_0-2_in pcr1
         $surge_tests_payload = $this->getSurgeTestsPayload($start_date,$end_date,$week_number_string);
-       //\Log::info($result_set);
+       \Log::info($surge_tests_payload);
         //send data to Hibrid
+
+        
+        $this->sendPayLoad($surge_tests_payload);
 
         $this->comment('finished sending to HIBRID ....');
     }
@@ -241,7 +244,11 @@ class EidEngine extends Command
 
      private function sendPayLoad($data_instance){
         $this->comment( 'started sending data to server....' );
-        $url = 'https://hibrid.uat.s-3.net/dhis/api/dataValueSets';
+        $url = 'https://hibrid.ug.s-3.com/dhis/api/dataValueSets';
+        $username = 'CPHL';
+        $password = '11!January!2021';
+        $auth_details = 'CPHL:11!January!2021';
+        $toke_authentication = base64_encode($auth_details);
         // Collection object
         $data = $data_instance;
         // Initializes a new cURL session
@@ -256,11 +263,12 @@ class EidEngine extends Command
         curl_setopt($curl_session_instance, CURLOPT_HTTPHEADER, [
           //'X-RapidAPI-Host: kvstore.p.rapidapi.com',
           //'X-RapidAPI-Key: 7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+          "Authorization: Basic $toke_authentication",
           'Content-Type: application/json'
         ]);
 
        // url: curl -d @one_site.json  -d @surge.json "https://hibrid.uat.s-3.net/dhis/api/dataValueSets" -H "Content-Type:application/json" -u CPHL_user:our password
-        
+
         // Execute cURL request with all previous settings
         $response = curl_exec($curl_session_instance);
         // Close cURL session
@@ -283,7 +291,7 @@ class EidEngine extends Command
                 $cphl_facilities_array = iterator_to_array($this->mongo->facilities->find());
                 $hibrid_dhis2_list = $this->getHibridDhis2MappedList();
                 
-
+                $row_counter = 0;
                 foreach ($pcr_tests as $key => $pcr_test_instance) {
                     
                     $org_unit_hibrid_uid = $this->getHealthFaciltyHibridID($pcr_test_instance['_id'],$cphl_facilities_array, $hibrid_dhis2_list);
@@ -296,9 +304,14 @@ class EidEngine extends Command
                     $surge_report_instance_pcr_one["orgUnit"] = $org_unit_hibrid_uid;
                     $surge_report_instance_pcr_one["value"]=$pcr_test_instance['pcr_one'];
 
+                    if(trim($org_unit_hibrid_uid) == '')
+                        continue;
                     array_push($surge_test_report, $surge_report_instance_pcr_one);
-
                     
+                    if($row_counter == 20)
+                        break;
+
+                    $row_counter++;
                 }//end_foreach
 
                 foreach ($facility_numbers_zero_to_two_months as $key => $zero_to_two_months_instance) {
@@ -316,7 +329,12 @@ class EidEngine extends Command
                     $surge_report_instance_0_2_months["orgUnit"] = $org_unit_hibrid_uid;
                     $surge_report_instance_0_2_months["value"]=$zero_to_two_months_instance['total_tests'];
 
+                    if(trim($org_unit_hibrid_uid) == '')
+                        continue;
                     array_push($surge_test_report, $surge_report_instance_0_2_months);
+
+                     if($row_counter == 20)
+                        break;
                     
                 }//end foreach
 

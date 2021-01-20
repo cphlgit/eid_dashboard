@@ -224,7 +224,9 @@ class EidEngine extends Command
         $end_date = date("Ymd",$end_date_timestamp);//20200216;
 
         $week_number = idate('W',$start_date_timestamp);//'W08';//
-        $week_number_string =  idate('Y',$start_date_timestamp).$week_number;
+        $formatted_week_number = $this->formatWeekNumber($week_number);
+        $week_number_string =  idate('Y',$start_date_timestamp).$formatted_week_number;
+
         $this->comment('Start date: '.$start_date);
         $this->comment('End date: '.$end_date);
         $this->comment('Week Number: '.$week_number_string);
@@ -232,17 +234,26 @@ class EidEngine extends Command
         //fetch data
         //--facility, number_of_pcr_1,number_of_0-2_in pcr1
         $surge_tests_payload = $this->getSurgeTestsPayload($start_date,$end_date,$week_number_string);
-       \Log::info($surge_tests_payload);
-        //send data to Hibrid
-
+        \Log::info($surge_tests_payload);
         
         $this->sendPayLoad($surge_tests_payload);
 
         $this->comment('finished sending to HIBRID ....');
     }
 
+    private function formatWeekNumber($week_number){
+       $numeric_week_number = intval($week_number);
+       $alphanumberic_week_number = '';
 
-     private function sendPayLoad($data_instance){
+       if($numeric_week_number < 10){
+        $alphanumberic_week_number = 'W0'.$numeric_week_number;
+       }else{
+        $alphanumberic_week_number = 'W'.$numeric_week_number;
+       }
+
+       return $alphanumberic_week_number;
+    }
+    private function sendPayLoad($data_instance){
         $this->comment( 'started sending data to server....' );
         $url = 'https://hibrid.ug.s-3.com/dhis/api/dataValueSets';
         $username = 'CPHL';
@@ -502,44 +513,43 @@ class EidEngine extends Command
     }
 
    private function updateFacilityDhis2Records(){
-        $eid_facilities = LiveData::getFacilities();
-        $dhis2_facilities = LiveData::getDhis2FacilityData();
-       
+        
+            $eid_facilities = LiveData::getFacilities();
+            $dhis2_facilities = LiveData::getDhis2FacilityData();
+           
+            $dhis2_name_string = "";
+            $dhis2_uid_string = "";
+            $where_id_in_string = "";
 
-        $dhis2_name_string = "";
-        $dhis2_uid_string = "";
-        $where_id_in_string = "";
+            $counter =0;
+            foreach ($eid_facilities as $eid_facility) {
+                
+                foreach ($dhis2_facilities as $dhis2_facility) {
+                    if($eid_facility->facility == $dhis2_facility->facility){
+                        $dhis2_name_string = $dhis2_name_string . 'WHEN '.$eid_facility->id .' THEN "'.$dhis2_facility->dhis2_name.'" ';
+                        $dhis2_uid_string = $dhis2_uid_string . 'WHEN '.$eid_facility->id .' THEN "'.$dhis2_facility->dhis2_uid.'" ';
+                        $where_id_in_string = $where_id_in_string . $dhis2_facility->id .',';
+                        $counter++;
 
-        $counter =0;
-        foreach ($eid_facilities as $eid_facility) {
-            
-            foreach ($dhis2_facilities as $dhis2_facility) {
-                if($eid_facility->facility == $dhis2_facility->facility){
-                    $dhis2_name_string = $dhis2_name_string . 'WHEN '.$eid_facility->id .' THEN "'.$dhis2_facility->dhis2_name.'" ';
-                    $dhis2_uid_string = $dhis2_uid_string . 'WHEN '.$eid_facility->id .' THEN "'.$dhis2_facility->dhis2_uid.'" ';
-                    $where_id_in_string = $where_id_in_string . $dhis2_facility->id .',';
-                    $counter++;
-
-                    break;
+                        break;
+                    }
                 }
+                
             }
-            
-        }
-try{
 
+            try{
+                $where_id_in_string = $this->removeLastComma($where_id_in_string);
+                $sql = 'UPDATE facilities SET dhis2_name = 
+                (CASE id  '.$dhis2_name_string .' END),  dhis2_uid = (CASE id  '.$dhis2_uid_string .' END) 
+                WHERE id IN ('.$where_id_in_string .')';
 
-        $where_id_in_string = $this->removeLastComma($where_id_in_string);
-        $sql = 'UPDATE facilities SET dhis2_name = 
-        (CASE id  '.$dhis2_name_string .' END),  dhis2_uid = (CASE id  '.$dhis2_uid_string .' END) 
-        WHERE id IN ('.$where_id_in_string .')';
-
-        $result_flag = \DB::connection('live_db')->select($sql);
-        $this->comment("....DHIS2 Records Update: Completed ....");
-    }catch(Exception $e){
+                $result_flag = \DB::connection('live_db')->select($sql);
+                $this->comment("....DHIS2 Records Update: Completed ....");
+            }catch(Exception $e){
+                
+            }
         
-    }
-        
-
+       
 
 
     }//end method

@@ -31,10 +31,12 @@ app.filter('slice', function() {
 app.filter('d_format', function() {
         return function(y_m) {
             var month_labels={1:'Jan',2:'Feb',3:'Mar',4:'Apr',5:'May',6:'Jun',7:'Jul',8:'Aug',9:'Sept',10:'Oct',11:'Nov',12:'Dec'};
-            var arr=y_m.split('-');
-            var yr=arr[0]||"";
-            var mth=arr[1]||"";
-            return month_labels[mth]+" '"+yr.slice(-2);
+            var year_month_string = ""+y_m;
+           
+            var yr=year_month_string.slice(0,4)||"";
+            var mth=year_month_string.slice(-2)||"";
+            var month_int=parseInt(mth);
+            return month_labels[month_int]+" '"+yr.slice(-2);
         }
     });
 app.filter('uganda_date_format', function() {

@@ -970,7 +970,9 @@
             <section id="tab5"> @include('sections._results_printing_statistics')</section>
         </div><!-- /content -->
     </div><!-- /tabs -->
-    
+    <br>
+     <label class='hdr hdr-grey'> SUMMARY OF KEY INDICATORS </label>
+         @include('sections._eid_indicators')
     <br>
      <label class='hdr hdr-grey'> ADDITIONAL METRICS</label>
     <div class='addition-metrics'>

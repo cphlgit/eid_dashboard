@@ -430,6 +430,12 @@ class DashboardController extends Controller {
 	   //total tests
 	 	$total_tests_statement = array('$sum' => 1 );
 
+	 	//tatal of samples whose testing is completed
+	 	$if_testing_is_completed = array('$eq' => array('$testing_completed','YES'));
+	 	$testing_is_completed_cond = array($if_testing_is_completed,1,0);
+	 	$testing_is_completed_cond_statement = array('$cond' =>$testing_is_completed_cond );
+	 	$total_testing_completed_sum_statement = array('$sum'=>$testing_is_completed_cond_statement);
+
 		//total pcr1 tests	        
 		$if_pcr_one = array('$eq' => array('$pcr','FIRST'));
 		$pcr1_cond = array($if_pcr_one,1,0);
@@ -599,7 +605,9 @@ class DashboardController extends Controller {
 		$group_array =array(
 			'_id'=>'$year_month',
 
-			'total_tests'=>$total_tests_statement,
+			'total_tests'=> $total_tests_statement,
+			'total_testing_completed' => $total_testing_completed_sum_statement,
+			
 			'pcr_one'=>$pcr1_sum_statement,
 			'pcr_two'=>$pcr2_tests_sum_statement,
 			'pcr_three'=>$pcr3_tests_sum_statement,

@@ -1238,8 +1238,10 @@ db.eid_dashboard.aggregate(
 	}
 
 	public function getPocFacilityStatistics(){
-
-			$sql = "SELECT district, facility, COUNT(DISTINCT facility) AS peripheral_sites, poc_device, max(created_at) AS latest_date,
+			$from = $request->get('start');
+        	$to = $request->get('end');
+			$sql = "SELECT district, facility, COUNT(DISTINCT facility) AS peripheral_sites, poc_device, SUM(CASE WHEN p.created_at > DATE_SUB(NOW(), INTERVAL 1 WEEK) THEN 1 ELSE 0 END) as thiswk,
+ SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW() THEN 1 ELSE 0 END) as wk1, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 2 WEEK) AND DATE_SUB(NOW(), INTERVAL 1 WEEK) THEN 1 ELSE 0 END) as wk2, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 3 WEEK) AND DATE_SUB(NOW(), INTERVAL 2 WEEK) THEN 1 ELSE 0 END) as wk3, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 4 WEEK) AND DATE_SUB(NOW(), INTERVAL 3 WEEK) THEN 1 ELSE 0 END) as wk4, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 5 WEEK) AND DATE_SUB(NOW(), INTERVAL 4 WEEK) THEN 1 ELSE 0 END) as wk5, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 6 WEEK) AND DATE_SUB(NOW(), INTERVAL 5 WEEK) THEN 1 ELSE 0 END) as wk6, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 7 WEEK) AND DATE_SUB(NOW(), INTERVAL 6 WEEK) THEN 1 ELSE 0 END) as wk7, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 51 WEEK) AND DATE_SUB(NOW(), INTERVAL 52 WEEK) THEN 1 ELSE 0 END) as wk8, max(created_at) AS latest_date,
 				COUNT(p.id) AS tests,  
 				SUM(CASE WHEN results='Negative' THEN 1 ELSE 0 END) AS negatives,
 				SUM(CASE WHEN results='Positive' THEN 1 ELSE 0 END) AS positives,
@@ -1253,6 +1255,27 @@ db.eid_dashboard.aggregate(
 
 		    return compact('pocfacilities');
 
+	}
+
+	public function stock_data(Request $request){
+        $from = $request->get('start');
+        $to = $request->get('end');
+		$records = \DB::select("select d.*,f.facility from inventory_data d JOIN facilities f ON(d.facility_id = f.id)");
+        if($request->has('word')){
+                $date = date("Ymdhi");
+                $fileName = "stock_status_".$date.".doc";
+                $headers = array(
+                    "Content-type"=>"text/html",
+                    "Content-Disposition"=>"attachment;Filename=".$fileName
+                );
+                $content = view('poc.exportStockLog')
+                    ->with('records', $records)
+                    ->withInput($request->all());
+                return \Response::make($content,200, $headers);
+            }
+            else{
+		return view('poc.poc_stock',compact('records'));
+            }
 	}
 
 	public function getSurgeTests(Request $request_parameters,$from_date,$to_date){

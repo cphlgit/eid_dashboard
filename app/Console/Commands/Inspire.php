@@ -29,7 +29,15 @@ class Inspire extends Command
     public function handle()
     {
        // $this->comment(PHP_EOL.Inspiring::quote().PHP_EOL);
-        $this->updateDhis2Fields();
+        $_text_percentage = 0;
+        $first="Mantoroba Health Centre II";
+        $data=["Rwimi Prison HC III","Sanyu Clinic (Rwimi TC)","Shifa Health Centre HC II","St. Francis Medical Centre","St. John's Medical Centre","Trivest Medical Centre HC II","Yerya HC III","Mantoroba HC II"];
+        foreach ($data as $key => $second) {
+           similar_text($first, $second,$_text_percentage);
+           $this->comment("First: $first, Second: $second, Percentage: $_text_percentage");
+        }
+        
+       // $this->updateDhis2Fields();
     }
    
     private function updateDhis2Fields(){
@@ -70,12 +78,7 @@ class Inspire extends Command
             var_dump($updated_facility_record);
             if(sizeof($found_facility_record) >0){
                 $this->comment("g.....");
-                $updated_facility_record['dhis2_facility_uid']=$found_facility_record['facility_uid'];
-                $updated_facility_record['dhis2_sub_county_uid']=$found_facility_record['sub_county_uid'];
-                $updated_facility_record['dhis2_sub_county_name']=$found_facility_record['sub_county_name'];
-                $updated_facility_record['dhis2_district_uid']=$found_facility_record['district_uid'];
-                $updated_facility_record['dhis2_district_name']=$found_facility_record['district_name'];
-                $updated_facility_record['dhis2_region']=$found_facility_record['region'];
+                $updated_facility_record['dhis2_facility_uid']=$found_facility_record['dhis2_facility_uid'];
 
                 array_push( $final_list, $updated_facility_record);
             }else{
@@ -100,13 +103,11 @@ class Inspire extends Command
         // write each row at a time to a file
         //first line/header
          $header=['id','cphl_facility_name','cphl_district','dhis2_facility_uid',
-         'dhis2_facility_name','dhis2_sub_county_uid','dhis2_sub_county_name',
-         'dhis2_district_uid','dhis2_district_name','dhis2_region'];
+         'dhis2_facility_name'];
         fputcsv($f, $header);
         foreach ($final_list as $final_record) {
             $row=[$final_record['id'],$final_record['cphl_facility_name'],$final_record['cphl_district'],$final_record['dhis2_facility_uid'],
-                    $final_record['dhis2_facility_name'],$final_record['dhis2_sub_county_uid'],$final_record['dhis2_sub_county_name'],
-                    $final_record['dhis2_district_uid'],$final_record['dhis2_district_name'],$final_record['dhis2_region']
+                    $final_record['dhis2_facility_name']
                 ];
             fputcsv($f, $row);
         }
@@ -116,18 +117,18 @@ class Inspire extends Command
         $this->comment('File Generated successfully');
     }
     private function getDhis2FacilityRecord($dhis2_facility_name,$cphl_district,$dhis2_master_facility_list){
+        //district,hub,cphl_facility_name,dhis2_facility_name,dhis2_facility_uid
 
         $found_facility_record=[];
         foreach ($dhis2_master_facility_list as $key => $dhis2_facility_record) {
-            $dummy_district = $dhis2_facility_record['district_name'];
-            $district_name_array = explode(" ", $dummy_district);
-            $cleaned_district_name = $district_name_array[0];
+            
+            $cleaned_district_name = $dhis2_facility_record['district'];
 
             $cleaned_district_name = strtolower($cleaned_district_name);
             $cphl_district = strtolower($cphl_district);
 
             if($cphl_district == $cleaned_district_name){
-                $facility = $dhis2_facility_record['facility_name'];
+                $facility = $dhis2_facility_record['dhis2_facility_name'];
                 $facility = strtolower($facility);
                 if($facility == strtolower($dhis2_facility_name)){
                     $found_facility_record = $dhis2_facility_record;
@@ -141,12 +142,11 @@ class Inspire extends Command
 
     }
     private function getDistrictDhis2Facilities($cphl_district,$dhis2_master_facility_list){
+        //district,hub,cphl_facility_name,dhis2_facility_name,dhis2_facility_uid
         
         $facility_list=[];
         foreach ($dhis2_master_facility_list as $key => $facility_record) {
-            $dummy_district = $facility_record['district_name'];
-            $district_name_array = explode(" ", $dummy_district);
-            $cleaned_district_name = $district_name_array[0];
+            $cleaned_district_name = $facility_record['district'];
 
             $cleaned_district_name = strtolower($cleaned_district_name);
             $cphl_district = strtolower($cphl_district);
@@ -154,7 +154,7 @@ class Inspire extends Command
             $facility="";
 
             if($cphl_district == $cleaned_district_name){
-                $facility = $facility_record['facility_name'];
+                $facility = $facility_record['dhis2_facility_name'];
                 array_push($facility_list, $facility);
                 
             }
@@ -163,7 +163,25 @@ class Inspire extends Command
         return $facility_list;
 
     }
+    
     private function getClosestMatch($cphl_facility_name, $possible_dhis2_facility_names){
+        $facility_to_search_for = $cphl_facility_name;
+
+        // array of words to check against
+        $possible_dhis2_facility_names  = $possible_dhis2_facility_names;
+
+      
+
+        // loop through words to find the closest
+        foreach ($possible_dhis2_facility_names as $possible_dhis2_facility_name_instance) {
+            $precentage_ = 0;
+            similar_text($cphl_facility_name, $possible_dhis2_facility_name_instance,$precentage_);
+
+        }
+
+        return $closest_match;
+    }
+    private function _getClosestMatch($cphl_facility_name, $possible_dhis2_facility_names){
         $facility_to_search_for = $cphl_facility_name;
 
         // array of words to check against
@@ -214,13 +232,11 @@ class Inspire extends Command
             //print_r($array_instance);
 
              
-                $facility['facility_uid']=$array_instance[0];
-                $facility['facility_name']=$array_instance[1];
-                $facility['sub_county_uid']=$array_instance[2];
-                $facility['sub_county_name']=$array_instance[3];
-                $facility['district_uid']=$array_instance[4];
-                $facility['district_name']=$array_instance[5];
-                $facility['region']=$array_instance[6];
+                $facility['district']=$array_instance[0];
+                $facility['hub']=$array_instance[1];
+                $facility['cphl_facility_name']=$array_instance[2];
+                $facility['dhis2_facility_name']=$array_instance[3];
+                $facility['dhis2_facility_uid']=$array_instance[4];
                
                 
                 array_push($data, $facility);
@@ -229,7 +245,7 @@ class Inspire extends Command
         }
         
         //remove duplicates
-        $facilities = $this->unique_multidim_array($data,'facility_uid'); 
+        $facilities = $this->unique_multidim_array($data,'dhis2_facility_uid'); 
 
         return $facilities;
     }

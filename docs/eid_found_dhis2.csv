@@ -1,0 +1,616 @@
+﻿id,cphl_facility_name,cphl_district,dhis2_facility_uid,dhis2_facility_name
+13,Aduku H/C IV ,Kwania,WEH3aMvIS0B,Aduku HC IV
+29,Amach H/C IV,Lira,ah2PY0hhVkV,Amach HC IV
+31,Amolatar H/C IV ,Amolatar,XazfKCvCCLS,Amolatar HC IV
+42,Apac Hospital ,Apac,OeBKA5gCBXG,Apac HOSPITAL
+53,Atiak H/C IV ,Amuru,i5CDWEBfo9n,Atiak HC IV
+57,Awach H/C IV ,Gulu,Z1dfGmIoSeF,Awach HC IV
+67,Bardyang H/C II,Dokolo,lS9T6oCJ5Lc,Bardyang HC II
+79,Kasese Community Medical Centre(KCMC) HC III,Kasese,OMTL4FcwFul,Mt. Rwenzori Medical Centre HC III
+82,Bombo Military Hospital ,Luweero,MH0SVcF6X2F,Bombo General Military HOSPITAL
+96,Bugambe Tea H/C III (Hoima),Kikuube,Gbjmyvee9zh,Bugambe Tea HC III
+111,Buremba H/C III (Kiruhura),Kazo,rRPBsggvt0q,Buremba HC III
+117,Bukuuku H/C IV ,Kabarole,n8cJGH7q4QK,Bukuku HC IV
+124,Bundibugyo Hospital  ,Bundibugyo,VkNdAzkYGjh,Bundibugyo Hospital
+134,Busanza H/C IV ,Kisoro,pCvTmt48vr0,Busanza HC IV
+159,St Cecilia Buyamba H/C II-Rakai,Rakai,OQnJUNl390Z,Buyamba HC III
+166,Bwizibwera H/C IV ,Mbarara,SMkx58aUYtC,Bwizibwera HC IV
+174,Kotido COU   H/C III,Kotido,ahrb1oS6ucq,Kotido HC IV
+177,Dabani Hosipital,Busia,AhDvE2o9F3L,Dabani HOSPITAL
+183,Family Health Resource Centre Kiruhura ,Kiruhura,sIXMnx11pLV,Family Health Resource Centre CLINIC
+222,Jinja R R Hospital ,Jinja,SZS6IdnTKZR,Jinja Regional Ref Hospital
+226,Kabende H/C II,Kabarole,Nkq4sBVIoUd,Kabende HC III
+230,Kabuga H/C III ,Kamwenge,JiXMZzyWhUb,Kabuga HC III
+239,Kagadi  Hospital,Kagadi,JLUfWD5Q5jB,Kagadi Hospital
+246,Kakira Sugar Works Hospital ,Jinja,ikdW0m1mt7H,Kakira Worker's Hospital
+248,Kakumiro H/C IV ,Kakumiro,aLPsQWPEMFT,Kakumiro HC IV
+255,Kalisizo Hospital ,Kyotera,eZPhMsZGZza,Kalisizo Hospital
+259,Kambuga Hospital ,Kanungu,CCW0LpJoTnO,Kambuga Hospital
+264,Kamukira H/C IV ,Kabale,aVKmbSeBF1N,Kamukira HC IV
+268,Kamwezi   H/C IV ,Rukiga,Yy2ZLOpEx2S,Kamwezi HC IV
+269,Kamwokya Christian Caring Community ,Kampala,vTqB8UrtjVT,Kamwokya Christian Caring Community HC I
+278,Kanyum H/C III (Kumi),Kumi,al7HcOssdLZ,Kanyum HC III
+285,Karugutu H/C IV,Ntoroko,A6P3WOAXDru,Karugutu HC IV
+319,Kibiito H/C IV ,Bunyangabu,egswmCc8ssL,Kibiito HC IV
+322,Kibuli Muslim Hospital ,Kampala,Ygv5366dTvl,Kibuli Hospital
+339,Kikyo H/C IV ,Bundibugyo,m6EphK59CJo,Kikyo HC IV
+367,Kitwe H/C IV (Ntungamo),Ntungamo,FGnMVMPBCLN,Kitwe HC IV
+370,Kiwoko Hospital ,Nakaseke,OtHSbYGRmmu,Kiwoko HOSPITAL
+377,Koch Ongako H/C III,Gulu,P2sdfoxH0a7,Angaya HC III
+381,Kubongi Military Hospital,Tororo,ZVwFNyBsJxz,Rubongi Military HOSPITAL
+388,Kyabugimbi H/C IV ,Bushenyi,ILr03pFmrva,Kyabugimbi HC IV
+395,Kyarusozi H/C IV ,Kyenjojo,LLjCLRuuOpp,Kyarusozi HC IV
+406,Lalogi  H/C IV ,Omoro,Dxbu2QPZahI,Lalogi HC IV
+413,Lira  Kato H/C III (  Agago ),Agago,a9ZI6jNBqXx,Lira-Kato HC III
+414,Lira Medical Centre ,Lira,riFZJMWkiZR,Lira Medical Centre Ltd HC III
+417,Lobo  rom H/C III,Kitgum,WgmL7qQcVxV,Loborom HC III
+427,Lwala Hospital ,Kalaki,UdkpzjDtHXu,Lwala Hospital
+434,Lyantonde Hospital ,Lyantonde,Gje6ykVPZKQ,Lyantonde Hospital
+439,Madi Opei H/C IV ,Lamwo,Z3lDSWMFUyS,Madi-Opei HC IV
+454,Mateete H/C III ,Ssembabule,ajiOvkBSZBh,Mateete HC III
+455,Matuma H/C III,Yumbe,MkD1c6jagfl,Matuma HC III
+478,Mpigi H/C IV ,Mpigi,QXVOVXOy3FM,Mpigi   HC IV
+480,Mubende R R Hospital ,Mubende,VLclxVcJh5v,Mubende RR HOSPITAL
+481,Mubende Rehabilitation Centre ,Mubende,PO8WHm1kFck,Mubende Rehabilitation Centre HC III
+483,Muduuma H/C III,Mpigi,YxeL7JN6HKe,Muduuma HC III
+488,Muko H/C IV ,Rubanda,YTxnLBZCFwA,Muko HC IV
+495,Murchison Bay Hospital ,Kampala,WGc7kKRhPaH,Murchision Bay Hospital
+498,Muyembe  H/C IV,Bulambuli,G4DUWj0Q8hp,Muyembe HC IV
+500,Naam Okora H/C III,Kitgum,iqr4dCf6xsU,Naam Okora HC IV
+501,Nabiganda H/C III,Butaleja,cwGt2cWV5TN,Nabiganda HC III
+506,Nakapiripirit Field Hospital,Nakapiripirit,b4ei3WhTRAH,Nakapiripirit HC III
+508,Nakaseke  Hospital ,Nakaseke,mlPC71DkTp5,Nakaseke HOSPITAL
+509,Nakasongola Military Hospital ,Nakasongola,Jn7Sz79BL2v,Nakasongola Military HOSPITAL
+531,Nebbi Hospital ,Nebbi,iEdI13kUo0h,Nebbi Hospital
+540,Nkozi Hospital ,Mpigi,vkpREtlXQxQ,Nkozi HOSPITAL
+541,Nkuruba H/C  III,Kabarole,NPsUXWauJwy,Nkuruba HC II
+549,Ntungamo H/C IV,Ntungamo,NImJbGuvUS6,Ntungamo HC IV
+550,Ntuusi H/C IV,Ssembabule,WuDi4LmzEWV,Ntuusi HC IV
+551,Ntwetwe H/C IV ,Kyankwanzi,QDSGcekPM4S,Ntwetwe HC IV
+557,Nyakarongo  H/C   II,Kyenjojo,aU6065dnndu,Nyakarongo HC II
+582,Omoro H/C III (Alebtong),Alebtong,NakSNp1eO2L,Omoro HC III
+603,Lira PAG Mission Hospital H/C IV,Lira,BTQIO9sgvpP,Lira PAG Mission Hospital
+607,Pajimo Military H/C III,Kitgum,f33lKK2tJNV,Pajimo HC III
+608,Pajule H/C  IV ,Pader,NiSWW2k1Hqt,Pajule HC IV
+621,Pingire H/C III,Serere,f8m6k3MjPsf,Pingire HC III
+630,Rapha Medical Centre,Gomba,R4Vfx0e7HLy,Rapha Medical Centre
+632,Rubaare H/C IV,Ntungamo,acuu3ktUO4t,Rubaare HC IV
+663,Rwesande H/C IV ,Kasese,KSrm1cFNorS,Rwesande HC IV
+679,St Joseph Hospital  Kitgum ,Kitgum,g6xaEQ1fTQS,St. Joseph'S Kitgum HOSPITAL
+684,St Stephens Disp & Maternity Center (Luzira),Kampala,at9KnQkgpy6,St. Stephen's Dispensary and Marternity 
+685,TASO Gulu ,Gulu,atGRMXTBJaA,TASO Gulu Clinic
+691,TASO Mulago ,Kampala,QHyLvO7sL6p,TASO Mulago CLINIC
+697,Toro  Kahuna H/C III,Kabarole,BsqCx1RBM4V,Toro Kahuna HC III
+706,Walukuba H/C IV ,Jinja,E2mdeU0lkNe,Walukuba HC IV
+727,St Luke KMD-Kiyinda  H/C III (Mityana),Mityana,ocmJzmqmXWX,St. Luke Kiyinda Mityana Diocese HC III
+754,Goli H/C III (Nebbi),Nebbi,F3VE0gdRXu1,Goli HC III NGO
+795,Zeu H/C III,Zombo,Wk8yKMCUZOk,Zeu HC III
+839,Buwaata H/C II,Mubende,NVzyUPHcrEd,Butawata HC III
+850,Ayago H/C III (Lira),Lira,AXlKF4953Sh,Ayago HC III
+855,St Ambrose Charity H/C III,Kagadi,vsu4ND4ja3E,St. Ambrose Charity HC IV
+868,Kochi H/C III,Yumbe,eagCoWlLIhR,Kochi HC III
+874,Adumi H/C IV,Arua,H7pcxkjHX8T,Adumi HC IV
+919,Ngora Maternity Unit H/C III,Ngora,GLPEmICaqyp,Ngora District Maternity HC III
+932,Buwabwala H/C III,Namisindwa,tZ2r1YHQh04,Buwabwala HC III
+976,Kakooge H/C III(Nakasongola),Nakasongola,i1KIxI3H281,Kakooge HC III
+988,Wera H/C III  ST MICHAEL ,Amuria,a4Cp1oW19Lo,Wera HC III
+1004,Azaipi H/C III,Adjumani,Krxa01FAxdW,Dzaipi HC III
+1082,Bukasa H/C IV (Kalangala),Kalangala,NKcfhEUaMHx,Bukasa HC IV
+1130,St Marys H/C Kasaala,Luweero,DAcqiebFOcd,St. Mary's Kasaala HC III
+1152,Kasozi H/C III (Luwero),Luweero,Z2Mr0fdyDaz,Kasozi HC III GOVT
+1176,Kirewa Community H/C III,Tororo,TCjLjkwPQ8c,Kirewa Comm. HC III
+1186,Nkoko H/C III,Mubende,MlMuBEoqA9y,Musozi HC III
+1212,Mirembe Maria Gorreti H/C III ,Mubende,vh8cOiWZOv9,Mirembe Maria HC III
+1222,Epi Centre H/C III (Butambala),Butambala,E1TxjBqAvWB,Butambala Epi Centre HC III GOVT
+1228,Nyarugoote H/C II,Bushenyi,wMiApjHnWVa,Nyarugote HC II
+1231,Kibirizi H/C III,Rukungiri,JzvyKeN1NIO,Kibirizi HC III
+1243,St Martin H/C III -Mabira (Kyenjojo),Kyenjojo,HEvqMCVc5qD,St. Martins Mabira HC III
+1249,Nyakishenyi H/C III,Rukungiri,UKwlyClQ3AR,Nyakishenyi Gvt HC III
+1252,Kobulubulu H/C III ,Kaberamaido,UMzvOsVEnNH,Kobulubulu HC III
+1270,Stella Maris H/C II,Ntoroko,aHL2NoEwlHh,Stella Maris Ntoroko HC III
+1294,Ankole Tea H/C II,Bushenyi,BoGS6ZmpQc2,Ankole Tea Factory HC II
+1296,Iremera H/C III,Kisoro,j1c8wmQO6d7,Iremera HC III
+1299,Nyantabooma H/C III,Kabarole,v19MRLoaChf,Nyantaboma HC II
+1314,Butemba H/C III(Kyankwanzi),Kyankwanzi,JHtjwrjBlm4,Butemba HC III
+1330,Kamuhunga H/C IV,Bushenyi,aerTdJxlEQh,Kyamuhunga HC III
+1331,Orivu H/C II,Arua,aM3UfhNrS2W,Orivu HC III
+1344,Nyakashashara H/C III (Kiruhura),Kiruhura,SU8JOQnA0n1,Nyakashashara HC III
+1345,Kisiizi  H/C III,Rukungiri,TsELcr5sajj,Kisiizi Gvt HC III
+1353,Kagano  H/C   III,Kisoro,zAPmrjVeufo,Kagano HC III
+1356,Apopong  H/C  III,Pallisa,DE5VuZb0Xei,Apopong HC III
+1361,Anyiribu H/C III  ,Arua,FKuNaclJDeD,Anyiribu HC III
+1373,Kabarwa   H/C  III,Bukedea,aowpXPkRtAt,Kabarwa HC III
+1374,Kikandwa H/C III (Mityana),Mityana,aVPydv9zaor,Kikandwa HC III
+1375,Kikokwa  H/C   III,Isingiro,HRUwvJnV3yt,Kikokwa HC III
+1388,Zumbo H/C III,Zombo,tuYjF238GTf,Zombo HC III
+1395,Hima  Govt H/C III,Kasese,D76MlGzidHn,Hiima Disp. HC III
+1400,Kiryanga H/C III,Kagadi,DdEgPYS7ttc,Kiryanga HC III
+1404,Kolonyi Hospital,Mbale,O4hJJKkCm5r,Kolonyi HC III
+1421,Butare H/C III(Buhweju),Buhweju,RndGp2J7TuE,Butare HC III
+1431,Makondo H/C II,Lwengo,c4QCM3YpqqE,Makondo HC II
+1433,Katunguru H/C III (Kasese),Kasese,ai5Sfj3nu9K,Katunguru HC II
+1451,Lambu H/C II,Masaka,OpHCVPDEaBb,Lambu HC II
+1471,Loyo Ajonga H/C II,Omoro,oYdsJ8kS1JS,Koro Abili HC II
+1472,Nurture  Africa H/C III,Wakiso,dQprl8P1Uae,Nurture Africa
+1504,Reachout (  Kinawataka   Site),Kampala,FzxeAP4YHxC,Reach Out - Kinawataka CLINIC
+1510,Katira H/C III (Budaka),Budaka,CbZsLxa0Zp6,Katira HC III
+1511,Bugitimwa H/C III,Sironko,h9EhsXtR7wl,Bugitimwa Gvt HC III
+1522,Buyanja H/C (Gomba),Gomba,Abzyw3gTHdQ,Buyanja  HC II (Gomba)
+1548,Luteete H/C III (FortPortal),Kabarole,YzWi4kmieZt,Ruteete HC III
+1562,Arivu H/C III,Arua,aM3UfhNrS2W,Orivu HC III
+1577,Holy Innocent Childrens Hospital(Mbarara),Mbarara,aMldu85cKyD,Holy Innocents Children's HOSPITAL
+1582,Olimai Community H/C III,Kumi,aqG8bVVJdXW,Olimai CBO HC III
+1586,Kawonawo H/C II,Butambala,a93zYnWO0cT,Bugobango HC II
+1591,St Micheal H/C III (Kibaale),Kibaale,hHaqQ2NBBOs,Kibaale HC IV (Kibaale)
+1601,Omagoro H/C III,Serere,HtstkAl6IEl,Omagoro HC II
+1616,Biguli  H/C III,Kamwenge,Sg3h27N489f,Biguli HC III
+1623,Ayivuni H/C,Arua,Ae8zVsIuHFC,Ayivuni HC III
+1650,Kyere Mission NGO H/C III ,Serere,qmIXnGwbmHP,Kyere mission NGO HC III
+1651,Kyarulangira H/C III,Rakai,hBhHjc3o6Fa,Kyalulangira HC III
+1660,Lemusuii H/C III,Nakapiripirit,zNvPZ3xCibY,Lemusui HC III
+1663,Lokitelebu H/C III,Kotido,krPNAO6ikKF,Lokitelaebu HC III
+1688,Ikumba H/C III (Kabale),Rubanda,S1qinK4bVGQ,Ikumba HC III
+1723,Senta Medicare,Wakiso,Wv0A7XnUFP5,Senta Medicare HC IV
+1726,Rwengiri  H/C III,Rukungiri,aeuGMylOmSs,Rwengiri HC III
+1734,Katete H/C III,Kanungu,zu1VixoD4pu,Katete HC III
+1735,Enganju H/C II,Buhweju,DIE1bNkw04b,Engaju HC II
+1753,Kachumbala Mission Dispensary,Bukedea,ak1yCSlQVYY,Kachumbala Ngo HC II
+1775,Kasambiika H/C II,Iganga,FSVMTORF0Dn,Kasambika HC III
+1782,Nkoni Health Center III,Lwengo,EBmWiWJFu2L,Nkoni HC III
+1785,Lwakaloolo H/C II,Rakai,uLBT1C3Dhkh,Lwakalolo HC II
+1788,Zia Angelina ,Wakiso,ODl6muHUdeG,Zia Angelina HC II
+1791,Rusheshe H/C III,Rukungiri,ve5j2Ed30wv,Rusheshe HC III
+1800,Kapkoloswo H/C III,Bukwo,apNXE4NwXoP,Kapkoloswo HC III
+1814,Hope Medical Centre (AMG)(Sheema),Sheema,yP6WiIyFAj7,Hope Medical Centre HC II NGO
+1815,Mukwano Medical Services Ltd,Kalungu,cQlhVgIOXko,Mukwano Medical Centre CLINIC
+1829,Well Springs Childrens Medical  Center Kamutuuza,Kalungu,YXN5KHNVc5J,Well Springs HC III
+1835,Aliwa H/C III,Kaberamaido,VEc0XL8e8Sa,Alwa HC III
+1838,Butare H/C III (Ntungamo ),Ntungamo,a9vGVj3Ftt9,Butaare HC III
+1849,Kirumba H/C III (Isingiro),Isingiro,uEUAoZHJzu0,Kyeirumba HC III
+1853,Mucwa H/C II,Kabarole,Pf3v59iyqdM,Mucwa HC III
+1856,Joy Medical Center (Mbale  ),Mbale,aaI3qQuFct4,Joy Medical Center HC II
+1886,ST Martins H/C III ( AMAKIO),Serere,a3f7BmwY4kL,St. Martins Amakio HC III
+1887,Kisoko H/C III,Tororo,HNjaSmUnPzM,Kisoko HC III
+1890,St Francis Of Assis Naddangira H/C III,Wakiso,TKpSl9J25U1,Nadangira HC III
+1894,Kahokya H/C II,Kasese,j3kOByZMdZu,Kahokya HC II
+1895,Community Health Plan (Kibuku),Kibuku,vxetMic6GCb,Community Health Center (kibuku) HC III
+1905,Rugazi Mission,Rubirizi,wa5ALmOQe62,Rugazi Mission HC II
+1914,Butogota HC,Kanungu,aRwFP1c5PuU,Butogota HC II
+1915,Kanyantorogo HC,Kanungu,NLIAgxXVsuv,Kanyantorogo Gvt HC III
+1916,Nyakisenyi PNFP ,Rukungiri,UKwlyClQ3AR,Nyakishenyi Gvt HC III
+1918,Kagezi H/C III,Kisoro,lJf5crQrZpO,Kagezi HC III
+1921,Kemubeizi H/c,Isingiro,PGpdN6nh3Lz,Kamubeizi HC II
+1924,Nyondo H/C III,Mbale,vaNMmgaScuW,Nyondo HC III
+1933,Kazibz H/C II,Wakiso,gCobOTnUj2H,Kiziba HC III
+1964,Ngomanene H/C III,Gomba,Xvt0nRCNyrC,Ngomanene HC II
+1980,Awach H/C II,Abim,sYhGbKU5621,Awach HC II
+1999,Namalu Prison H/C II,Nakapiripirit,UCe1oCdRuEA,Namalu HC III
+2012,Morulem H/C II,Abim,hIuSd1NGumG,Morulem HC III
+2046,Pakwach Mission H/C ,Pakwach,a1DNpYv02JK,Pakwach Mission HC III
+2050,Kikandwa H/C II (Mubende),Mubende,avQJxIeVNUF,Kikandwa HC III
+2052,Buddabugya H/C III,Nakaseke,YTCehe1KMvF,Bidabugya HC III
+2061,Kyangatto H/C II,Nakaseke,l6faU6mJBOh,Kyangato HC II
+2091,Karungu H/C III,Kiryandongo,QHsCNVmRURq,Karungu HC III NGO
+2092,Kigwera H/C II,Buliisa,Qk1XgoxFmuU,Kigwera HC II
+2095,Kihungya H/C II,Buliisa,Sq5R0McgjQo,Kihungya HC II
+2121,Kwanyinyi,Kween,zpMTFJlXcMH,Kwanyiy HC III
+2126,Bumadanda H/C III,Mbale,OlaVEDuSn6W,Bumadada HC III
+2135,St Martin  Clinic (Bukunda),Rakai,wpLf3ooCcJu,St. Martin's  HC II
+2139,St Francis Of Asiisi Marternity Home (lukaya),Kalungu,dkhfFpWRiL0,St. Francis Maternity Home HC II
+2144,Kawoko muslim H/C III,Bukomansimbi,A7BAVMsywaQ,Kawoko muslim HC III
+2150,Koch Lii H/C II,Nwoya,NdIteLoT2FC,Koch Goma HC III
+2156,Chepsukunya H/C II,Kapchorwa,mOxAHl3KoLP,Cheptuya HC III
+2158,Kiriki H/C II,Kween,gcApTQ5WMyb,Kirik HC II
+2169,Kaserem Christian H/C II,Kapchorwa,S8LH3k8Bkir,Kaserem HC III
+2179,Lumino Catholic,Busia,eheRSS5qlxR,Lumino HC III
+2191,Pallisa Mission Kaucho H/CIII,Pallisa,o9Cx4B22Mu5,Pallisa Mission Kaucho HC II
+2196,Kapwai H/C III,Pallisa,qQ4572bsXHc,Kapuwai HC III
+2204,Community H/C (Kaliro),Kaliro,waAFO9dc0Rz,Community HC III
+2235,Kashagazi H/C II,Kyegegwa,VYTPJMKfPsi,Kishagazi HC II
+2240,Buhanda H/C II,Kamwenge,oa2Jc3fTgtD,Bunoga HC III
+2241,Busoru H/C II,Bundibugyo,xpfoySoqqeO,Busaru HC IV
+2258,Rurongo H/C II,Isingiro,fctfxQy7JeK,Rurongo  HC II
+2261,Bulunagi H/C III,Iganga,Hx3bgntGfm7,Bulamagi HC III
+2276,Mt Elgon Hospital (Mbale),Mbale,s6I81Be52IE,Mount Elgon Hospital
+2317,Ruhomuro H/C III,Bushenyi,bDQh7NSmTZd,Ruhumuro HC III
+2318,Kanu H/C II,Abim,ZotVVjcyDdV,Kanu HC II
+2322,Barjobi HCIII,Otuke,O4N8uOmlbM6,Barjobi HC III
+2325,Fastline Medical Centre,Bugiri,dyD1iVotBI3,Fast Line Cinic
+2347,Midas Touch Medical Services,Kyenjojo,GTfZ3KEfuFb,Midas Torch HC IV
+2350,Akoboi H/C II (Serere),Serere,xEN68HYkacl,Akoboi (Serere) HC II
+2354,Amusus H/C II,Amuria,kwd5xyrWwvO,Amusus HC III
+2363,Kristina H/C II,Otuke,dMm3DJNLoe0,Kristina HC III
+2378,Naiku Health Centre III,Mbale,aVEGxoGe7RS,Naiku HC III
+2395,Rapha Medical Centre(Wakiso),Wakiso,m8iIXo1Saga,Rapha Medical Center HC III
+2396,Aids Information Centre (Arua),Arua,XpJak3aZzRX,AIDS Information Centre (Arua) Special Clinic
+2398,Abako Elim H/C II,Alebtong,yDPmjwoOIxi,Abako HC III
+2401,Donna Carnevale Medical Centre,Mpigi,rmyUGedzWB2,Dona Medical Centre HC III
+2409,Kalege H/C II,Nakaseke,DwudfdiJ3gq,Kalege HC II
+2412,St Balikuddembe H/C III,Kyankwanzi,H461gSsRGrd,St. Balikudembe HC III
+2424,Holy Innocents H/C III (Bukedea),Bukedea,TnIUAczx1Hq,Holy Innocents Health Centre
+2426,St Charles Kabuwoko H/C III,Rakai,GREWqcdtoVn,Kabuwoko Gvt HC III
+2428,Buyaga H/C III,Bulambuli,aUCVOvi5Zz5,Buyaga HC III
+2429,Kalungi H/C III (Kalungu),Kalungu,i6hyU0bywAr,Kalungi HC II
+2433,Nsale H/C II,Iganga,ktWYA6M0nc1,Nsale HC II
+2439,Kigasa H/C II,Kalungu,ald3aEmViHB,Kigasa Ii HC II
+2440,Family Care Hospital,Wakiso,ezZNOr0FvGV,Family Care Hospital
+2447,Nkabbani H/C III,Kamwenge,aVLWD9zrowf,Nyabbani HC III
+2455,St Luke H/C II (Gulu),Omoro,agdLbxaa0Dz,St. Luke HC II
+2482,Kyayi H/C III,Gomba,tPiPaWz3TIK,Kyai HC III
+2489,Mulago National Hospital-MUJHU CLINIC,Kampala,nVK7vHSkLbr,Mulago National Hospital- MUJHU Clinic
+2511,Ntabuswa h/c iii,Kabarole,OwDder9Wkwn,Nyabuswa HC II
+2519, OutReach Kitwe Town School,Ntungamo,FGnMVMPBCLN,Kitwe HC IV
+2530,Kwayiy H/C III,Kween,zpMTFJlXcMH,Kwanyiy HC III
+2535,Nyumanzi H/C II,Adjumani,RHkry0Pxk7e,Nyumanzi HC III
+2539,Nabutongwa H/C II,Kalungu,EbUv0a1HNlA,Nabutongwa HC II
+2542,Kisagazi H/C II,Kyegegwa,VYTPJMKfPsi,Kishagazi HC II
+2543,St Richard Medicare Centre,Pallisa,Ml5daGLdYZG,St. Richard med care center
+2548,Charisma Medical Health Services,Wakiso,mKWovs8yZBv,Cherish Medical Centre HC III
+2552,Opeta H/C III (Kole),Kole,dNP6KRlY9L6,Opeta HC II
+2559,Bumalenge H/C II,Namayingo,Zd4l6BoQjP5,Bumalenge HC II
+2560, Arabaka H/C II,Soroti,fV3WgwSenHR,Arabaka HC II
+2563,Buliisa  General Hospital,Buliisa,VDUop9kcxx2,Buliisa Hospital
+2574,Outreach Kamuli Hospital,Kamuli,LVFyV61bpdi,Kamuli Hospital
+2579,Lyakajula H/C II (Lyantode),Lyantonde,e3pk4rlUWj7,Lyakajura HC II
+2581,Panyadoli Hills H/C II,Kiryandongo,eAuFbAc1MUZ,Panyadoli Hill HC II
+2599,Igombe H/C III,Iganga,PP7yUJOjWsV,Igombe HC III
+2606,Mpongo H/C II,Mityana,SuApa6pnYA7,Mpongo HC II
+2607,Abunga H/C II,Lira,bySgMOvuyJ2,Abunga HC II
+2610,Atipe H/C II,Oyam,ab4OBBdke1q,Atipe HC III
+2611,Busaale H/C II,Kayunga,aXN9vlaqvJx,Busaale HC II
+2625,Kansambya H/C II,Mubende,vSPwh0RCueD,Kassanda HC IV
+2626,Mitete H/C II,Ssembabule,sbsaajvJPqH,Ntete HC II
+2627,Kagamba H/C II,Rakai,zZKvHFAuep2,Kagamba HC II
+2628,Kagoggo H/C II,Bukomansimbi,hkoHNZAApbg,Kagoggo HC II
+2629,St Aloysious Ngobya Dom.Clinic,Lwengo,DYuQQTl4VFn,St. Aloysius Namabaale
+2638,Atura H/C II,Oyam,KCqaFyGMWjF,Atura HC III
+2645,Bugiri H/C II (Kanungu),Kanungu,tomEcRAbdhE,Bugiri HC II
+2661,Pamya H/C III,Nebbi,t8rivYmnWIo,Paminya HC III
+2665,Masaka Armoured Brigade H/C III (A/BDE),Masaka,bm9191Y8XWN,Armoured Brigade HC III
+2677,Pagirinya H/C III,Adjumani,hmL6fXhBwaS,Pagirinya HC III
+2696,Makoole,Ssembabule,aRoR6TMIU2c,Makoole HC II
+2699,Buyamba H/C III (Rakai),Rakai,OQnJUNl390Z,Buyamba HC III
+2700,Le Memorial Medical Sevices,Wakiso,VQEzkkbWHar,Qudrah Medical Clinic
+2707,Triam Medical Centre,Wakiso,aYN6PpIj4bQ,Triam Medical Centre CLINIC-NR
+2708,SDA H/C III (Mbale),Mbale,C46L5bEGtcn,SDA HC III
+2709,St Thereza H/C II Kabogwe,Nakaseke,Khcb8YYpw8O,St. Theresa Kabogwe HC II
+2724,Nyamirami H/C IV (Kasese),Kasese,KIxk9RDic7e,Nyamirami HC IV
+2725,Munathamat Health Centre,Lwengo,ibWX2enXzZq,Munathamat HC II
+2745,Kaluuba H/C II,Mayuge,GTYUYJ2Ueyu,Kaluba HC II
+2757,Aduku Mission H/C III,Kwania,WEH3aMvIS0B,Aduku HC IV
+2769,Abala H/C II,Lira,E9a1cflRJZf,Abala HC III
+2775,Kali  H/C II,Moyo,FDGxZvsSQrY,Kali HC II
+2779,Kasonga H/C II,Kikuube,TROMT6DVKEl,Kasonga HC II
+2811, Kampala International Medical Centre,Kampala,wZ7da8feu18,Kampala International Medical Centre HC 
+2813,Restoration Gateway H/C II,Kiryandongo,x4dtyTyfoU0,Restoration Gateway Hospital
+2820,Nyakadot H/C II,Kiryandongo,rfk0AEPFYk5,Nyakadoti HC II
+2823,Child and Family Medical Centre,Kampala,p1UKAe8a5WU,Child and Family Medical Clinic HC II
+2849,Zone III Health Post,Arua,GEn29R8295K,Zone 3 HC III
+2857,Nakasero Blood Bank,Kampala,soJkaCms4J3,Nakasero Hospital
+2862,Kateta COU H/C II,Serere,CeThdXtRHzx,Kateta Ngo HC II
+2863,Kateta Moru H/C II,Serere,XNLtmr7pmjB,Kateta Moru HC II
+2874,Lyolwa H/C III,Tororo,XJMwYIWSmOO,Iyolwa HC III
+2905,kyambogo university Medical Centre,Kampala,qx1tdwUae4t,Kyambogo University Medical Centre HC II
+2906,Kawempe Natiomal Referral Hospit,Kampala,tAjQlwQ3YJu,Kawempe National Referral Hospital
+2907,He Reigns Medical Center,Kampala,aT1aouq7op5,Case Medical Centre
+2916,Namusaale(Nakaseke),Nakaseke,V7fbzGI10qW,Namusaale HC II
+1978,Adea H/C II,Abim,vXlnJIdin7f,Adea HC II
+1981,Anita H/C II,Abim,Owvv3PbIrZ2,Amita Prison HC II
+1983,Atunga H/C II ,Abim,Ug8m4dtpeYZ,Atunga HC II
+1979,Gangming H/C II,Abim,JO1cLIghdBv,Gangming HC II
+1976,Katabok H/C II,Abim,aT1ytslGHPP,Katabok (Abim) HC II
+1977,Kiru H/C II,Abim,eVqlzAGda5U,Kiru HC II
+1985,Koya H/C II,Abim,RnktSI9w0ZM,Koya HC II
+1975,Obolokome H/C II,Abim,cPeDqm6vYHn,Obolokome (Lira) HC II
+1972,Opopong H/C II,Abim,aPv6owroI2J,Opopongo HC II
+1973,Oretha H/C II,Abim,Tyxrv2J0s0m,Oreta HC II
+1974,Pupukanya H/C II,Abim,jhtjCBU3lZG,Pupu Kamuya HC II
+1984,Wilela H/C II,Abim,aCGaJx85MR6,Wilela HC II
+2263,Bira HC III,Adjumani,atv0z4e9m8B,Bira HC III
+1741,Kureku H/C II,Adjumani,x14PIFWlmxx,Kureku HC II
+1635,Ofua H/C III,Adjumani,BSrrPPLiBZo,Ofua (Ofua) HC III
+2651,Alop H/C II,Agago,pUeR6j03GhJ,Alop HC II
+854,St Janani H/C II,Agago,ldVk8civU6m,St. Janani HC II
+2413,Akura II,Alebtong,zkvmBd2YoxG,Akura HC II
+2688,Omarari H/C II,Alebtong,Ef6JLaKeELl,Omarari HC II
+2703,Oteno H/C II,Alebtong,MVYYKgICwep,Oteno HC II
+2275,Biko H/C II,Amolatar,gK0K0TF0Nci,Biko HC II
+1196,Oberabic H/C II,Amuru,OJYXXSC87rV,Oberabic HC II
+594,Otong H/C II,Amuru,a2a7qNyJg9j,Otong HC II
+170,Chegere H/C II,Apac,RtLANRdFvdh,Chegere HC II
+2847,Florence Nightingale Hospital,Apac,pnX83NIrhAk,Nightingale Hospital
+1168,Oje (Mission) H/C III,Arua,jgS1yAtN6HR,Oje Mission HC III
+2616,Butove H/C II,Budaka,r2MmzjEyXNT,Butove HC II
+2123,Siita Save Life H/C III,Budaka,a7rvaK12ZU1,Siita Save HC III
+2617,Namaitsu H/C II,Bududa,IgRocb664xW,Namaitsu HC II
+878,Buredo H/C III,Buhweju,a7VqYp7reP4,Buredo HC II
+2217,Bukomansimbi Medical Centre,Bukomansimbi,obXcd9wL3Pf,Bukomansimbi Medical Center HC III
+2652,Mutushet H/C II,Bukwo,qXQvylmsflU,Mutushet HC II
+2894,Bulegeni H/C III,Bulambuli,LLs45lStr4N,Bumageni HC II
+2152,Marine Military H/C II,Buliisa,O4srstZgm0D,Marine Military HC III
+2094,Uganda Matyrs H/C II,Buliisa,L527rOiqFUJ,Uganda Martyrs HC II
+2239,Bulyambwa H/C II,Bundibugyo,JplpqZql8xM,Bulyambwa HC II
+2246,Bundimulangya H/C II,Bundibugyo,D63IKQOEOlL,Bundimulangya HC II
+2243,Bundingoma HC II,Bundibugyo,Q2keh7obLFL,Bundingoma HC II
+2245,Bupompoli H/C II,Bundibugyo,x8u9lpI2pUu,Bupomboli HC III
+2247,Kayenje H/C II,Bundibugyo,aP9QvjkEszN,Kayenje HC II
+1706,Mantoroba H/C II,Bundibugyo,ntpmcM5sv9V,Mantoroba HC II
+2183,Busia Police,Busia,ENNiBZmoBma,Busia Police HC II
+2181,Buwembe H/C II,Busia,vwA6dkN8RHb,Buwembe HC II
+2180,Namungodi H/C II,Busia,QBcNhnMbA3s,Namungodi HC II
+1954,Kilokola H/C II,Butambala,jSTIbH5xzbW,Kilokola HC II
+2722,Kiziiko H/C II,Butambala,FI11C32LNK8,Kiziiko HC II
+2048,Nsonzibbirye H/C II,Butambala,J5ZGPIn0Opf,Nsozibirye HC II
+2271,Anyacoto H/C II,Dokolo,fb3OMf58qdu,Anyacoto HC II
+51,Atabu H/C II,Dokolo,RZwOQM4fzR3,Atabu HC II
+2283,Kachung H/C II,Dokolo,H7mo6x8x8yS,Kachung HC II
+2376,Awaca H/C IV,Gulu,Z1dfGmIoSeF,Awach HC IV
+2730,Comboni Samaritans of Gulu H/C II,Gulu,aoBupw5zrMP,Comboni Samaritans HC II
+173,Coope H/C II,Gulu,KBjtlZguP00,Coope HC II
+1558,GwengDiya H/C II,Gulu,F6wXWJHDAlo,Gwengdiya HC II
+250,Kal Ali H/C II,Gulu,cStwSlODOpK,Kal Alii HC II
+2306,Oitino HCII,Gulu,F2C1BkGVMSW,Oitino HC II
+2302,Pawel Angany  H/C II,Gulu,NsNbvtaMOK2,Pawel Angany HC II
+624,Pugwinyi H/C II,Gulu,UgqKAVxjbex,Pugwinyi HC II
+1560,Pukony H/C II,Gulu,EutuLBY58L0,Pukony HC II
+625,Punena H/C III,Gulu,WKobZy8pNwR,Punena HC II
+1557,Rwot Obilo H/C II,Gulu,UH56sJpuPoN,Rwotobilo HC II
+701,Unyama H/C II,Gulu,rigBgTrixkr,Unyama HC II
+2788,Kapaapi H/C III,Hoima,cxmFH4hcpsH,Kapapi HC III
+318,Kibaire H/C II,Hoima,McZvpFIBuvM,Kibaire HC II
+1371,Reproductive Health Uganda (Hoima),Hoima,FQazDjX6MHR,Reproductive Health Uganda (Hoima) HC II
+2371,Soft Power Health Clinic,Jinja,qCl4oiQptB0,Soft Power Clinic
+2051,Kanjobe H/C II,Kabale,tMXnyuz6ImO,Kanjobe HC II
+2903,Kasheregyenyi H/C III,Kabale,aoKwhABrCpq,Kasheregyenyi HC III
+1739,Kijurera H/C II,Kabale,DJj3j0lGtlA,Kijurera HC II
+2296,Kyobugombe H/C II,Kabale,say5alYHaR7,Kyobugombe HC II
+1727,Ageteraine Nursing Home,Kabarole,Qlkl4NZqpFm,Ageteraine Nursing Home HC II
+1839,Kiguma H/C II,Kabarole,kJ8zh4TpBav,Kiguma HC II
+2656,Kihembo SDA H/C II,Kabarole,nB9oHWXeRpp,Kihembo SDA HC II
+2200,Pakegido H/C III,Kaberamaido,aaylU8AkVhF,Pakegido HC III
+2895,Budomero H/C III,Kaliro,MrutYIp69Ui,Budomero HC III
+2212,Kaliro Medical Center,Kaliro,SfyR6Xi56ox,Kaliro Medical Centre HC III
+2755,Above All Medical Centre,Kampala,U7EsMSb275z,Above All Madical Centre HC II
+2721,Adventist Medical Centre,Kampala,aWtkpwtp9JE,Adventist Medical Centre HC III
+2600,Bazadde Clinic,Kampala,IRwuTRJoiW1,Bazadde Clinic HC II
+1732,Ebenezer Clinical Laboratory,Kampala,gc2JNaA0ylx,Ebenezer Ltd Clinical Laboratory HC II
+2784,Elim Medical Centre,Kampala,QgtrJG7qLJn,Elim Medical Centre HC II
+523,Holy Cross Orthodox (Namungoona) Hospital ,Kampala,e9F9XvTFIrI,Holy Cross Orthodox Mission Namungoona Hospital
+1426,JOY Medical Centre,Kampala,O2ISli6TrDu,Joy Medical Centre HC III
+2201,Kampala West Medical Clinic,Kampala,WPSYy1bDfIb,Kampala West Medical Clinic HC III
+2612,Katwe Martyrs Clinic,Kampala,gv9c5KYrp4O,Katwe Martyrs Clinic HC II
+2893,Kiruddu National Refferal Hospital,Kampala,pNT8f17lJiA,Kiruddu National Referral Hospital
+2420,Kyadondo Medical Centre,Kampala,WDbxuHRdYY4,Kyadondo Medical Centre HC IV
+2692,Mukisa Nursing Home,Kampala,xgH7fTBjgW3,Mukisa Nursing Home HC II
+2691,Murisa Nursing Home,Kampala,xgH7fTBjgW3,Mukisa Nursing Home HC II
+2713,Prime Care Medical Center,Kampala,RKNpbTZ6Efw,Prime Care Medical Center HC II
+2476,Rift Valley Medical Centre,Kampala,LSpLSwpaM71,Rift Valley Medical Center HC III
+2305,Zaam Medical Center,Kampala,MTam7ZtWOuX,Zam Zam Medical Center (Kamwokya) HC II
+2621,Bugeywa H/C II,Kamuli,b9niqLqoyqP,Bugeywa HC II
+2618,Kasolwe H/C II,Kamuli,DjgbWcdzpkC,Kasolwe HC II
+1634,Kimulikidongo H/C II,Kamwenge,mMZZQTjDPfj,Kimulikidongo HC II
+2453,Rwenzori Medical Centre,Kamwenge,xe3tGQazTHi,Rwenzori Medical Centre HC II
+1912,Nyakashozi H/C,Kanungu,UQKvb926FKp,Nyakashozi HC II
+1911,Nyakinoni H/C,Kanungu,dLltT9lhShc,Nyakinoni HC II
+2178,Gamatui H/C II,Kapchorwa,UYWZjSrracT,Gamatui HC II
+2174,Kapkwomurya H/C II,Kapchorwa,Z9dLZO7dCS2,Kokwomurya HC II
+2176,Kaplelko H/C II,Kapchorwa,qpP5cilBXi9,Kaplelko HC II
+2173,Kwoti H/C II,Kapchorwa,aKrzURA6hJZ,Kwoti HC II
+2175,Tumboboi H/C II,Kapchorwa,lz5JN2jaw2Y,Tumboboi HC III
+162,Bwera Hospital ,Kasese,HLeMhK9q6Wm,Bwera Hospital
+2078,Nakatovu H/C II,Kayunga,KOR692oAfkP,Nakatovu HC II
+2316,Allustin H/C III,Kibaale,jEWfNHf8Ayt,Alustin HC III
+317,Kibaale H/C IV,Kibaale,hHaqQ2NBBOs,Kibaale HC IV
+2114,Bamusuta H/C II,Kiboga,YuEmzNR0L9A,Bamusuuta HC II
+2634,Kenkebu H/C II,Kibuku,vGB5z2UnueH,Kenkebu HC II
+1823,Busingye Maternity Home,Kiruhura,kbXEP21YajN,Busingye Maternity Home Clinic
+2747,Nyakahiita H/C II,Kiruhura,wCOg7R9Ty1P,Nyakahita HC II
+2469,Rwabarata H/C II,Kiruhura,a8bCpZeym6p,Rwabarata HC II
+2915,Rwabigyemano H/C III,Kiruhura,AT6wxdMK8PV,Rwabigyemano HC III
+1032,St Jude Thaddeous Karungu H/C,Kiryandongo,QHsCNVmRURq,St. Jude Thaddeos Karungu HC III
+725,Akilok H/C II,Kitgum,GHx4dLfIox3,Akilok HC II
+2370,Diocese Of Kitgum H/C II,Kitgum,CK05rJs1H25,Diocese Of Kitgum HC II
+746,Gweng-coo H/C II,Kitgum,resqo4n29Tk,Gweng-Coo HC II
+574,Ogili H/C III,Kitgum,MxcpmhA0rrA,Okidi HC III
+125,Bung H/C II,Kole,syAwMnRR1xn,Bung HC II
+576,Okole H/C III,Kole,alhzoKRyLzY,Okole HC II
+2006,Lookorok H/C II,Kotido,vxakzmtxnPv,Lookorok HC II
+2885,Oseera H/C II,Kumi,q7F4gAY5vLR,Oseera HC II
+2630,Nakitembe H/C II,Kyankwanzi,XVlKPQYqqfK,Nakitembe HC II
+2269,Apyeta H/C II,Lamwo,p0bIifvmV47,Kapeta HC II
+2280,Dibolyec H/C II,Lamwo,XBRMWAS3FO2,Dibolyec HC II
+2224,Kapeta H/C II,Lamwo,p0bIifvmV47,Kapeta HC II
+2291,Katum H/C II,Lamwo,a4WmbJQWIME,Katum HC II
+1037,Potika H/C II,Lamwo,a0zKrkhl5M6,Potika HC II
+2896,Lira University Hospital,Lira,nKEtuqJsd9h,Lira University Hospital
+1370,Reproductive Health Uganda (Lira),Lira,hMwLP1XZ3v6,Reproductive Health Uganda (Lira) HC III
+2912,Katovu H/C II,Lyantonde,OPlFFKzCcCC,Katovu HC II
+724,Kitabaazi H/C II,Masaka,tViSdSGUcZ3,Kitabaazi HC II
+365,Kitovu Hospital ,Masaka,n9fxWoPWRJB,Kitovu Hospital
+1629,Kyabakuza H/C II,Masaka,wb2tYXUWWcv,Kyabakuza HC II
+2642,Busuyi H/C II,Mayuge,XK9RFXZJrFx,Busuyi HC II
+189,Gangama H/C II,Mbale,ZNsYKx9M5ag,Gangama HC II
+2901,kyarwabuganda H/C III,Mbarara,rCMdDkUaL1i,Kyarwabuganda HC II
+2129,Cardinal Nsubuga H/C III,Mityana,aNwwYe1P90o,Cardinal Nsubuga Memorial HC III
+2039,Gbalala H/C II,Moyo,biQmsTGoRmT,Gbalala HC II
+2041,Goopi H/C II,Moyo,VZjIOTAddHZ,Goopi HC II
+2038,Lama H/C II,Moyo,WHVbek1utH5,Lama HC II
+1957,Mpigi Police,Mpigi,IovA7MWZaP4,Mpigi Police HC II
+1793,Kabbo H/C II,Mubende,aW1eTxFPaeo,Kabbo HC II
+2647,Kanseera H/C II,Mubende,aI0URGtt8iX,Kanseera HC II
+1443,Mawujjo H/C II,Mubende,lcBEpZG4m9x,Mawujjo HC II
+1880,Karinga H/CI II,Nakapiripirit,IgDdvRDyk3K,Karinga HC II
+1997,Nakaale H/C II,Nakapiripirit,Dpn8dDNGrCR,Nakaale HC II
+2909,Singo H/C III,Nakaseke,grKJgZGCS9b,Singo HC III
+1875,Bukimbi H/C II,Namayingo,qWjJEUikVGR,Bukimbi HC II
+2267,Buyambo H/C II,Namayingo,pLbsnCMz2UB,Buyombo HC II
+1879,Dohwe H/C II,Namayingo,uR2pjJIMiTl,Dohwe HC II
+1876,Isinde H/C II,Namayingo,tLN9WUS83FH,Isinde HC II
+943,Nabitsikiti H/C III,Namisindwa,VB6z6SmiL33,Nabitsikhi HC III
+2209,Aparanga H/C II,Nwoya,MT5KksXURUZ,Aparanga HC II
+2478,Lulyango H/C II,Nwoya,u5RZ36WcsNN,Lulyango HC II
+1480,St Andrew H/C II,Nwoya,XNgY6vmosgX,St. Andrew HC II
+2297,St Francis H/C II,Nwoya,Y6HWuEiOwo8,St. Francis HC II
+2773,Stefano Campagnolo Memorial H/C,Nwoya,IgWKJ3pwQKT,St. Stefano Campagnolo Memorial HC II
+2203,Todora H/C II,Nwoya,Fx43OzTkOmx,Todora HC II
+837,Wii Anaka H/C II,Nwoya,PaFDdt89chv,Wiianaka HC II
+1555,Lakwatomer H/C II,Omoro,qKVewTpVtG6,Lakwatomer HC II
+2487,Tegot H/CII,Omoro,I2psFCABsSs,Tegot HC II
+2353,Anep Moroto H/C II,Otuke,OkXiLXdu8pG,Anepmoroto HC III
+2331,Barocok H/C II,Otuke,Z3WlLWhRcDR,Barocok HC II
+2355,Ogwete H/C II,Otuke,xa8AvzwrPSi,Ogwete HC III
+2910,Loro H/C III,Oyam,aB4YnvwOvMk,Loro HC III
+1615,Alim H/C II,Pader,SFDIr8urO72,Alim HC II
+2641,Okinga H/C II,Pader,aCeYBPSHvrT,Okinga HC II
+623,Porogali H/C II,Pader,thLFkOYAEEl,Porogali HC II
+2186,Limoto H/C III,Pallisa,hHtw3xjbPaG,Limoto HC II
+2194,Obutete H/C II,Pallisa,a6dy90zDFD5,Obutete HC II
+2195,Oladot H/C III,Pallisa,stQxw620sYZ,Oladot HCII
+2189,Oloko H/C III,Pallisa,TkgfXWHv2CD,Olok HC III
+1867,Lwembajjo H/C III,Rakai,U4XL5jXfjTk,Lwembajjo HC II
+2742,Mushumba H/C II,Rubirizi,aND7XoaR2P9,Mushumba HC II
+1803,Buhandagazi H/C II,Rukungiri,yHKSwGqmyt8,Buhandagazi HC II
+1822,Burama H/C II,Rukungiri,xCowz1yluaZ,Murama HC II
+2636,Masya H/C II,Rukungiri,mxmNtjYy0DP,Masya Ngo HC II
+2643,Kamusala H/C II,Serere,Hjtox3w6eZx,Kamusala HC II
+2298,Oburin H/C II,Serere,ZSczOvaCJ29,Oburin HC II
+910,Atiriri H/C IV,Soroti,Wyvz7rsEBpd,Tiriri HC IV
+1352,Kichinjaji  H/C  III,Soroti,CxzGSxEbecK,Kichinjaji HC III
+1306,Kuchinjaji H/C III,Soroti,CxzGSxEbecK,Kichinjaji HC III
+2882,Bunamwaya H/C II,Wakiso,E4I0kczftmi,Bunamwaya HC II
+1949,Busesebba H/C III,Wakiso,zHXK0z9GZkA,Besusebba HC II
+1951,Emmanuel Medical Centre,Wakiso,nvrta4xHyuQ,Emmanuel Medical Centre HC IV
+2690,Kasozo H/C II,Wakiso,vV7C6Z6nEbZ,Kasoozo HC II
+860,Katabi H/C III,Wakiso,XjwZ7sS7pAB,Katabi HC III
+1163,Kireku H/C III,Wakiso,MXTRYmtJtlC,Kireka HC II
+2615,Muzinda Katereke H/C II,Wakiso,n8EFMWQJYip,Muzinda Katereke HC II
+2624,Naluvule Medical Centre,Wakiso,Bl24tso9KAd,Nfuufu Medical Centre
+2202,St Magdalene H/C II,Wakiso,FzK1K0WRsFW,St. Magdalene HC II
+2394,Alnoor H/C II,Yumbe,A4g2J49bMOr,Alnoor HC II
+1811,Apo H/C II,Yumbe,adctmXQVM9M,Apo HC III
+2644,Atyenda H/C II,Zombo,aDLMbFOe62I,Atyenda HC II
+175,Cure Children Hospital of Uganda,Mbale,SoOVoe9z5U6,Cure Children's Hospital
+267,Kamwenge H/C III (Kamwenge),Kamwenge,ACckadqFYV7,Kamwenge HC III
+312,Kayonza H/C III (Ntungamo)  ,Ntungamo,H9Kdh2eKGyz,Kayonza (Ntungamo) HC III
+385,Kumi Hospital ,Kumi,ahzk9fymop1,Kumi (Ongino) Hospital
+510,Dr Charlse Farthing Memorial Clinic,Kampala,aUoqX6lBNFA,Dr.Charles Furthing Clinic
+542,Nsambya Hospital ,Kampala,smr8mTNYzFP,St. Francis Nsambya Hospital
+614,Pallisa General Hospital ,Pallisa,In3apXiVwke,Pallisa Hospital
+698,Tororo District Hospital ,Tororo,RPJpuHyPqWP,Tororo Hospital
+1437,Kicwamba H/C III,Rubirizi,deqUOFQ4Gqn,Kicwamba (Rubirizi) HC III
+1680,Coorom H/C II(Koch),Nwoya,rKGazd2JbUJ,Corom HC II
+1752,Uganda Martyrs Hospital (Namugongo),Wakiso,vb6L8SkLnK6,Uganda Martyrs Hospital
+1787,Butiti H/C II (Rakai),Rakai,iN7CXIs0XT3,Butiti HC II
+1900,Nyakasharara H/C II (Kabale),Kabale,aRMmd4zYKEH,Nyakasharara (Kabale) HC II
+1947,Nabbingo Parish H/C III,Wakiso,ac7OhvMEosK,Nabbingo HC II
+2009,Nakwakwa,Kotido,adrhWWGz3jT,Nakwakwa HC II
+2054,Kasambya H/C II (Gomba),Gomba,QX10pPIWlfR,Kasambya (Gomba) HC II
+2058,Kitwe H/C II (Gomba),Gomba,wVUi8BXxKkY,Kitwe HC II
+2110,St Aulistin H/C III,Kibaale,jEWfNHf8Ayt,Alustin HC III
+2257,Kaliro T C H/CII,Kaliro,akGUnEvfeLd,Kaliro Town Council HC II
+2382,SCSC+AC0-Kimaka H/C II,Jinja,gOPqoaeHJKA,Kimaka HC II
+2400,Alapata H/C II (Dokolo),Dokolo,qBVBH0yzctn,Alapata HC II
+2481,Obim H/C,Alebtong,FkHL59DWIav,Obim HC II
+2551,Santa Maria Medicare,Mityana,a1SMwlwzCg2,Santa Maria Medical Centre HC III
+2613,Kagorogoro H/C II,Kyenjojo,yWHTUO9adBP,Kagorogoro Dispensary HC II
+2720,Alleluyah Maternity Joint Clinic,Alebtong,taqtXzzxCQm,Alelluyah Joint Maternity Clinic
+2810,St Joseph Health Care Clinic,Wakiso,LpgfEoB5t95,St. Josephs Ortho Care Clinic HC II
+2854,Fort Portal Reg Blood Bank ,Kabarole,GemPANbKzy5,Fort Portal (Buhinga ) Regional Blood Bank
+2855,AIDS Information Centre (LIRA) ,Lira,b27exHAFNPv,AIDS Information Centre (Lira) Special Clinic
+2877,St Kizito Bwaise H/C III,Kampala,UaeXqnkVFAp,St. Kizito Bwayiise Clinic HC II
+2881,Mulago National Referral - Kiruddu Hepatitis Clinic,Kampala,acPbhVKpHHr,Mulago National Referral Hospital
+2904,Relife Family Medical Center,Kampala,PUSIXuQuLlJ,Welfa Medical Center HC II
+288,Kasana H/C IV,Luweero,SbhXVHOtboo,Luwero Hospital
+467,Mildmay Hospital Uganda ,Kampala,yznQYcViuVu,Mildmay Uganda Hospital
+157,Buwasunguyi H/C II,Manafwa,TZcWnlYP5wf,Buwasunguyi HC II
+33,Amuda H/C II,Dokolo,GhPOJYsK5di,Amuda HC II
+58,Awer H/C II,Amuru,XdXAfIaLuld,Awer HC II
+283,Karambi H/C III (Kasese),Kasese,aXspFLZSsut,Kanamba HC III
+408,Langol H/C II,Nwoya,w4z6Vt9nkBs,Langol HC II
+422,Lugore H/C II,Gulu,Gzcd4Zsd8iB,Lugore HC II
+590,Oroko H/C II,Gulu,bRt4VDvHDPQ,Oroko HC II
+604,Paibona H/C II,Gulu,gtVTKwveKEE,Paibona HC II
+622,Pogo H/C II,Amuru,a5pTJ9dZfZV,Pogo HC II
+915,Reproductive Health Uganda (Apac),Apac,FFC33H9EiSK,Reproductive Health Uganda (Apac) HC II
+1045,Anyavu H/C II,Arua,M7xUX14enRA,Anyavu HC II
+1143,Kayogera H/C II,Bugiri,yj1g0uy0fXZ,Kayogera HC II
+1194,Community H/C Plan uganda Lugoba(Kawempe),Wakiso,EaoliyCc0O7,Community Health Plan Uganda HC III
+1199,Luna Medical Cetre (Katooke),Wakiso,HIlCMGJzJV2,Linah Medical Centre HC III
+1237,Kabale H/C III (Kalungu),Kalungu,Cx3eXkf07dC,Kabaale HC II
+1441,Oraba H/C II,Koboko,KSQ9mCLvRMA,Oraba HC II
+1489,Kukewa H/C III,Manafwa,wcTUcjmdOA3,Bukewa HC III
+1541,Kitooma H/C III,Kabale,RdzJlXtx1G9,Kitooma HC II
+1559,Lapeta H/C II,Gulu,FvZUwmuSrzB,Lapeta HC II
+1669,Busunga H/C II,Bundibugyo,U4VqFHT72Eu,Busunga HC II
+1744,Masaka Prision H/C III,Masaka,hMXCTcwH9XJ,Masaka Prisons HC III
+1756,Pacilo H/C II,Amuru,awjedeMiWo3,Pacilo HC II
+1819,Maziriga H/C II,Bugiri,tOS4NFR78ex,Maziriga HC II
+1837,Buyombo H/C II,Namayingo,pLbsnCMz2UB,Buyombo HC II
+1873,ST Andrew H/C III (Nyarushanje),Rukungiri,JTO4v1VkUuu,Ibanda (Nyarushanje) HC II
+1903,Burungira H/C II,Bushenyi,PaDMXSrDug6,Burungira HC II
+1956,Kabasanda H/C II,Butambala,BE5LiYZjBvM,Kabasanda HC II
+1988,Kitooro H/C II (Private),Wakiso,GXm2FPnZqfB,Kitooro HC III
+1994,Moruita H/C III,Nakapiripirit,x5mIE0NPDSb,Moruita HC II
+2056,Namabeya H/C II,Gomba,asCegsmRBma,Namabeya HC II
+2207,Ogako H/C II,Lamwo,p1DN5s8Iw8F,Ogako HC II
+2236,Burondo H/C II,Bundibugyo,xJFdSkzMwm0,Burondo HC III
+2242,Kasulenga H/C II,Bundibugyo,nOieZSj7iJC,Kasulenge HC II
+2274,Amwoma H/C III,Dokolo,ac9DA2VJVnk,Amwoma HC II
+2287,Awiri H/C II,Dokolo,AWgqpMWL7Qh,Awiri HC II
+2289,Wakawaka H/C II,Bugiri,a2d3lpVigxP,Wakawaka HC II
+2299,Alango H/C II,Otuke,YkLkGLk2Xxz,Alango HC II
+2303,Lagot H/C II,Kitgum,GYYFVZOZ3gz,Lagot HC II
+2308,Bukedea Mission Dispensary,Bukedea,aNchHEjSnch,Bukedea Mission HC II
+2346,Aganga H/C II,Apac,Qjo6d9XrGLZ,Aganga HC II
+2358,Pangira H/C II,Lamwo,fnse10SronT,Pangira HC II
+2361,District Medical Officer's Clinic H/C II,Moroto,UJeBuAmnnuk,Dmos Clinic HC II
+2388,Awelo H/C II,Dokolo,am0CWdRoImq,Awelo HC II
+2421,Kirumba H/C II,Masaka,uOR8JASVFHX,Kirumba HC II
+2438,Benedict Medical Centre,Kampala,QUd8daomu0P,Benedict HC IV
+2444,Patika H/C II,Lamwo,a0zKrkhl5M6,Potika HC II
+2461,Span Medicare Kisaasi,Kampala,plvakokILP9,Span Medicare HC IV
+2512,Bethany Women & Fertility Hospital,Kampala,GIBdXqBaa89,Bethany Womens and Family HC III
+2558,St Joseph's Hospital Wakiso,Wakiso,sa4kFf5jMyF,St. Joseph's Medical Clinic
+2587,Adagmon H/C II,Dokolo,zy3p9lNo0dh,Adagmon HC II
+2602,Pakor H/C II,Agago,err2diilQ8C,Pakor HC II
+2609,Inuula H/C II,Luuka,SkhiXQMswFb,Inuula HC II
+2619,Kibuye H/C II,Kamuli,KVr6XH80o39,Kibuye HC II
+2632,Kanyatsi H/C II,Kasese,hSxonAXpBbW,Kanyatsi HC II
+2633,Kisansala H/C II,Lwengo,Kr7CHCgWoNo,Kisansala HC II
+2640,Parabongo H/C II,Amuru,mYGNn9Bx0OH,Parabongo HC II
+2683,Adwir H/C II,Alebtong,klwx6rSe63o,Adwir HC II
+2684,Mugiti H/C III,Budaka,UMeiyZqnUaS,Mugiti HC III
+2689,Angetta H/C II,Alebtong,c5ebeykuexn,Angetta HC III
+2736,Sas Clinic Kampala,Kampala,WlPYZmDndVm,Sas Clinic HC IV
+2737,Flama Uganda (GULU),Gulu,DgcoJ3W21vA,Flama Uganda HC II
+2800,Malere H/C II,Kamwenge,wP6qm4MtWn2,Malere HC II
+2802,Busoga H/C II,Bugiri,K3VuoMDqbif,Busoga HC II
+2818,ST ULRIKA H/C III,Wakiso,l8JCkd3nqOV,Ttikalu HC III
+2871,Mulago National Hospital (CDC) Mulago,Kampala,acPbhVKpHHr,Mulago National Referral Hospital
+2875,Mbarara H/C IV (Municipal),Mbarara,NvEq5qtAV4e,Mbarara Community Hospital
+2884,St Kizito H/C III (Kijabijo),Wakiso,gCobOTnUj2H,Kiziba HC III
+2892,St Peter's H/C III (Busiba),Lwengo,DQT0OSOZ3sf,"St. Peter,Busibo"
+2900,Adyel H/C III,Lira,wHkTdzF4SpR,Adyel HC III
+2914,Anara H/C III,Alebtong,NrUmuqO5ggm,Anara HC II
+256,Kalongo Hospital ,Agago,y8q1syPdfdK,Kalongo Ambrosoli Memorial Hospital
+61,Ayer H/C II,Kole,DBbZ5zoI94F,Ayer HC III
+1114,TASO Kanyanya,Kampala,vzIPsloRguW,TASO Kanyanya Special Clinic
+1284,Buyanja H/C III (Mpigi),Mpigi,X1RkzMg2Hn1,Bunjako HC III
+1671,Potters Villiage,Kisoro,FF1Tn1yXAdl,Potters Village Medical Centre
+1696,Kikka Yokana H/C II,Mityana,aaDoMV4GUYu,Kikka Yokana Domiciliary HC II
+1958,Kibigga,Butambala,aP3vXWciBlE,Kibugga HC II
+2182,Buwumba H/C III,Busia,zZdTVtXzMxi,Buwumba HC II
+2339,Muhoti Military H/C III,Kabarole,Y3hpndpv6cR,Muhooti Barraccks HC III
+2362,Abalang H/C II (Dokolo),Dokolo,UjMKFe4MIGj,Abalang HC II (Okwalongwen Subcounty)
+2467,Dream Centre Uganda,Omoro,fLGGzlZfyOJ,Dream Centre HC III
+2480,Hassan Tourabi,Wakiso,hzPoo5zzWjj,Bweyogerere Hassan Turabi HC III
+2637,Ayago H/C II (Apac),Apac,TGO08DZfxK1,Ayago HC II
+2646,Alere H/C II,Amuria,yV1l7X3U9ZG,Alere (Amuria) HC II
+2698,Awei H/C II,Alebtong,aUjs9UBFWGB,Awei HC III
+2711,Mother Angioletta H/C II,Omoro,n4iwSO6iule,Mother Angioletta Memorial Clinic
+2728,St Luke H/C III Kkonge,Mpigi,yC5rgTEjfVO,Kkonge St. Luke HC III
+2768,Almeca Hospital,Jinja,sWiFANJNsQo,Almeca Medicare Hospital
+2888,Nawampiti H/C III,Kaliro,NlotJOaRy0K,Nawampiti Dorudo HC II
+191,Gombe Hospital ,Butambala,xuCJ8NBomxP,Gombe (Butambala) Hospital
+186,FinlaysMwenge H/C III,Kyenjojo,afJ1tepzpak,Mwenge Clinic HC III
+2716,Bidibidi H/C III,Yumbe,dHp8jtq8Q6v,Bidibidi Health Centre HC III

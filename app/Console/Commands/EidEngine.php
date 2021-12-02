@@ -579,6 +579,8 @@ class EidEngine extends Command
                         $dhis2_name_string = $dhis2_name_string . 'WHEN '.$eid_facility->id .' THEN "'.$dhis2_facility->dhis2_name.'" ';
                         $dhis2_uid_string = $dhis2_uid_string . 'WHEN '.$eid_facility->id .' THEN "'.$dhis2_facility->dhis2_uid.'" ';
                         $where_id_in_string = $where_id_in_string . $dhis2_facility->id .',';
+
+                        \DB::connection('live_db')->update('UPDATE facilities SET dhis2_name = ?, dhis2_uid = ? where id = ? ',[$dhis2_facility->dhis2_name,$dhis2_facility->dhis2_uid,$eid_facility->id]);
                         $counter++;
 
                         break;
@@ -593,15 +595,13 @@ class EidEngine extends Command
                 (CASE id  '.$dhis2_name_string .' END),  dhis2_uid = (CASE id  '.$dhis2_uid_string .' END) 
                 WHERE id IN ('.$where_id_in_string .')';
 
-                $result_flag = \DB::connection('live_db')->select($sql);
-                $this->comment("....DHIS2 Records Update: Completed ....");
+                //$result_flag = \DB::connection('live_db')->insert($sql);
+                //\Log::info($sql);
+                //\Log::info($result_flag);
+                $this->comment("$counter...DHIS2 Records Update: Completed ....");
             }catch(Exception $e){
-                
+                $this->comment($e->getMessage());
             }
-        
-       
-
-
     }//end method
 
     private function removeLastComma($where_string){

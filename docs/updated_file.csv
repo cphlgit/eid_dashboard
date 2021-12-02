@@ -1,0 +1,74 @@
+id,cphl_facility_name,cphl_district,cphl_region,dhis2_facility_uid,dhis2_facility_name,dhis2_district_uid,dhis2_district_name,dhis2_subcounty_uid,dhis2_subcounty_name,dhis2_region
+61,"Ayer H/C II",Kole,Lango,DBbZ5zoI94F,"Ayer HC III",Y4LV8xqkv6J,"Kole District",APscKx450Qa,"Ayer Subcounty",Lango
+211,"Iss Clinic (Mbarara R R Hospital)",Mbarara,Ankole,ZpJgSAyZtkl,"Mbarara Regional Referral Hospital",auswb7JO9wY,"Mbarara District",BUWL20wfAHB,"Kamukuzi Division",Ankole
+214,"JCRC Fort Portal",Kabarole,Tooro,Jod4tzrdWrq,"Kisakye Clinic (Fort Portal) HC II",m77oR1YJESj,"Kabarole District",ak477N3SWYO,"Southern Division (Kabarole MC)",Tooro
+215,"JCRC Gulu",Gulu,Acholi,b2LlvIFGc5U,"AAR Gulu Clinic",Gwk4wkLz7EW,"Gulu District",x7pZ9LvlBky,"Laroo Division",Acholi
+216,"JCRC Kabale",Kabale,Kigezi,aOVFxbW05Dr,"Rutooma (Kabale) HC II",zBIpPzKYFLp,"Kabale District",FIum5r1vz31,"Northern Division (Kabale MC)",Kigezi
+217,"JCRC Kakira",Jinja,Busoga,HiCwzjSmUWO,"Kakira HC III",aJR2ZxSH7g4,"Jinja District",bzwQwNeos4x,"Kakira Town Council",Busoga
+218,"JCRC Mbale",Mbale,Bugisu,a1y6GK9Otxa,"Imc Mbale HC II",yuo5ielNL7W,"Mbale District",q0BqaYeLsKz,"Mbale Industrial Division",Bugisu
+221,"Jengari H/C II",Apac,Lango,eR77udlIWIM,"Alenga HC III",JyZJhGXKeEq,"Apac District",FEIP4B06TTS,"Ibuje Subcounty",Lango
+277,"Kanyanya H/C IV",Kampala,Kampala,hjZvWkoLzzp,"Kisenyi HC IV",aXmBzv61LbM,"Kampala District",zNdkt1W9dcu,"Central Division (Kampala CCA)",Kampala
+348,"Kiruddu H/C III",Kampala,Kampala,aKmx8C5qUZ8,"Kisugu HC III",aXmBzv61LbM,"Kampala District",FbuhMjEaMXt,"Makindye Division",Kampala
+588,"Orapwoyo H/C II",Gulu,Acholi,bRt4VDvHDPQ,"Oroko HC II",Gwk4wkLz7EW,"Gulu District",N00GWUvXv52,"Palaro Subcounty",Acholi
+747,"Mjap (Iss Clinic) Mulago",Kampala,Kampala,KpCgX05NrIS,"Sas Clinic - Bugolobi",aXmBzv61LbM,"Kampala District",kKEBeO1LL7S,"Nakawa Division",Kampala
+862,"Butaga H/C III",Jinja,Busoga,ga9sLsbCiMo,"Butagaya HC III",aJR2ZxSH7g4,"Jinja District",a92Lyf8Vnrg,"Butagaya Subcounty",Busoga
+1114,"TASO Kanyanya",Kampala,Kampala,vzIPsloRguW,"TASO Kanyanya Special Clinic",aXmBzv61LbM,"Kampala District",LYuMx5oPsR5,"Kawempe Division",Kampala
+1160,"Kaliro H/C IV (Kaliro)",Kaliro,Busoga,JOD4jzkAQIJ,"Kaliro Flep HC II",kJCEJnXLgnh,"Kaliro District",LUHdM7WTGOa,"Kaliro Town Council",Busoga
+1280,"Buwa H/C II",Kole,Lango,syAwMnRR1xn,"Bung HC II",Y4LV8xqkv6J,"Kole District",APscKx450Qa,"Ayer Subcounty",Lango
+1284,"Buyanja H/C III (Mpigi)",Mpigi,"South Central",X1RkzMg2Hn1,"Bunjako HC III",YMMexeHFUay,"Mpigi District",hQ8aPoqFZbB,"Buwama Subcounty","South Central"
+1313,"Mengo Hospital Counselling & HomeCare",Kampala,Kampala,E9qpkBrblkc,"Mengo Joint Clinic HC II",aXmBzv61LbM,"Kampala District",zNdkt1W9dcu,"Central Division (Kampala CCA)",Kampala
+1333,"CBHA-USAID RHU Project -Kabale",Kabale,Kigezi,s0sTvb5DnDP,"AIDS Information Centre (Kabale) Special Clinic",zBIpPzKYFLp,"Kabale District",DiPNrbcTMu7,"Southern Division (Kabale MC)",Kigezi
+1414,"CBHA -USAID Project (RHU)- Kanungu",Kanungu,Kigezi,Si7fnPL4oQb,"Burora (Kanungu) HC II",aphcy5JTnd6,"Kanungu District",T06zMrtvVyD,"Rugyeyo Subcounty",Kigezi
+1671,"Potters Villiage",Kisoro,Kigezi,FF1Tn1yXAdl,"Potters Village Medical Centre",aPhSZRinfbg,"Kisoro District",HchgzT5soyP,"Northern Division (Kisoro MC)",Kigezi
+1696,"Kikka Yokana H/C II",Mityana,"North Central",aaDoMV4GUYu,"Kikka Yokana Domiciliary HC II",Q7PaNIbyZII,"Mityana District",aPq34NY4UoQ,"Kakindu Subcounty","North Central"
+1747,"Buyambi H/C II- (st Noa) Mityana",Mityana,"North Central",HVwuyUY7azZ,"St. Francis HC IV (Mitiyana)",Q7PaNIbyZII,"Mityana District",HjoAahqy6Yw,"Busimbi Division","North Central"
+1832,"Kitojo H/C II",Kabale,Kigezi,RdzJlXtx1G9,"Kitooma HC II",zBIpPzKYFLp,"Kabale District",bccV4EYcggS,"Rubaya Subcounty (Kabale District)",Kigezi
+1953,"Rapha H/C",Mpigi,"South Central",AwOr5ob9gDR,"St Raphael HC III",YMMexeHFUay,"Mpigi District",abHXswMdUC4,"Mpigi Town Council","South Central"
+1958,Kibigga,Butambala,"South Central",aP3vXWciBlE,"Kibugga HC II",a3LMKP8z8Xj,"Butambala District",BA5mnJAevwO,"Budde Subcounty","South Central"
+2161,"Tukumo H/C II",Kapchorwa,Bugisu,pyeMjBNdNrR,"Amukol HC II",aginheWSLef,"Kapchorwa District",D06Hv2GofVa,"Amukol Subcounty",Bugisu
+2182,"Buwumba H/C III",Busia,Bukedi,zZdTVtXzMxi,"Buwumba HC II",lkuO79O6mRx,"Busia District",gLyHeUBTz8t,"Dabani Subcounty",Bukedi
+2223,"Alemere H/C II",Amolatar,Lango,apxYt6pdYil,"Alyecmeda HC II",ZuQHWOaFQVM,"Amolatar District",eaiTceKCzoa,"Agwingiri Subcounty",Lango
+2312,"Multicare Medical Centre",Pallisa,Bukedi,tSL5FQJjlkg,"Grace Medical Centre",WiVj4bEhX4P,"Pallisa District",kVC2XemQfB6,"Pallisa Town Council",Bukedi
+2324,"IDI Mulago",Kampala,Kampala,QPXDOMD6RkR,"Mulago SWN Hospital",aXmBzv61LbM,"Kampala District",QN3iILQUI8a,"Mulago SWN Hospital Complex",Kampala
+2339,"Muhoti Military H/C III",Kabarole,Tooro,Y3hpndpv6cR,"Muhooti Barraccks HC III",m77oR1YJESj,"Kabarole District",mnk10FugmGB,"Western Division (Kabarole MC)",Tooro
+2340,"Munobwa Clinic",Kyenjojo,Tooro,eqXcVOLqXPI,"Abbu Clinic",O9MoQcpZ4uA,"Kyenjojo District",VzNo51e77c5,"Butunduuzi Town Council",Tooro
+2362,"Abalang H/C II (Dokolo)",Dokolo,Lango,UjMKFe4MIGj,"Abalang HC II (Okwalongwen Subcounty)",wMQ25dybdgH,"Dokolo District",lbIyDdBijdD,"Okwalongwen Subcounty",Lango
+2397,"Outreach (URA)",Kampala,Kampala,G2t4FM71nVk,"Cure Health Care",aXmBzv61LbM,"Kampala District",LYuMx5oPsR5,"Kawempe Division",Kampala
+2402,"Outreach Makerere",Kampala,Kampala,G2t4FM71nVk,"Cure Health Care",aXmBzv61LbM,"Kampala District",LYuMx5oPsR5,"Kawempe Division",Kampala
+2404,"Outreach Tororo",Tororo,Bukedi,eoRAHqKHcVo,"Mercy Clinic Tororo",KhT80mlwJ3Y,"Tororo District",aMbwlzLZVsf,"Nabuyoga Subcounty",Bukedi
+2407,"Outreach Lugogo Grounds",Kampala,Kampala,voJbyaP4rnX,"Lugogo General Clinic HC II",aXmBzv61LbM,"Kampala District",kKEBeO1LL7S,"Nakawa Division",Kampala
+2408,"Outreach Uganda Meseum",Kampala,Kampala,y79MyvDLZeo,"Care Uganda HC II",aXmBzv61LbM,"Kampala District",LYuMx5oPsR5,"Kawempe Division",Kampala
+2417,"Outreach Wakiso",Wakiso,"South Central",OdisbvWKxC8,"Gombe (Wakiso) HC II",aIahLLmtvgT,"Wakiso District",awd0xy7yb1C,"Gombe Division","South Central"
+2419,"Outreach Parliament",Kampala,Kampala,G2t4FM71nVk,"Cure Health Care",aXmBzv61LbM,"Kampala District",LYuMx5oPsR5,"Kawempe Division",Kampala
+2434,"Outreach Ndeeba",Kampala,Kampala,OLmTe5kU6HD,"Equator Health Services",aXmBzv61LbM,"Kampala District",oweSpFBNbmi,"Rubaga Division",Kampala
+2450,"Emergency Operations Centre",Kampala,Kampala,mN3hGBqYmG5,"Emergency Medical Center HC II",aXmBzv61LbM,"Kampala District",LYuMx5oPsR5,"Kawempe Division",Kampala
+2465,"Outreach Mulago",Kampala,Kampala,G2t4FM71nVk,"Cure Health Care",aXmBzv61LbM,"Kampala District",LYuMx5oPsR5,"Kawempe Division",Kampala
+2467,"Dream Centre Uganda",Omoro,Acholi,fLGGzlZfyOJ,"Dream Centre HC III",S5fvUXgY54J,"Omoro District",Jwnd2Jayc4g,"Lalogi Subcounty",Acholi
+2480,"Hassan Tourabi",Wakiso,"South Central",hzPoo5zzWjj,"Bweyogerere Hassan Turabi HC III",aIahLLmtvgT,"Wakiso District",RQ4bTHOso6m,"Bweyogerere Division","South Central"
+2485,"Outreach Bundibugyo",Bundibugyo,Tooro,ADYVLN5f9vF,"Buhanda (Bundibugyo) HC II",g8M1cWRJZV6,"Bundibugyo District",mk8um9fK0pZ,"Tokwe Subcounty",Tooro
+2503,"Butambala outreach",Butambala,"South Central",xuCJ8NBomxP,"Gombe (Butambala) Hospital",a3LMKP8z8Xj,"Butambala District",McggXNT9Zyg,"Gombe Town Council","South Central"
+2517,"Outreach Africana",Kampala,Kampala,OLmTe5kU6HD,"Equator Health Services",aXmBzv61LbM,"Kampala District",oweSpFBNbmi,"Rubaga Division",Kampala
+2520," Outreach Mother Care Primary School",Ntungamo,Ankole,rZUQEvxthk4,"Universal Health Care Clinic",hAoe9dhZh9V,"Ntungamo District",xR3tMZhXRSG,"Central Division (Ntungamo MC)",Ankole
+2524,"Kasenyi ART Site",Wakiso,"South Central",tX9av6uDVox,"Kasenge HC II",aIahLLmtvgT,"Wakiso District",z9UtbSArut7,"Kyengera Town Council","South Central"
+2526,"Ministry of Defence Clinic(Mbuya)",Kampala,Kampala,hVZSTHIGSyw,"Mirembe Clinic (Kibuye I) HC II",aXmBzv61LbM,"Kampala District",FbuhMjEaMXt,"Makindye Division",Kampala
+2546,"Nalufenya Children's Hospital",Jinja,Busoga,sWiFANJNsQo,"Almeca Medicare Hospital",aJR2ZxSH7g4,"Jinja District",amHAOOSM5kw,"Mafubira Subcounty",Busoga
+2562,"Cherish H/C III",Wakiso,"South Central",A4pdFqJLCLN,"Perusi HC III",aIahLLmtvgT,"Wakiso District",MmY9teDWcvb,"Massajja Division","South Central"
+2577,"Rutooma H/C II",Kabale,Kigezi,RdzJlXtx1G9,"Kitooma HC II",zBIpPzKYFLp,"Kabale District",bccV4EYcggS,"Rubaya Subcounty (Kabale District)",Kigezi
+2637,"Ayago H/C II (Apac)",Apac,Lango,TGO08DZfxK1,"Ayago HC II",JyZJhGXKeEq,"Apac District",cTWnZgdmqWB,"Apoi Subcounty",Lango
+2646,"Alere H/C II",Amuria,Teso,VVGxBCCP2jE,"Arute HC II",TM6ccNxawqy,"Amuria District",YjjiR3pf7GD,"Abarilela Subcounty",Teso
+2657,"Nakaseeta H/C II (Mityana)",Mityana,"North Central",HVwuyUY7azZ,"St. Francis HC IV (Mitiyana)",Q7PaNIbyZII,"Mityana District",HjoAahqy6Yw,"Busimbi Division","North Central"
+2668,"Uganda Sickle cell Rescue Foundation",Kampala,Kampala,b2Hrp74IbAm,"Ecos Medical Foundation Ltd HC II",aXmBzv61LbM,"Kampala District",zNdkt1W9dcu,"Central Division (Kampala CCA)",Kampala
+2698,"Awei H/C II",Alebtong,Lango,aUjs9UBFWGB,"Awei HC III",p7EEgDEX3jT,"Alebtong District",RHEU4J1wJiy,"Awei Subcounty",Lango
+2711,"Mother Angioletta H/C II",Omoro,Acholi,n4iwSO6iule,"Mother Angioletta Memorial Clinic",S5fvUXgY54J,"Omoro District",q03uh0SJ0N9,"Koro Subcounty",Acholi
+2712,"Ikan Medical Centre",Kampala,Kampala,MmC3AiJiS1Y,"May Medical Centre",aXmBzv61LbM,"Kampala District",zNdkt1W9dcu,"Central Division (Kampala CCA)",Kampala
+2728,"St Luke H/C III Kkonge",Mpigi,"South Central",yC5rgTEjfVO,"Kkonge St. Luke HC III",YMMexeHFUay,"Mpigi District",abHXswMdUC4,"Mpigi Town Council","South Central"
+2734,"Mulago NRH - EID POC",Kampala,Kampala,PwJPp5pF6Z4,"Mulago NRH - ENT OPD",aXmBzv61LbM,"Kampala District",MJu9Pwi3twb,"Mulago National Referral Hospital",Kampala
+2761,"Diagnostic World Laboratories Ltd",Kampala,Kampala,huNEzNjttgA,"Alpha Clinical Laboratories HC II",aXmBzv61LbM,"Kampala District",kKEBeO1LL7S,"Nakawa Division",Kampala
+2768,"Almeca Hospital",Jinja,Busoga,sWiFANJNsQo,"Almeca Medicare Hospital",aJR2ZxSH7g4,"Jinja District",amHAOOSM5kw,"Mafubira Subcounty",Busoga
+2789,"Mulango EID Clinic",Kasese,Tooro,jgW3U2iN1PY,"Maliba Prison Clinic",aa8xVDzSpte,"Kasese District",VBrVhVxTU7W,"Maliba Subcounty",Tooro
+2819,"Victory Medical Centre (Gulu)",Gulu,Acholi,qb4Et8MqIZt,"Paicho Medical Centre",Gwk4wkLz7EW,"Gulu District",OKIyTJatyIr,"Paicho Subcounty",Acholi
+2837,"Mirembe Esther",Tororo,Bukedi,Gv6gOC3pJAJ,"Africure Medical Center",KhT80mlwJ3Y,"Tororo District",ajaV3Ug1PuP,"Malaba Town Council",Bukedi
+2845,"MBN-Kampala ",Kampala,Kampala,SByryiWsa89,"Kampala Hospital",aXmBzv61LbM,"Kampala District",zNdkt1W9dcu,"Central Division (Kampala CCA)",Kampala
+2879,"MEDI SAFE Hospital",Kampala,Kampala,QPXDOMD6RkR,"Mulago SWN Hospital",aXmBzv61LbM,"Kampala District",QN3iILQUI8a,"Mulago SWN Hospital Complex",Kampala
+2888,"Nawampiti H/C III",Kaliro,Busoga,NlotJOaRy0K,"Nawampiti Dorudo HC II",kJCEJnXLgnh,"Kaliro District",YoysVtAL2hS,"Nawaikoke Subcounty",Busoga
+2897,"Orbit Labs",Mubende,"North Central",yIhsj2bSacy,"Anbar Hospital",lzWuB6bCQeV,"Mubende District",AgiJUzMaGYS,"Western Division (Mubende MC)","North Central"

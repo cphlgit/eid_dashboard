@@ -384,6 +384,7 @@ class DashboardController extends Controller {
 		$dist_numbers=$this->_districtNumbers();
 
 		$facility_numbers=$this->_facilityNumbers();
+		$poc_facility_numbers=$this->_pocfacilityNumbers();
 		$facility_numbers_for_positives=$this->_facilityNumbersForPositivePCRs();
 		$facility_numbers_zero_to_two_months = $this->_facilityNumbersForZeroToTwoMonths();
 		$facility_numbers_zero_to_two_months_pcr1=$this->_facilityNumbersForZeroToTwoMonthsFirstPcr();
@@ -396,7 +397,7 @@ class DashboardController extends Controller {
 			"facility_numbers_for_positives","facility_numbers_zero_to_two_months",
 			"facility_numbers_zero_to_two_months_pcr1",
 			"facility_numbers_positives_zero_to_two_months",
-			"facility_numbers");
+			"facility_numbers","poc_facility_numbers");
 	}
 	
 	private function _wholeNumbers(){
@@ -1239,7 +1240,7 @@ db.eid_dashboard.aggregate(
 
 	public function getPocFacilityStatistics(){
 			$sql = "SELECT district, f.id, facility, COUNT(DISTINCT facility) AS peripheral_sites, poc_device, SUM(CASE WHEN p.created_at > DATE_SUB(NOW(), INTERVAL 1 WEEK) THEN 1 ELSE 0 END) as thiswk,
- SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW() THEN 1 ELSE 0 END) as wk1, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 2 WEEK) AND DATE_SUB(NOW(), INTERVAL 1 WEEK) THEN 1 ELSE 0 END) as wk2, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 3 WEEK) AND DATE_SUB(NOW(), INTERVAL 2 WEEK) THEN 1 ELSE 0 END) as wk3, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 4 WEEK) AND DATE_SUB(NOW(), INTERVAL 3 WEEK) THEN 1 ELSE 0 END) as wk4, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 5 WEEK) AND DATE_SUB(NOW(), INTERVAL 4 WEEK) THEN 1 ELSE 0 END) as wk5, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 6 WEEK) AND DATE_SUB(NOW(), INTERVAL 5 WEEK) THEN 1 ELSE 0 END) as wk6, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 7 WEEK) AND DATE_SUB(NOW(), INTERVAL 6 WEEK) THEN 1 ELSE 0 END) as wk7, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 51 WEEK) AND DATE_SUB(NOW(), INTERVAL 52 WEEK) THEN 1 ELSE 0 END) as wk8, max(created_at) AS latest_date,
+ SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW() THEN 1 ELSE 0 END) as wk1, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 2 WEEK) AND DATE_SUB(NOW(), INTERVAL 1 WEEK) THEN 1 ELSE 0 END) as wk2, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 3 WEEK) AND DATE_SUB(NOW(), INTERVAL 2 WEEK) THEN 1 ELSE 0 END) as wk3, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 4 WEEK) AND DATE_SUB(NOW(), INTERVAL 3 WEEK) THEN 1 ELSE 0 END) as wk4, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 5 WEEK) AND DATE_SUB(NOW(), INTERVAL 4 WEEK) THEN 1 ELSE 0 END) as wk5, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 6 WEEK) AND DATE_SUB(NOW(), INTERVAL 5 WEEK) THEN 1 ELSE 0 END) as wk6, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 7 WEEK) AND DATE_SUB(NOW(), INTERVAL 6 WEEK) THEN 1 ELSE 0 END) as wk7, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 8 WEEK) AND DATE_SUB(NOW(), INTERVAL 7 WEEK) THEN 1 ELSE 0 END) as wk8, max(created_at) AS latest_date,
 				COUNT(p.id) AS tests,  
 				SUM(CASE WHEN results='Negative' THEN 1 ELSE 0 END) AS negatives,
 				SUM(CASE WHEN results='Positive' THEN 1 ELSE 0 END) AS positives,
@@ -1362,6 +1363,24 @@ db.eid_dashboard.aggregate(
             array_push($clean_result_set, $fields);
         }
         return $clean_result_set;
+	}
+
+	private function _pocfacilityNumbers(){
+	
+		$sql = "SELECT f.id, COUNT(DISTINCT f.id) AS total
+				FROM poc_data AS p
+				LEFT JOIN facilities AS f ON p.facility_id=f.id
+				LEFT JOIN districts AS d ON f.districtID=d.id;";
+
+		    $pocfacilities = $this->db->select($sql);
+		// $group_stage = array(
+
+		// 	);
+		
+		// $res=$this->mongo->eid_dashboard->aggregate($match_stage,$group_stage );
+		
+		
+		return isset($pocfacilities['total'])?$pocfacilities['total']:[];
 	}
 
 	/*

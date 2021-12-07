@@ -1365,7 +1365,7 @@ db.eid_dashboard.aggregate(
         return $clean_result_set;
 	}
 
-	private function _pocfacilityNumbers(){
+    private function _pocfacilityNumbers(){
 	
 		$sql = "SELECT f.id, COUNT(DISTINCT f.id) AS total
 				FROM poc_data AS p
@@ -1373,14 +1373,10 @@ db.eid_dashboard.aggregate(
 				LEFT JOIN districts AS d ON f.districtID=d.id;";
 
 		    $pocfacilities = $this->db->select($sql);
-		// $group_stage = array(
 
-		// 	);
+            $result = json_decode(json_encode($pocfacilities), true);
 		
-		// $res=$this->mongo->eid_dashboard->aggregate($match_stage,$group_stage );
-		
-		
-		return isset($pocfacilities['total'])?$pocfacilities['total']:[];
+		return isset($result[0]['total'])?$result[0]['total']:[];
 	}
 
 	/*

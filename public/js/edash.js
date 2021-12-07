@@ -342,6 +342,7 @@ ctrllers.DashController=function($scope,$http){
                 $scope.district_numbers_postives_zero_to_two_months=data.dist_numbers_for_positives_zero_to_two_months||{};
 
                 $scope.facility_numbers = data.facility_numbers||{};
+                $scope.poc_facility_numbers = data.poc_facility_numbers||0;
                 $scope.facility_numbers_for_positives = data.facility_numbers_for_positives||{};
                 $scope.facility_numbers_zero_to_two_months = data.facility_numbers_zero_to_two_months ||{};
                 $scope.facility_numbers_zero_to_two_months_pcr1 =data.facility_numbers_zero_to_two_months_pcr1||{};
@@ -372,6 +373,7 @@ ctrllers.DashController=function($scope,$http){
 
                 //csv downloads
                 $scope.export_facility_numbers = exportFacilityNumbers($scope);
+                $scope.export_poc_facility_data = exportPocStat($scope);
                 $scope.export_district_numbers = exportDistrictNumbers($scope);
                 $scope.current_timestamp = getCurrentTimeStamp();
 
@@ -730,6 +732,44 @@ ctrllers.DashController=function($scope,$http){
 
             export_facility_numbers.push(facility_instance);
         }
+
+        return export_facility_numbers;
+    }
+
+    function exportPocStat(scopeInstance){
+       
+        var export_facility_numbers = [];
+      
+        // var poc_facility_stat_from_scope = scopeInstance.pocfacilities;
+        var poc_facility_stat_from_scope = scopeInstance.poc_facilities_array;
+
+        // console.log(poc_facility_stat_from_scope); 
+        for( var index = 0; index < poc_facility_stat_from_scope.length; index++){
+            var facilityRecord = poc_facility_stat_from_scope[index];
+            var facility_instance = {                
+                facility : facilityRecord.facility,
+                peripheral_sites : facilityRecord.peripheral_sites,
+                district : facilityRecord.district,
+                poc_device : facilityRecord.poc_device,
+                tests : facilityRecord.tests,
+                wk1 : facilityRecord.wk1,
+                wk2 : facilityRecord.wk2,
+                wk3 : facilityRecord.wk3,
+                wk4 : facilityRecord.wk4,
+                wk5 : facilityRecord.wk5,
+                wk6 : facilityRecord.wk6,
+                wk7 : facilityRecord.wk7,
+                wk8 : facilityRecord.wk8,
+                negatives : facilityRecord.negatives,
+                positives : facilityRecord.positives,
+                errors : facilityRecord.errors,
+                latest_date : facilityRecord.latest_date,
+                
+            }
+
+            export_facility_numbers.push(facility_instance);
+        }
+
 
         return export_facility_numbers;
     }

@@ -533,7 +533,7 @@
                 </li>
                 <li id='tb_hd6' ng-show="show_poc_sites">
                     <a href="#tab6" id='tb_lnk6'>
-                        <span style="font-size:10px">POC Sites Status</span> 
+                        <span class="num ng-cloak"><% poc_facility_numbers %></span> 
                         <span class="desc">POC Sites Status</span>
                     </a>
                 </li>
@@ -974,7 +974,10 @@
                 <i style="font-size:12px;color:#9F82D1">* ART Initiation Rate is a preliminary estimate based on data collected at CPHL. CPHL is still revising the data collection mechanism</i>               
             </section -->
             <section id="tab5"> @include('sections._results_printing_statistics')</section>
-            <section id="tab6"> @include('sections._poc_sites_statistics')</section>
+            <section id="tab6"> @include('sections._poc_sites_statistics')
+            <br>
+                        <button ng-hide="show_fclties1" id="exportDistricts" type="button" ng-csv="export_poc_facility_data"  class="btn btn-success" filename="poc_stat_<%current_timestamp%>.csv" csv-header="['POC site', '# Peripheral facilities','District','Device','#Tests','week1','week2','week3','week4','week5','week6','week7','week8','Negatives','Positives','Errors','Last Report Date']">Download CSV</button>
+            </section>
         </div><!-- /content -->
     </div><!-- /tabs -->
     <br>

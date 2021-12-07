@@ -1367,7 +1367,7 @@ db.eid_dashboard.aggregate(
 
     private function _pocfacilityNumbers(){
 	
-		$sql = "SELECT f.id, COUNT(DISTINCT f.id) AS total
+		$sql = "SELECT f.id, COUNT(DISTINCT p.testing_facility) AS total
 				FROM poc_data AS p
 				LEFT JOIN facilities AS f ON p.facility_id=f.id
 				LEFT JOIN districts AS d ON f.districtID=d.id;";

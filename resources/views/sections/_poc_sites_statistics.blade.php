@@ -24,8 +24,8 @@
                                     <th>District</th>
                                     <th>Device</th>
                                     <th>#Tests</th>
-                                    <th <?php $dates->setISODate($currentyr,$currentWeekNumber);
-                                        $result = $dates->format('d-M-Y');?>><a href='#' title="from {{$result}}">Week {{$currentWeekNumber}}</a></th>
+                                    <!-- <th <?php $dates->setISODate($currentyr,$currentWeekNumber);
+                                        $result = $dates->format('d-M-Y');?>><a href='#' title="from {{$result}}">Week {{$currentWeekNumber}}</a></th> -->
                                     <th <?php $dates->setISODate($currentyr,$currentWeekNumber-1);
                                         $result = $dates->format('d-M-Y');?>><a href='#' title="from {{$result}}">Week {{$currentWeekNumber -1}}</a></th>
                                     <th <?php $dates->setISODate($currentyr,$currentWeekNumber-2);
@@ -47,7 +47,7 @@
                                     <th>Positivity Rate</th>
                                     <th>#Errors</th>
                                     <th>Error Rate</th>
-                                    <th>Date last updated</th>
+                                    <th>Last Report Date</th>
 
                                 </tr>
                             </thead>
@@ -58,7 +58,7 @@
                                         <td class="ng-cloak"><% f.district %></td>
                                         <td class="ng-cloak"><% f.poc_device %></td>
                                         <td class="ng-cloak"><% f.tests %></td>
-                                        <td class="ng-cloak"><% f.thiswk %></td>
+                                        <!-- <td class="ng-cloak"><% f.thiswk %></td> -->
                                         <td class="ng-cloak"><% f.wk1 %></td>
                                         <td class="ng-cloak"><% f.wk2 %></td>
                                         <td class="ng-cloak"><% f.wk3 %></td>
@@ -76,9 +76,7 @@
                                     </tr>                        
                                  </tbody>
                              
-            </table>
-
-            
+            </table>         
 
     </div>
 </div>

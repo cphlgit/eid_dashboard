@@ -1239,7 +1239,7 @@ db.eid_dashboard.aggregate(
 	}
 
 	public function getPocFacilityStatistics(){
-			$sql = "SELECT district, f.id, facility, COUNT(DISTINCT facility) AS peripheral_sites, poc_device, SUM(CASE WHEN p.created_at > DATE_SUB(NOW(), INTERVAL 1 WEEK) THEN 1 ELSE 0 END) as thiswk,
+			$sql = "SELECT district, tf.id, tf.facility, COUNT(DISTINCT f.facility) AS peripheral_sites, tf.poc_device, SUM(CASE WHEN p.created_at > DATE_SUB(NOW(), INTERVAL 1 WEEK) THEN 1 ELSE 0 END) as thiswk,
  SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 1 WEEK) AND NOW() THEN 1 ELSE 0 END) as wk1, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 2 WEEK) AND DATE_SUB(NOW(), INTERVAL 1 WEEK) THEN 1 ELSE 0 END) as wk2, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 3 WEEK) AND DATE_SUB(NOW(), INTERVAL 2 WEEK) THEN 1 ELSE 0 END) as wk3, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 4 WEEK) AND DATE_SUB(NOW(), INTERVAL 3 WEEK) THEN 1 ELSE 0 END) as wk4, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 5 WEEK) AND DATE_SUB(NOW(), INTERVAL 4 WEEK) THEN 1 ELSE 0 END) as wk5, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 6 WEEK) AND DATE_SUB(NOW(), INTERVAL 5 WEEK) THEN 1 ELSE 0 END) as wk6, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 7 WEEK) AND DATE_SUB(NOW(), INTERVAL 6 WEEK) THEN 1 ELSE 0 END) as wk7, SUM(CASE WHEN p.created_at BETWEEN DATE_SUB(NOW(), INTERVAL 8 WEEK) AND DATE_SUB(NOW(), INTERVAL 7 WEEK) THEN 1 ELSE 0 END) as wk8, max(created_at) AS latest_date,
 				COUNT(p.id) AS tests,  
 				SUM(CASE WHEN results='Negative' THEN 1 ELSE 0 END) AS negatives,
@@ -1247,6 +1247,7 @@ db.eid_dashboard.aggregate(
 				SUM(CASE WHEN results='Error' THEN 1 ELSE 0 END) AS errors
 				FROM poc_data AS p
 				LEFT JOIN facilities AS f ON p.facility_id=f.id
+				LEFT JOIN facilities AS tf ON p.testing_facility=tf.id
 				LEFT JOIN districts AS d ON f.districtID=d.id
 				GROUP BY testing_facility;";
 

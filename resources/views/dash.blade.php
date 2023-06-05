@@ -976,7 +976,7 @@
             <section id="tab5"> @include('sections._results_printing_statistics')</section>
             <section id="tab6"> @include('sections._poc_sites_statistics')
             <br>
-                        <button ng-hide="show_fclties1" id="exportDistricts" type="button" ng-csv="export_poc_facility_data"  class="btn btn-success" filename="poc_stat_<%current_timestamp%>.csv" csv-header="['POC site', '# Peripheral facilities','District','Device','#Tests','week1','week2','week3','week4','week5','week6','week7','week8','Negatives','Positives','Errors','Last Report Date']">Download CSV</button>
+                        <button ng-hide="show_fclties1" id="exportDistricts" type="button" ng-csv="export_poc_facility_data"  class="btn btn-success" filename="poc_stat_<%current_timestamp%>.csv" csv-header="['POC site', '# Peripheral facilities','District','Device','#Tests','<?php echo 'week'.'-'.date("W",strtotime("-8 week")); ?>','<?php echo 'week'.'-'.date("W",strtotime("-7 week")); ?>','<?php echo 'week'.'-'.date("W",strtotime("-6 week")); ?>','<?php echo 'week'.'-'.date("W",strtotime("-5 week")); ?>','<?php echo 'week'.'-'.date("W",strtotime("-4 week")); ?>','<?php echo 'week'.'-'.date("W",strtotime("-3 week")); ?>','<?php echo 'week'.'-'.date("W",strtotime("-2 week")); ?>','<?php echo 'week'.'-'.date("W",strtotime("-1 week")); ?>','Negatives','Positives','Errors','Last Report Date']">Download CSV</button>
             </section>
         </div><!-- /content -->
     </div><!-- /tabs -->
